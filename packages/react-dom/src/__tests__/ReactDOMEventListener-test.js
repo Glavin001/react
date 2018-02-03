@@ -7,57 +7,57 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-describe('ReactDOMEventListener', () => {
+describe("ReactDOMEventListener", () => {
   let React;
   let ReactDOM;
 
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
-    ReactDOM = require('react-dom');
+    React = require("react");
+    ReactDOM = require("react-dom");
   });
 
-  it('should dispatch events from outside React tree', () => {
+  it("should dispatch events from outside React tree", () => {
     const mock = jest.fn();
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const node = ReactDOM.render(<div onMouseEnter={mock} />, container);
-    const otherNode = document.createElement('h1');
+    const otherNode = document.createElement("h1");
     document.body.appendChild(container);
     document.body.appendChild(otherNode);
 
     otherNode.dispatchEvent(
-      new MouseEvent('mouseout', {
+      new MouseEvent("mouseout", {
         bubbles: true,
         cancelable: true,
-        relatedTarget: node,
-      }),
+        relatedTarget: node
+      })
     );
     expect(mock).toBeCalled();
   });
 
-  describe('Propagation', () => {
-    it('should propagate events one level down', () => {
+  describe("Propagation", () => {
+    it("should propagate events one level down", () => {
       const mouseOut = jest.fn();
       const onMouseOut = event => mouseOut(event.currentTarget);
 
-      const childContainer = document.createElement('div');
-      const parentContainer = document.createElement('div');
+      const childContainer = document.createElement("div");
+      const parentContainer = document.createElement("div");
       const childNode = ReactDOM.render(
         <div onMouseOut={onMouseOut}>Child</div>,
-        childContainer,
+        childContainer
       );
       const parentNode = ReactDOM.render(
         <div onMouseOut={onMouseOut}>div</div>,
-        parentContainer,
+        parentContainer
       );
       parentNode.appendChild(childContainer);
       document.body.appendChild(parentContainer);
 
-      const nativeEvent = document.createEvent('Event');
-      nativeEvent.initEvent('mouseout', true, true);
+      const nativeEvent = document.createEvent("Event");
+      nativeEvent.initEvent("mouseout", true, true);
       childNode.dispatchEvent(nativeEvent);
 
       expect(mouseOut).toBeCalled();
@@ -68,32 +68,32 @@ describe('ReactDOMEventListener', () => {
       document.body.removeChild(parentContainer);
     });
 
-    it('should propagate events two levels down', () => {
+    it("should propagate events two levels down", () => {
       const mouseOut = jest.fn();
       const onMouseOut = event => mouseOut(event.currentTarget);
 
-      const childContainer = document.createElement('div');
-      const parentContainer = document.createElement('div');
-      const grandParentContainer = document.createElement('div');
+      const childContainer = document.createElement("div");
+      const parentContainer = document.createElement("div");
+      const grandParentContainer = document.createElement("div");
       const childNode = ReactDOM.render(
         <div onMouseOut={onMouseOut}>Child</div>,
-        childContainer,
+        childContainer
       );
       const parentNode = ReactDOM.render(
         <div onMouseOut={onMouseOut}>Parent</div>,
-        parentContainer,
+        parentContainer
       );
       const grandParentNode = ReactDOM.render(
         <div onMouseOut={onMouseOut}>Parent</div>,
-        grandParentContainer,
+        grandParentContainer
       );
       parentNode.appendChild(childContainer);
       grandParentNode.appendChild(parentContainer);
 
       document.body.appendChild(grandParentContainer);
 
-      const nativeEvent = document.createEvent('Event');
-      nativeEvent.initEvent('mouseout', true, true);
+      const nativeEvent = document.createEvent("Event");
+      nativeEvent.initEvent("mouseout", true, true);
       childNode.dispatchEvent(nativeEvent);
 
       expect(mouseOut).toBeCalled();
@@ -106,13 +106,13 @@ describe('ReactDOMEventListener', () => {
     });
 
     // Regression test for https://github.com/facebook/react/issues/1105
-    it('should not get confused by disappearing elements', () => {
-      const container = document.createElement('div');
+    it("should not get confused by disappearing elements", () => {
+      const container = document.createElement("div");
       document.body.appendChild(container);
       class MyComponent extends React.Component {
-        state = {clicked: false};
+        state = { clicked: false };
         handleClick = () => {
-          this.setState({clicked: true});
+          this.setState({ clicked: true });
         };
         componentDidMount() {
           expect(ReactDOM.findDOMNode(this)).toBe(container.firstChild);
@@ -130,24 +130,24 @@ describe('ReactDOMEventListener', () => {
       }
       ReactDOM.render(<MyComponent />, container);
       container.firstChild.dispatchEvent(
-        new MouseEvent('click', {
-          bubbles: true,
-        }),
+        new MouseEvent("click", {
+          bubbles: true
+        })
       );
-      expect(container.firstChild.textContent).toBe('clicked!');
+      expect(container.firstChild.textContent).toBe("clicked!");
       document.body.removeChild(container);
     });
 
-    it('should batch between handlers from different roots', () => {
+    it("should batch between handlers from different roots", () => {
       const mock = jest.fn();
 
-      const childContainer = document.createElement('div');
+      const childContainer = document.createElement("div");
       const handleChildMouseOut = () => {
         ReactDOM.render(<div>1</div>, childContainer);
         mock(childNode.textContent);
       };
 
-      const parentContainer = document.createElement('div');
+      const parentContainer = document.createElement("div");
       const handleParentMouseOut = () => {
         ReactDOM.render(<div>2</div>, childContainer);
         mock(childNode.textContent);
@@ -155,34 +155,34 @@ describe('ReactDOMEventListener', () => {
 
       const childNode = ReactDOM.render(
         <div onMouseOut={handleChildMouseOut}>Child</div>,
-        childContainer,
+        childContainer
       );
       const parentNode = ReactDOM.render(
         <div onMouseOut={handleParentMouseOut}>Parent</div>,
-        parentContainer,
+        parentContainer
       );
       parentNode.appendChild(childContainer);
       document.body.appendChild(parentContainer);
 
-      const nativeEvent = document.createEvent('Event');
-      nativeEvent.initEvent('mouseout', true, true);
+      const nativeEvent = document.createEvent("Event");
+      nativeEvent.initEvent("mouseout", true, true);
       childNode.dispatchEvent(nativeEvent);
 
       // Child and parent should both call from event handlers.
       expect(mock.mock.calls.length).toBe(2);
       // The first call schedules a render of '1' into the 'Child'.
       // However, we're batching so it isn't flushed yet.
-      expect(mock.mock.calls[0][0]).toBe('Child');
+      expect(mock.mock.calls[0][0]).toBe("Child");
       // The first call schedules a render of '2' into the 'Child'.
       // We're still batching so it isn't flushed yet either.
-      expect(mock.mock.calls[1][0]).toBe('Child');
+      expect(mock.mock.calls[1][0]).toBe("Child");
       // By the time we leave the handler, the second update is flushed.
-      expect(childNode.textContent).toBe('2');
+      expect(childNode.textContent).toBe("2");
       document.body.removeChild(parentContainer);
     });
   });
 
-  it('should not fire duplicate events for a React DOM tree', () => {
+  it("should not fire duplicate events for a React DOM tree", () => {
     const mouseOut = jest.fn();
     const onMouseOut = event => mouseOut(event.target);
 
@@ -203,13 +203,13 @@ describe('ReactDOMEventListener', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const instance = ReactDOM.render(<Wrapper />, container);
 
     document.body.appendChild(container);
 
-    const nativeEvent = document.createEvent('Event');
-    nativeEvent.initEvent('mouseout', true, true);
+    const nativeEvent = document.createEvent("Event");
+    nativeEvent.initEvent("mouseout", true, true);
     instance.getInner().dispatchEvent(nativeEvent);
 
     expect(mouseOut).toBeCalled();

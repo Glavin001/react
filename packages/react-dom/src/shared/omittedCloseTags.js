@@ -23,7 +23,7 @@ const omittedCloseTags = {
   param: true,
   source: true,
   track: true,
-  wbr: true,
+  wbr: true
   // NOTE: menuitem's close tag should be omitted, but that causes problems.
 };
 

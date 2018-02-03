@@ -7,10 +7,10 @@
  * @flow
  */
 
-import invariant from 'fbjs/lib/invariant';
+import invariant from "fbjs/lib/invariant";
 
-import typeof * as FeatureFlagsType from 'shared/ReactFeatureFlags';
-import typeof * as CSFeatureFlagsType from './ReactFeatureFlags.native-cs';
+import typeof * as FeatureFlagsType from "shared/ReactFeatureFlags";
+import typeof * as CSFeatureFlagsType from "./ReactFeatureFlags.native-cs";
 
 export const debugRenderPhaseSideEffects = false;
 export const enableAsyncSubtreeAPI = true;
@@ -25,7 +25,7 @@ export const enablePersistentReconciler = true;
 
 // Only used in www builds.
 export function addUserTimingListener() {
-  invariant(false, 'Not implemented.');
+  invariant(false, "Not implemented.");
 }
 
 // Flow magic to verify the exports of this file match the original version.

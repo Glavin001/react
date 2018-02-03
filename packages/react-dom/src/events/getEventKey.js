@@ -7,25 +7,25 @@
  * @flow
  */
 
-import getEventCharCode from './getEventCharCode';
+import getEventCharCode from "./getEventCharCode";
 
 /**
  * Normalization of deprecated HTML5 `key` values
  * @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent#Key_names
  */
 const normalizeKey = {
-  Esc: 'Escape',
-  Spacebar: ' ',
-  Left: 'ArrowLeft',
-  Up: 'ArrowUp',
-  Right: 'ArrowRight',
-  Down: 'ArrowDown',
-  Del: 'Delete',
-  Win: 'OS',
-  Menu: 'ContextMenu',
-  Apps: 'ContextMenu',
-  Scroll: 'ScrollLock',
-  MozPrintableKey: 'Unidentified',
+  Esc: "Escape",
+  Spacebar: " ",
+  Left: "ArrowLeft",
+  Up: "ArrowUp",
+  Right: "ArrowRight",
+  Down: "ArrowDown",
+  Del: "Delete",
+  Win: "OS",
+  Menu: "ContextMenu",
+  Apps: "ContextMenu",
+  Scroll: "ScrollLock",
+  MozPrintableKey: "Unidentified"
 };
 
 /**
@@ -34,42 +34,42 @@ const normalizeKey = {
  * @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent#Key_names
  */
 const translateToKey = {
-  '8': 'Backspace',
-  '9': 'Tab',
-  '12': 'Clear',
-  '13': 'Enter',
-  '16': 'Shift',
-  '17': 'Control',
-  '18': 'Alt',
-  '19': 'Pause',
-  '20': 'CapsLock',
-  '27': 'Escape',
-  '32': ' ',
-  '33': 'PageUp',
-  '34': 'PageDown',
-  '35': 'End',
-  '36': 'Home',
-  '37': 'ArrowLeft',
-  '38': 'ArrowUp',
-  '39': 'ArrowRight',
-  '40': 'ArrowDown',
-  '45': 'Insert',
-  '46': 'Delete',
-  '112': 'F1',
-  '113': 'F2',
-  '114': 'F3',
-  '115': 'F4',
-  '116': 'F5',
-  '117': 'F6',
-  '118': 'F7',
-  '119': 'F8',
-  '120': 'F9',
-  '121': 'F10',
-  '122': 'F11',
-  '123': 'F12',
-  '144': 'NumLock',
-  '145': 'ScrollLock',
-  '224': 'Meta',
+  "8": "Backspace",
+  "9": "Tab",
+  "12": "Clear",
+  "13": "Enter",
+  "16": "Shift",
+  "17": "Control",
+  "18": "Alt",
+  "19": "Pause",
+  "20": "CapsLock",
+  "27": "Escape",
+  "32": " ",
+  "33": "PageUp",
+  "34": "PageDown",
+  "35": "End",
+  "36": "Home",
+  "37": "ArrowLeft",
+  "38": "ArrowUp",
+  "39": "ArrowRight",
+  "40": "ArrowDown",
+  "45": "Insert",
+  "46": "Delete",
+  "112": "F1",
+  "113": "F2",
+  "114": "F3",
+  "115": "F4",
+  "116": "F5",
+  "117": "F6",
+  "118": "F7",
+  "119": "F8",
+  "120": "F9",
+  "121": "F10",
+  "122": "F11",
+  "123": "F12",
+  "144": "NumLock",
+  "145": "ScrollLock",
+  "224": "Meta"
 };
 
 /**
@@ -84,25 +84,25 @@ function getEventKey(nativeEvent: KeyboardEvent): string {
     // FireFox implements `key` but returns `MozPrintableKey` for all
     // printable characters (normalized to `Unidentified`), ignore it.
     const key = normalizeKey[nativeEvent.key] || nativeEvent.key;
-    if (key !== 'Unidentified') {
+    if (key !== "Unidentified") {
       return key;
     }
   }
 
   // Browser does not implement `key`, polyfill as much of it as we can.
-  if (nativeEvent.type === 'keypress') {
+  if (nativeEvent.type === "keypress") {
     const charCode = getEventCharCode(nativeEvent);
 
     // The enter-key is technically both printable and non-printable and can
     // thus be captured by `keypress`, no other non-printable key should.
-    return charCode === 13 ? 'Enter' : String.fromCharCode(charCode);
+    return charCode === 13 ? "Enter" : String.fromCharCode(charCode);
   }
-  if (nativeEvent.type === 'keydown' || nativeEvent.type === 'keyup') {
+  if (nativeEvent.type === "keydown" || nativeEvent.type === "keyup") {
     // While user keyboard layout determines the actual meaning of each
     // `keyCode` value, almost all function keys have a universal value.
-    return translateToKey[nativeEvent.keyCode] || 'Unidentified';
+    return translateToKey[nativeEvent.keyCode] || "Unidentified";
   }
-  return '';
+  return "";
 }
 
 export default getEventKey;

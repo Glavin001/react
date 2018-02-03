@@ -1,32 +1,32 @@
-'use strict';
+"use strict";
 
-const {rollup} = require('rollup');
-const babel = require('rollup-plugin-babel');
-const closure = require('rollup-plugin-closure-compiler-js');
-const commonjs = require('rollup-plugin-commonjs');
-const prettier = require('rollup-plugin-prettier');
-const replace = require('rollup-plugin-replace');
-const stripBanner = require('rollup-plugin-strip-banner');
-const chalk = require('chalk');
-const path = require('path');
-const resolve = require('rollup-plugin-node-resolve');
-const fs = require('fs');
-const argv = require('minimist')(process.argv.slice(2));
-const Modules = require('./modules');
-const Bundles = require('./bundles');
-const Stats = require('./stats');
-const Sync = require('./sync');
-const sizes = require('./plugins/sizes-plugin');
-const useForks = require('./plugins/use-forks-plugin');
-const extractErrorCodes = require('../error-codes/extract-errors');
-const Packaging = require('./packaging');
-const {asyncCopyTo, asyncRimRaf} = require('./utils');
-const codeFrame = require('babel-code-frame');
-const Wrappers = require('./wrappers');
+const { rollup } = require("rollup");
+const babel = require("rollup-plugin-babel");
+const closure = require("rollup-plugin-closure-compiler-js");
+const commonjs = require("rollup-plugin-commonjs");
+const prettier = require("rollup-plugin-prettier");
+const replace = require("rollup-plugin-replace");
+const stripBanner = require("rollup-plugin-strip-banner");
+const chalk = require("chalk");
+const path = require("path");
+const resolve = require("rollup-plugin-node-resolve");
+const fs = require("fs");
+const argv = require("minimist")(process.argv.slice(2));
+const Modules = require("./modules");
+const Bundles = require("./bundles");
+const Stats = require("./stats");
+const Sync = require("./sync");
+const sizes = require("./plugins/sizes-plugin");
+const useForks = require("./plugins/use-forks-plugin");
+const extractErrorCodes = require("../error-codes/extract-errors");
+const Packaging = require("./packaging");
+const { asyncCopyTo, asyncRimRaf } = require("./utils");
+const codeFrame = require("babel-code-frame");
+const Wrappers = require("./wrappers");
 
 // Errors in promises should be fatal.
 let loggedErrors = new Set();
-process.on('unhandledRejection', err => {
+process.on("unhandledRejection", err => {
   if (loggedErrors.has(err)) {
     // No need to print it twice.
     process.exit(1);
@@ -42,39 +42,39 @@ const {
   FB_DEV,
   FB_PROD,
   RN_DEV,
-  RN_PROD,
+  RN_PROD
 } = Bundles.bundleTypes;
 
-const requestedBundleTypes = (argv.type || '')
-  .split(',')
+const requestedBundleTypes = (argv.type || "")
+  .split(",")
   .map(type => type.toUpperCase());
-const requestedBundleNames = (argv._[0] || '')
-  .split(',')
+const requestedBundleNames = (argv._[0] || "")
+  .split(",")
   .map(type => type.toLowerCase());
 const forcePrettyOutput = argv.pretty;
-const syncFBSourcePath = argv['sync-fbsource'];
-const syncWWWPath = argv['sync-www'];
-const shouldExtractErrors = argv['extract-errors'];
+const syncFBSourcePath = argv["sync-fbsource"];
+const syncWWWPath = argv["sync-www"];
+const shouldExtractErrors = argv["extract-errors"];
 const errorCodeOpts = {
-  errorMapFilePath: 'scripts/error-codes/codes.json',
+  errorMapFilePath: "scripts/error-codes/codes.json"
 };
 
 const closureOptions = {
-  compilationLevel: 'SIMPLE',
-  languageIn: 'ECMASCRIPT5_STRICT',
-  languageOut: 'ECMASCRIPT5_STRICT',
-  env: 'CUSTOM',
-  warningLevel: 'QUIET',
+  compilationLevel: "SIMPLE",
+  languageIn: "ECMASCRIPT5_STRICT",
+  languageOut: "ECMASCRIPT5_STRICT",
+  env: "CUSTOM",
+  warningLevel: "QUIET",
   applyInputSourceMaps: false,
   useTypesForOptimization: false,
-  processCommonJsModules: false,
+  processCommonJsModules: false
 };
 
 function getBabelConfig(updateBabelOptions, bundleType, filename) {
   let options = {
-    exclude: 'node_modules/**',
+    exclude: "node_modules/**",
     presets: [],
-    plugins: [],
+    plugins: []
   };
   if (updateBabelOptions) {
     options = updateBabelOptions(options);
@@ -87,8 +87,8 @@ function getBabelConfig(updateBabelOptions, bundleType, filename) {
       return Object.assign({}, options, {
         plugins: options.plugins.concat([
           // Wrap warning() calls in a __DEV__ check so they are stripped from production.
-          require('./plugins/wrap-warning-with-env-check'),
-        ]),
+          require("./plugins/wrap-warning-with-env-check")
+        ])
       });
     case UMD_DEV:
     case UMD_PROD:
@@ -97,12 +97,12 @@ function getBabelConfig(updateBabelOptions, bundleType, filename) {
       return Object.assign({}, options, {
         plugins: options.plugins.concat([
           // Use object-assign polyfill in open source
-          path.resolve('./scripts/babel/transform-object-assign-require'),
+          path.resolve("./scripts/babel/transform-object-assign-require"),
           // Minify invariant messages
-          require('../error-codes/replace-invariant-error-codes'),
+          require("../error-codes/replace-invariant-error-codes"),
           // Wrap warning() calls in a __DEV__ check so they are stripped from production.
-          require('./plugins/wrap-warning-with-env-check'),
-        ]),
+          require("./plugins/wrap-warning-with-env-check")
+        ])
       });
     default:
       return options;
@@ -118,7 +118,7 @@ function getRollupOutputOptions(outputPath, format, globals, globalName) {
       globals,
       interop: false,
       name: globalName,
-      sourcemap: false,
+      sourcemap: false
     }
   );
 }
@@ -140,7 +140,7 @@ function getFormat(bundleType) {
 
 function getFilename(name, globalName, bundleType) {
   // we do this to replace / to -, for react-dom/server
-  name = name.replace('/', '-');
+  name = name.replace("/", "-");
   switch (bundleType) {
     case UMD_DEV:
       return `${name}.development.js`;
@@ -200,30 +200,30 @@ function getPlugins(
       transform(source) {
         findAndRecordErrorCodes(source);
         return source;
-      },
+      }
     },
     // Shim any modules that need forking in this environment.
     useForks(forks),
     // Use Node resolution mechanism.
     resolve({
-      skip: externals,
+      skip: externals
     }),
     // Remove license headers from individual modules
     stripBanner({
-      exclude: 'node_modules/**/*',
+      exclude: "node_modules/**/*"
     }),
     // Compile to ES5.
     babel(getBabelConfig(updateBabelOptions, bundleType)),
     // Remove 'use strict' from individual source files.
     {
       transform(source) {
-        return source.replace(/['"]use strict['"']/g, '');
-      },
+        return source.replace(/['"]use strict['"']/g, "");
+      }
     },
     // Turn __DEV__ and process.env checks into constants.
     replace({
-      __DEV__: isProduction ? 'false' : 'true',
-      'process.env.NODE_ENV': isProduction ? "'production'" : "'development'",
+      __DEV__: isProduction ? "false" : "true",
+      "process.env.NODE_ENV": isProduction ? "'production'" : "'development'"
     }),
     // We still need CommonJS for external deps like object-assign.
     commonjs(),
@@ -231,7 +231,7 @@ function getPlugins(
     isFBBundle && {
       transformBundle(source) {
         return source.replace(/require\(['"]react['"]\)/g, "require('React')");
-      },
+      }
     },
     // Apply dead code elimination and/or minification.
     isProduction &&
@@ -244,7 +244,7 @@ function getPlugins(
           // We can remove this if GCC merges my PR:
           // https://github.com/google/closure-compiler/pull/2707
           // and then the compiled version is released via `google-closure-compiler-js`.
-          renaming: !shouldStayReadable,
+          renaming: !shouldStayReadable
         })
       ),
     // Add the whitespace back if necessary.
@@ -259,7 +259,7 @@ function getPlugins(
           filename,
           moduleType
         );
-      },
+      }
     },
     // Record bundle size.
     sizes({
@@ -275,10 +275,10 @@ function getPlugins(
           bundleType,
           packageName,
           size,
-          gzip,
+          gzip
         };
-      },
-    }),
+      }
+    })
   ].filter(Boolean);
 }
 
@@ -319,7 +319,7 @@ async function createBundle(bundle, bundleType) {
 
   let resolvedEntry = require.resolve(bundle.entry);
   if (bundleType === FB_DEV || bundleType === FB_PROD) {
-    const resolvedFBEntry = resolvedEntry.replace('.js', '.fb.js');
+    const resolvedFBEntry = resolvedEntry.replace(".js", ".fb.js");
     if (fs.existsSync(resolvedFBEntry)) {
       resolvedEntry = resolvedFBEntry;
     }
@@ -345,10 +345,10 @@ async function createBundle(bundle, bundleType) {
   const rollupConfig = {
     input: resolvedEntry,
     treeshake: {
-      pureExternalModules,
+      pureExternalModules
     },
     external(id) {
-      const containsThisModule = pkg => id === pkg || id.startsWith(pkg + '/');
+      const containsThisModule = pkg => id === pkg || id.startsWith(pkg + "/");
       const isProvidedByDependency = externals.some(containsThisModule);
       if (!shouldBundleDependencies && isProvidedByDependency) {
         return true;
@@ -368,7 +368,7 @@ async function createBundle(bundle, bundleType) {
       bundle.modulesToStub
     ),
     // We can't use getters in www.
-    legacy: bundleType === FB_DEV || bundleType === FB_PROD,
+    legacy: bundleType === FB_DEV || bundleType === FB_PROD
   };
   const [mainOutputPath, ...otherOutputPaths] = Packaging.getBundleOutputPaths(
     bundleType,
@@ -382,42 +382,42 @@ async function createBundle(bundle, bundleType) {
     bundle.global
   );
 
-  console.log(`${chalk.bgYellow.black(' BUILDING ')} ${logKey}`);
+  console.log(`${chalk.bgYellow.black(" BUILDING ")} ${logKey}`);
   try {
     const result = await rollup(rollupConfig);
     await result.write(rollupOutputOptions);
   } catch (error) {
-    console.log(`${chalk.bgRed.black(' OH NOES! ')} ${logKey}\n`);
+    console.log(`${chalk.bgRed.black(" OH NOES! ")} ${logKey}\n`);
     handleRollupError(error);
     throw error;
   }
   for (let i = 0; i < otherOutputPaths.length; i++) {
     await asyncCopyTo(mainOutputPath, otherOutputPaths[i]);
   }
-  console.log(`${chalk.bgGreen.black(' COMPLETE ')} ${logKey}\n`);
+  console.log(`${chalk.bgGreen.black(" COMPLETE ")} ${logKey}\n`);
 }
 
 function handleRollupWarning(warning) {
-  if (warning.code === 'UNRESOLVED_IMPORT') {
+  if (warning.code === "UNRESOLVED_IMPORT") {
     console.error(warning.message);
     process.exit(1);
   }
-  if (warning.code === 'UNUSED_EXTERNAL_IMPORT') {
+  if (warning.code === "UNUSED_EXTERNAL_IMPORT") {
     const match = warning.message.match(/external module '([^']+)'/);
-    if (!match || typeof match[1] !== 'string') {
+    if (!match || typeof match[1] !== "string") {
       throw new Error(
-        'Could not parse a Rollup warning. ' + 'Fix this method.'
+        "Could not parse a Rollup warning. " + "Fix this method."
       );
     }
     const importSideEffects = Modules.getImportSideEffects();
     const externalModule = match[1];
-    if (typeof importSideEffects[externalModule] !== 'boolean') {
+    if (typeof importSideEffects[externalModule] !== "boolean") {
       throw new Error(
         'An external module "' +
           externalModule +
           '" is used in a DEV-only code path ' +
-          'but we do not know if it is safe to omit an unused require() to it in production. ' +
-          'Please add it to the `importSideEffects` list in `scripts/rollup/modules.js`.'
+          "but we do not know if it is safe to omit an unused require() to it in production. " +
+          "Please add it to the `importSideEffects` list in `scripts/rollup/modules.js`."
       );
     }
     // Don't warn. We will remove side effectless require() in a later pass.
@@ -433,19 +433,19 @@ function handleRollupError(error) {
     return;
   }
   console.error(
-    `\x1b[31m-- ${error.code}${error.plugin ? ` (${error.plugin})` : ''} --`
+    `\x1b[31m-- ${error.code}${error.plugin ? ` (${error.plugin})` : ""} --`
   );
   console.error(error.message);
-  const {file, line, column} = error.loc;
+  const { file, line, column } = error.loc;
   if (file) {
     // This looks like an error from Rollup, e.g. missing export.
     // We'll use the accurate line numbers provided by Rollup but
     // use Babel code frame because it looks nicer.
-    const rawLines = fs.readFileSync(file, 'utf-8');
+    const rawLines = fs.readFileSync(file, "utf-8");
     // column + 1 is required due to rollup counting column start position from 0
     // whereas babel-code-frame counts from 1
     const frame = codeFrame(rawLines, line, column + 1, {
-      highlightCode: true,
+      highlightCode: true
     });
     console.error(frame);
   } else {
@@ -457,7 +457,7 @@ function handleRollupError(error) {
 }
 
 async function buildEverything() {
-  await asyncRimRaf('build');
+  await asyncRimRaf("build");
 
   // Run them serially for better console output
   // and to avoid any potential race conditions.
@@ -476,11 +476,11 @@ async function buildEverything() {
   await Packaging.prepareNpmPackages();
 
   if (syncFBSourcePath) {
-    await Sync.syncReactNative('build/react-native', syncFBSourcePath);
-    await Sync.syncReactNativeRT('build/react-rt', syncFBSourcePath);
-    await Sync.syncReactNativeCS('build/react-cs', syncFBSourcePath);
+    await Sync.syncReactNative("build/react-native", syncFBSourcePath);
+    await Sync.syncReactNativeRT("build/react-rt", syncFBSourcePath);
+    await Sync.syncReactNativeCS("build/react-cs", syncFBSourcePath);
   } else if (syncWWWPath) {
-    await Sync.syncReactDom('build/facebook-www', syncWWWPath);
+    await Sync.syncReactDom("build/facebook-www", syncWWWPath);
   }
 
   console.log(Stats.printResults());
@@ -490,9 +490,9 @@ async function buildEverything() {
 
   if (shouldExtractErrors) {
     console.warn(
-      '\nWarning: this build was created with --extract-errors enabled.\n' +
-        'this will result in extremely slow builds and should only be\n' +
-        'used when the error map needs to be rebuilt.\n'
+      "\nWarning: this build was created with --extract-errors enabled.\n" +
+        "this will result in extremely slow builds and should only be\n" +
+        "used when the error map needs to be rebuilt.\n"
     );
   }
 }

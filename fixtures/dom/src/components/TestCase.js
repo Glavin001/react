@@ -1,9 +1,9 @@
-import cn from 'classnames';
-import semver from 'semver';
-import PropTypes from 'prop-types';
-import IssueList from './IssueList';
-import {parse} from 'query-string';
-import {semverString} from './propTypes';
+import cn from "classnames";
+import semver from "semver";
+import PropTypes from "prop-types";
+import IssueList from "./IssueList";
+import { parse } from "query-string";
+import { semverString } from "./propTypes";
 
 const React = window.React;
 
@@ -12,7 +12,7 @@ const propTypes = {
   title: PropTypes.node.isRequired,
   resolvedIn: semverString,
   introducedIn: semverString,
-  resolvedBy: PropTypes.string,
+  resolvedBy: PropTypes.string
 };
 
 class TestCase extends React.Component {
@@ -20,13 +20,13 @@ class TestCase extends React.Component {
     super(props, context);
 
     this.state = {
-      complete: false,
+      complete: false
     };
   }
 
   handleChange = e => {
     this.setState({
-      complete: e.target.checked,
+      complete: e.target.checked
     });
   };
 
@@ -39,19 +39,19 @@ class TestCase extends React.Component {
       resolvedBy,
       affectedBrowsers,
       relatedIssues,
-      children,
+      children
     } = this.props;
 
-    let {complete} = this.state;
+    let { complete } = this.state;
 
-    const {version} = parse(window.location.search);
+    const { version } = parse(window.location.search);
     const isTestFixed =
       !version || !resolvedIn || semver.gte(version, resolvedIn);
 
     complete = !isTestFixed || complete;
 
     return (
-      <section className={cn('test-case', complete && 'test-case--complete')}>
+      <section className={cn("test-case", complete && "test-case--complete")}>
         <h2 className="test-case__title type-subheading">
           <label>
             <input
@@ -59,7 +59,7 @@ class TestCase extends React.Component {
               type="checkbox"
               checked={complete}
               onChange={this.handleChange}
-            />{' '}
+            />{" "}
             {title}
           </label>
         </h2>
@@ -69,7 +69,8 @@ class TestCase extends React.Component {
           {introducedIn && (
             <dd>
               <a
-                href={'https://github.com/facebook/react/tag/v' + introducedIn}>
+                href={"https://github.com/facebook/react/tag/v" + introducedIn}
+              >
                 <code>{introducedIn}</code>
               </a>
             </dd>
@@ -78,7 +79,7 @@ class TestCase extends React.Component {
           {resolvedIn && <dt>First supported in: </dt>}
           {resolvedIn && (
             <dd>
-              <a href={'https://github.com/facebook/react/tag/v' + resolvedIn}>
+              <a href={"https://github.com/facebook/react/tag/v" + resolvedIn}>
                 <code>{resolvedIn}</code>
               </a>
             </dd>
@@ -89,9 +90,10 @@ class TestCase extends React.Component {
             <dd>
               <a
                 href={
-                  'https://github.com/facebook/react/pull/' +
+                  "https://github.com/facebook/react/pull/" +
                   resolvedBy.slice(1)
-                }>
+                }
+              >
                 <code>{resolvedBy}</code>
               </a>
             </dd>
@@ -130,7 +132,7 @@ TestCase.propTypes = propTypes;
 
 TestCase.Steps = class extends React.Component {
   render() {
-    const {children} = this.props;
+    const { children } = this.props;
     return (
       <div>
         <h3>Steps to reproduce:</h3>
@@ -142,7 +144,7 @@ TestCase.Steps = class extends React.Component {
 
 TestCase.ExpectedResult = class extends React.Component {
   render() {
-    const {children} = this.props;
+    const { children } = this.props;
     return (
       <div>
         <h3>Expected Result:</h3>

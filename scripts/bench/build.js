@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
-const Git = require('nodegit');
-const rimraf = require('rimraf');
-const ncp = require('ncp').ncp;
-const {existsSync} = require('fs');
-const exec = require('child_process').exec;
-const {join} = require('path');
+const Git = require("nodegit");
+const rimraf = require("rimraf");
+const ncp = require("ncp").ncp;
+const { existsSync } = require("fs");
+const exec = require("child_process").exec;
+const { join } = require("path");
 
-const reactUrl = 'https://github.com/facebook/react.git';
+const reactUrl = "https://github.com/facebook/react.git";
 
 function cleanDir() {
-  return new Promise(_resolve => rimraf('remote-repo', _resolve));
+  return new Promise(_resolve => rimraf("remote-repo", _resolve));
 }
 
 function executeCommand(command) {
@@ -39,12 +39,12 @@ function asyncCopyTo(from, to) {
 }
 
 function getDefaultReactPath() {
-  return join(__dirname, 'remote-repo');
+  return join(__dirname, "remote-repo");
 }
 
 async function buildBenchmark(reactPath = getDefaultReactPath(), benchmark) {
   // get the build.js from the benchmark directory and execute it
-  await require(join(__dirname, 'benchmarks', benchmark, 'build.js'))(
+  await require(join(__dirname, "benchmarks", benchmark, "build.js"))(
     reactPath,
     asyncCopyTo
   );
@@ -55,7 +55,7 @@ async function getMergeBaseFromLocalGitRepo(localRepo) {
   return await Git.Merge.base(
     repo,
     await repo.getHeadCommit(),
-    await repo.getBranchCommit('master')
+    await repo.getBranchCommit("master")
   );
 }
 
@@ -74,7 +74,7 @@ async function buildBenchmarkBundlesFromGitRepo(
       await cleanDir(remoteRepoDir);
     }
     // check if remote-repo diretory already exists
-    if (existsSync(join(__dirname, 'remote-repo'))) {
+    if (existsSync(join(__dirname, "remote-repo"))) {
       repo = await Git.Repository.open(remoteRepoDir);
       // fetch all the latest remote changes
       await repo.fetchAll();
@@ -82,15 +82,15 @@ async function buildBenchmarkBundlesFromGitRepo(
       // if not, clone the repo to remote-repo folder
       repo = await Git.Clone(url, remoteRepoDir);
     }
-    let commit = await repo.getBranchCommit('master');
+    let commit = await repo.getBranchCommit("master");
     // reset hard to this remote head
     await Git.Reset.reset(repo, commit, Git.Reset.TYPE.HARD);
     // then we checkout the latest master head
-    await repo.checkoutBranch('master');
+    await repo.checkoutBranch("master");
     // make sure we pull in the latest changes
-    await repo.mergeBranches('master', 'origin/master');
+    await repo.mergeBranches("master", "origin/master");
     // then we check if we need to move the HEAD to the merge base
-    if (commitId && commitId !== 'master') {
+    if (commitId && commitId !== "master") {
       // as the commitId probably came from our local repo
       // we use it to lookup the right commit in our remote repo
       commit = await Git.Commit.lookup(repo, commitId);
@@ -118,5 +118,5 @@ module.exports = {
   buildReactBundles,
   buildBenchmark,
   buildBenchmarkBundlesFromGitRepo,
-  getMergeBaseFromLocalGitRepo,
+  getMergeBaseFromLocalGitRepo
 };

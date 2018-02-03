@@ -7,7 +7,8 @@
     "react-dom": "file:../../../../build/packages/react-dom"
   },
   "scripts": {
-    "build": "rm -f output.js && browserify ./input.js -g [envify --NODE_ENV 'production'] -o output.js"
+    "build":
+      "rm -f output.js && browserify ./input.js -g [envify --NODE_ENV 'production'] -o output.js"
   },
   "devDependencies": {
     "envify": "^4.0.0"

@@ -7,7 +7,7 @@
  * @flow
  */
 
-import type {CapturedError} from './ReactFiberScheduler';
+import type { CapturedError } from "./ReactFiberScheduler";
 
 // This module is forked in different environments.
 // By default, return `true` to log errors to the console.

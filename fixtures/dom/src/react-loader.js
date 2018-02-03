@@ -9,21 +9,21 @@
 
 function parseQuery(qstr) {
   var query = {};
-  var a = qstr.substr(1).split('&');
+  var a = qstr.substr(1).split("&");
 
   for (var i = 0; i < a.length; i++) {
-    var b = a[i].split('=');
-    query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+    var b = a[i].split("=");
+    query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || "");
   }
   return query;
 }
 
 function loadScript(src) {
-  let firstScript = document.getElementsByTagName('script')[0];
+  let firstScript = document.getElementsByTagName("script")[0];
   let scriptNode;
 
   return new Promise((resolve, reject) => {
-    scriptNode = document.createElement('script');
+    scriptNode = document.createElement("script");
     scriptNode.async = 1;
     scriptNode.src = src;
 
@@ -35,30 +35,30 @@ function loadScript(src) {
 }
 
 export default function loadReact() {
-  let REACT_PATH = 'react.development.js';
-  let DOM_PATH = 'react-dom.development.js';
+  let REACT_PATH = "react.development.js";
+  let DOM_PATH = "react-dom.development.js";
 
   let query = parseQuery(window.location.search);
-  let version = query.version || 'local';
+  let version = query.version || "local";
 
-  if (version !== 'local') {
+  if (version !== "local") {
     // The file structure was updated in 16. This wasn't the case for alphas.
     // Load the old module location for anything less than 16 RC
-    if (parseInt(version, 10) >= 16 && version.indexOf('alpha') < 0) {
+    if (parseInt(version, 10) >= 16 && version.indexOf("alpha") < 0) {
       REACT_PATH =
-        'https://unpkg.com/react@' + version + '/umd/react.development.js';
+        "https://unpkg.com/react@" + version + "/umd/react.development.js";
       DOM_PATH =
-        'https://unpkg.com/react-dom@' +
+        "https://unpkg.com/react-dom@" +
         version +
-        '/umd/react-dom.development.js';
+        "/umd/react-dom.development.js";
     } else {
-      REACT_PATH = 'https://unpkg.com/react@' + version + '/dist/react.js';
+      REACT_PATH = "https://unpkg.com/react@" + version + "/dist/react.js";
       DOM_PATH =
-        'https://unpkg.com/react-dom@' + version + '/dist/react-dom.js';
+        "https://unpkg.com/react-dom@" + version + "/dist/react-dom.js";
     }
   }
 
-  const needsReactDOM = version === 'local' || parseFloat(version, 10) > 0.13;
+  const needsReactDOM = version === "local" || parseFloat(version, 10) > 0.13;
 
   let request = loadScript(REACT_PATH);
 

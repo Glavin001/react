@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment';
+import ExecutionEnvironment from "fbjs/lib/ExecutionEnvironment";
 
 let contentKey = null;
 
@@ -20,7 +20,7 @@ function getTextContentAccessor() {
     // Prefer textContent to innerText because many browsers support both but
     // SVG <text> elements don't support innerText even when <div> does.
     contentKey =
-      'textContent' in document.documentElement ? 'textContent' : 'innerText';
+      "textContent" in document.documentElement ? "textContent" : "innerText";
   }
   return contentKey;
 }

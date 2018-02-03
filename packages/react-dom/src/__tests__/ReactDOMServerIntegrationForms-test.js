@@ -7,9 +7,9 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-const ReactDOMServerIntegrationUtils = require('./utils/ReactDOMServerIntegrationTestUtils');
+const ReactDOMServerIntegrationUtils = require("./utils/ReactDOMServerIntegrationTestUtils");
 
 let React;
 let ReactDOM;
@@ -19,15 +19,15 @@ let ReactTestUtils;
 function initModules() {
   // Reset warning cache.
   jest.resetModuleRegistry();
-  React = require('react');
-  ReactDOM = require('react-dom');
-  ReactTestUtils = require('react-dom/test-utils');
-  ReactDOMServer = require('react-dom/server');
+  React = require("react");
+  ReactDOM = require("react-dom");
+  ReactTestUtils = require("react-dom/test-utils");
+  ReactDOMServer = require("react-dom/server");
 
   // Make them available to the helpers.
   return {
     ReactDOM,
-    ReactDOMServer,
+    ReactDOMServer
   };
 }
 
@@ -36,101 +36,101 @@ const {
   itRenders,
   itClientRenders,
   renderIntoDom,
-  serverRender,
+  serverRender
 } = ReactDOMServerIntegrationUtils(initModules);
 
-describe('ReactDOMServerIntegration', () => {
+describe("ReactDOMServerIntegration", () => {
   beforeEach(() => {
     resetModules();
   });
 
-  describe('form controls', function() {
-    describe('inputs', function() {
-      itRenders('an input with a value and an onChange', async render => {
+  describe("form controls", function() {
+    describe("inputs", function() {
+      itRenders("an input with a value and an onChange", async render => {
         const e = await render(<input value="foo" onChange={() => {}} />);
-        expect(e.value).toBe('foo');
+        expect(e.value).toBe("foo");
       });
 
-      itRenders('an input with a value and readOnly', async render => {
+      itRenders("an input with a value and readOnly", async render => {
         const e = await render(<input value="foo" readOnly={true} />);
-        expect(e.value).toBe('foo');
+        expect(e.value).toBe("foo");
       });
 
       itRenders(
-        'an input with a value and no onChange/readOnly',
+        "an input with a value and no onChange/readOnly",
         async render => {
           // this configuration should raise a dev warning that value without
           // onChange or readOnly is a mistake.
           const e = await render(<input value="foo" />, 1);
-          expect(e.value).toBe('foo');
-          expect(e.getAttribute('value')).toBe('foo');
-        },
+          expect(e.value).toBe("foo");
+          expect(e.getAttribute("value")).toBe("foo");
+        }
       );
 
-      itRenders('an input with a defaultValue', async render => {
+      itRenders("an input with a defaultValue", async render => {
         const e = await render(<input defaultValue="foo" />);
-        expect(e.value).toBe('foo');
-        expect(e.getAttribute('value')).toBe('foo');
-        expect(e.getAttribute('defaultValue')).toBe(null);
+        expect(e.value).toBe("foo");
+        expect(e.getAttribute("value")).toBe("foo");
+        expect(e.getAttribute("defaultValue")).toBe(null);
       });
 
-      itRenders('an input value overriding defaultValue', async render => {
+      itRenders("an input value overriding defaultValue", async render => {
         const e = await render(
           <input value="foo" defaultValue="bar" readOnly={true} />,
-          1,
+          1
         );
-        expect(e.value).toBe('foo');
-        expect(e.getAttribute('value')).toBe('foo');
-        expect(e.getAttribute('defaultValue')).toBe(null);
+        expect(e.value).toBe("foo");
+        expect(e.getAttribute("value")).toBe("foo");
+        expect(e.getAttribute("defaultValue")).toBe(null);
       });
 
       itRenders(
-        'an input value overriding defaultValue no matter the prop order',
+        "an input value overriding defaultValue no matter the prop order",
         async render => {
           const e = await render(
             <input defaultValue="bar" value="foo" readOnly={true} />,
-            1,
+            1
           );
-          expect(e.value).toBe('foo');
-          expect(e.getAttribute('value')).toBe('foo');
-          expect(e.getAttribute('defaultValue')).toBe(null);
-        },
+          expect(e.value).toBe("foo");
+          expect(e.getAttribute("value")).toBe("foo");
+          expect(e.getAttribute("defaultValue")).toBe(null);
+        }
       );
     });
 
-    describe('checkboxes', function() {
-      itRenders('a checkbox that is checked with an onChange', async render => {
+    describe("checkboxes", function() {
+      itRenders("a checkbox that is checked with an onChange", async render => {
         const e = await render(
-          <input type="checkbox" checked={true} onChange={() => {}} />,
+          <input type="checkbox" checked={true} onChange={() => {}} />
         );
         expect(e.checked).toBe(true);
       });
 
-      itRenders('a checkbox that is checked with readOnly', async render => {
+      itRenders("a checkbox that is checked with readOnly", async render => {
         const e = await render(
-          <input type="checkbox" checked={true} readOnly={true} />,
+          <input type="checkbox" checked={true} readOnly={true} />
         );
         expect(e.checked).toBe(true);
       });
 
       itRenders(
-        'a checkbox that is checked and no onChange/readOnly',
+        "a checkbox that is checked and no onChange/readOnly",
         async render => {
           // this configuration should raise a dev warning that checked without
           // onChange or readOnly is a mistake.
           const e = await render(<input type="checkbox" checked={true} />, 1);
           expect(e.checked).toBe(true);
-        },
+        }
       );
 
-      itRenders('a checkbox with defaultChecked', async render => {
+      itRenders("a checkbox with defaultChecked", async render => {
         const e = await render(<input type="checkbox" defaultChecked={true} />);
         expect(e.checked).toBe(true);
-        expect(e.getAttribute('defaultChecked')).toBe(null);
+        expect(e.getAttribute("defaultChecked")).toBe(null);
       });
 
       itRenders(
-        'a checkbox checked overriding defaultChecked',
+        "a checkbox checked overriding defaultChecked",
         async render => {
           const e = await render(
             <input
@@ -139,15 +139,15 @@ describe('ReactDOMServerIntegration', () => {
               defaultChecked={false}
               readOnly={true}
             />,
-            1,
+            1
           );
           expect(e.checked).toBe(true);
-          expect(e.getAttribute('defaultChecked')).toBe(null);
-        },
+          expect(e.getAttribute("defaultChecked")).toBe(null);
+        }
       );
 
       itRenders(
-        'a checkbox checked overriding defaultChecked no matter the prop order',
+        "a checkbox checked overriding defaultChecked no matter the prop order",
         async render => {
           const e = await render(
             <input
@@ -156,76 +156,76 @@ describe('ReactDOMServerIntegration', () => {
               checked={true}
               readOnly={true}
             />,
-            1,
+            1
           );
           expect(e.checked).toBe(true);
-          expect(e.getAttribute('defaultChecked')).toBe(null);
-        },
+          expect(e.getAttribute("defaultChecked")).toBe(null);
+        }
       );
     });
 
-    describe('textareas', function() {
+    describe("textareas", function() {
       // textareas
       // ---------
-      itRenders('a textarea with a value and an onChange', async render => {
+      itRenders("a textarea with a value and an onChange", async render => {
         const e = await render(<textarea value="foo" onChange={() => {}} />);
         // textarea DOM elements don't have a value **attribute**, the text is
         // a child of the element and accessible via the .value **property**.
-        expect(e.getAttribute('value')).toBe(null);
-        expect(e.value).toBe('foo');
+        expect(e.getAttribute("value")).toBe(null);
+        expect(e.value).toBe("foo");
       });
 
-      itRenders('a textarea with a value and readOnly', async render => {
+      itRenders("a textarea with a value and readOnly", async render => {
         const e = await render(<textarea value="foo" readOnly={true} />);
         // textarea DOM elements don't have a value **attribute**, the text is
         // a child of the element and accessible via the .value **property**.
-        expect(e.getAttribute('value')).toBe(null);
-        expect(e.value).toBe('foo');
+        expect(e.getAttribute("value")).toBe(null);
+        expect(e.value).toBe("foo");
       });
 
       itRenders(
-        'a textarea with a value and no onChange/readOnly',
+        "a textarea with a value and no onChange/readOnly",
         async render => {
           // this configuration should raise a dev warning that value without
           // onChange or readOnly is a mistake.
           const e = await render(<textarea value="foo" />, 1);
-          expect(e.getAttribute('value')).toBe(null);
-          expect(e.value).toBe('foo');
-        },
+          expect(e.getAttribute("value")).toBe(null);
+          expect(e.value).toBe("foo");
+        }
       );
 
-      itRenders('a textarea with a defaultValue', async render => {
+      itRenders("a textarea with a defaultValue", async render => {
         const e = await render(<textarea defaultValue="foo" />);
-        expect(e.getAttribute('value')).toBe(null);
-        expect(e.getAttribute('defaultValue')).toBe(null);
-        expect(e.value).toBe('foo');
+        expect(e.getAttribute("value")).toBe(null);
+        expect(e.getAttribute("defaultValue")).toBe(null);
+        expect(e.value).toBe("foo");
       });
 
-      itRenders('a textarea value overriding defaultValue', async render => {
+      itRenders("a textarea value overriding defaultValue", async render => {
         const e = await render(
           <textarea value="foo" defaultValue="bar" readOnly={true} />,
-          1,
+          1
         );
-        expect(e.getAttribute('value')).toBe(null);
-        expect(e.getAttribute('defaultValue')).toBe(null);
-        expect(e.value).toBe('foo');
+        expect(e.getAttribute("value")).toBe(null);
+        expect(e.getAttribute("defaultValue")).toBe(null);
+        expect(e.value).toBe("foo");
       });
 
       itRenders(
-        'a textarea value overriding defaultValue no matter the prop order',
+        "a textarea value overriding defaultValue no matter the prop order",
         async render => {
           const e = await render(
             <textarea defaultValue="bar" value="foo" readOnly={true} />,
-            1,
+            1
           );
-          expect(e.getAttribute('value')).toBe(null);
-          expect(e.getAttribute('defaultValue')).toBe(null);
-          expect(e.value).toBe('foo');
-        },
+          expect(e.getAttribute("value")).toBe(null);
+          expect(e.getAttribute("defaultValue")).toBe(null);
+          expect(e.value).toBe("foo");
+        }
       );
     });
 
-    describe('selects', function() {
+    describe("selects", function() {
       let options;
       beforeEach(function() {
         options = [
@@ -237,7 +237,7 @@ describe('ReactDOMServerIntegration', () => {
           </option>,
           <option key={3} value="baz" id="baz">
             Baz
-          </option>,
+          </option>
         ];
       });
 
@@ -250,98 +250,98 @@ describe('ReactDOMServerIntegration', () => {
         }
         // the select DOM element shouldn't ever have a value or defaultValue
         // attribute; that is not how select values are expressed in the DOM.
-        expect(element.getAttribute('value')).toBe(null);
-        expect(element.getAttribute('defaultValue')).toBe(null);
+        expect(element.getAttribute("value")).toBe(null);
+        expect(element.getAttribute("defaultValue")).toBe(null);
 
-        ['foo', 'bar', 'baz'].forEach(value => {
+        ["foo", "bar", "baz"].forEach(value => {
           const expectedValue = selected.indexOf(value) !== -1;
           const option = element.querySelector(`#${value}`);
           expect(option.selected).toBe(expectedValue);
         });
       };
 
-      itRenders('a select with a value and an onChange', async render => {
+      itRenders("a select with a value and an onChange", async render => {
         const e = await render(
           <select value="bar" onChange={() => {}}>
             {options}
-          </select>,
+          </select>
         );
-        expectSelectValue(e, 'bar');
+        expectSelectValue(e, "bar");
       });
 
-      itRenders('a select with a value and readOnly', async render => {
+      itRenders("a select with a value and readOnly", async render => {
         const e = await render(
           <select value="bar" readOnly={true}>
             {options}
-          </select>,
+          </select>
         );
-        expectSelectValue(e, 'bar');
+        expectSelectValue(e, "bar");
       });
 
       itRenders(
-        'a select with a multiple values and an onChange',
+        "a select with a multiple values and an onChange",
         async render => {
           const e = await render(
-            <select value={['bar', 'baz']} multiple={true} onChange={() => {}}>
+            <select value={["bar", "baz"]} multiple={true} onChange={() => {}}>
               {options}
-            </select>,
+            </select>
           );
-          expectSelectValue(e, ['bar', 'baz']);
-        },
+          expectSelectValue(e, ["bar", "baz"]);
+        }
       );
 
       itRenders(
-        'a select with a multiple values and readOnly',
+        "a select with a multiple values and readOnly",
         async render => {
           const e = await render(
-            <select value={['bar', 'baz']} multiple={true} readOnly={true}>
+            <select value={["bar", "baz"]} multiple={true} readOnly={true}>
               {options}
-            </select>,
+            </select>
           );
-          expectSelectValue(e, ['bar', 'baz']);
-        },
+          expectSelectValue(e, ["bar", "baz"]);
+        }
       );
 
       itRenders(
-        'a select with a value and no onChange/readOnly',
+        "a select with a value and no onChange/readOnly",
         async render => {
           // this configuration should raise a dev warning that value without
           // onChange or readOnly is a mistake.
           const e = await render(<select value="bar">{options}</select>, 1);
-          expectSelectValue(e, 'bar');
-        },
+          expectSelectValue(e, "bar");
+        }
       );
 
-      itRenders('a select with a defaultValue', async render => {
+      itRenders("a select with a defaultValue", async render => {
         const e = await render(<select defaultValue="bar">{options}</select>);
-        expectSelectValue(e, 'bar');
+        expectSelectValue(e, "bar");
       });
 
-      itRenders('a select value overriding defaultValue', async render => {
+      itRenders("a select value overriding defaultValue", async render => {
         const e = await render(
           <select value="bar" defaultValue="baz" readOnly={true}>
             {options}
           </select>,
-          1,
+          1
         );
-        expectSelectValue(e, 'bar');
+        expectSelectValue(e, "bar");
       });
 
       itRenders(
-        'a select value overriding defaultValue no matter the prop order',
+        "a select value overriding defaultValue no matter the prop order",
         async render => {
           const e = await render(
             <select defaultValue="baz" value="bar" readOnly={true}>
               {options}
             </select>,
-            1,
+            1
           );
-          expectSelectValue(e, 'bar');
-        },
+          expectSelectValue(e, "bar");
+        }
       );
     });
 
-    describe('user interaction', function() {
+    describe("user interaction", function() {
       let ControlledInput,
         ControlledTextArea,
         ControlledCheckbox,
@@ -350,13 +350,13 @@ describe('ReactDOMServerIntegration', () => {
         ControlledInput = class extends React.Component {
           constructor() {
             super();
-            this.state = {value: 'Hello'};
+            this.state = { value: "Hello" };
           }
           handleChange(event) {
             if (this.props.onChange) {
               this.props.onChange(event);
             }
-            this.setState({value: event.target.value});
+            this.setState({ value: event.target.value });
           }
           render() {
             return (
@@ -370,13 +370,13 @@ describe('ReactDOMServerIntegration', () => {
         ControlledTextArea = class extends React.Component {
           constructor() {
             super();
-            this.state = {value: 'Hello'};
+            this.state = { value: "Hello" };
           }
           handleChange(event) {
             if (this.props.onChange) {
               this.props.onChange(event);
             }
-            this.setState({value: event.target.value});
+            this.setState({ value: event.target.value });
           }
           render() {
             return (
@@ -390,13 +390,13 @@ describe('ReactDOMServerIntegration', () => {
         ControlledCheckbox = class extends React.Component {
           constructor() {
             super();
-            this.state = {value: true};
+            this.state = { value: true };
           }
           handleChange(event) {
             if (this.props.onChange) {
               this.props.onChange(event);
             }
-            this.setState({value: event.target.checked});
+            this.setState({ value: event.target.checked });
           }
           render() {
             return (
@@ -411,19 +411,20 @@ describe('ReactDOMServerIntegration', () => {
         ControlledSelect = class extends React.Component {
           constructor() {
             super();
-            this.state = {value: 'Hello'};
+            this.state = { value: "Hello" };
           }
           handleChange(event) {
             if (this.props.onChange) {
               this.props.onChange(event);
             }
-            this.setState({value: event.target.value});
+            this.setState({ value: event.target.value });
           }
           render() {
             return (
               <select
                 value={this.state.value}
-                onChange={this.handleChange.bind(this)}>
+                onChange={this.handleChange.bind(this)}
+              >
                 <option key="1" value="Hello">
                   Hello
                 </option>
@@ -436,43 +437,43 @@ describe('ReactDOMServerIntegration', () => {
         };
       });
 
-      describe('user interaction with controlled inputs', function() {
-        itClientRenders('a controlled text input', async render => {
+      describe("user interaction with controlled inputs", function() {
+        itClientRenders("a controlled text input", async render => {
           let changeCount = 0;
           const e = await render(
-            <ControlledInput onChange={() => changeCount++} />,
+            <ControlledInput onChange={() => changeCount++} />
           );
           expect(changeCount).toBe(0);
-          expect(e.value).toBe('Hello');
+          expect(e.value).toBe("Hello");
 
           // simulate a user typing.
-          e.value = 'Goodbye';
+          e.value = "Goodbye";
           ReactTestUtils.Simulate.change(e);
 
           expect(changeCount).toBe(1);
-          expect(e.value).toBe('Goodbye');
+          expect(e.value).toBe("Goodbye");
         });
 
-        itClientRenders('a controlled textarea', async render => {
+        itClientRenders("a controlled textarea", async render => {
           let changeCount = 0;
           const e = await render(
-            <ControlledTextArea onChange={() => changeCount++} />,
+            <ControlledTextArea onChange={() => changeCount++} />
           );
           expect(changeCount).toBe(0);
-          expect(e.value).toBe('Hello');
+          expect(e.value).toBe("Hello");
 
           // simulate a user typing.
-          e.value = 'Goodbye';
+          e.value = "Goodbye";
           ReactTestUtils.Simulate.change(e);
 
           expect(changeCount).toBe(1);
-          expect(e.value).toBe('Goodbye');
+          expect(e.value).toBe("Goodbye");
         });
 
-        itClientRenders('a controlled checkbox', async render => {
+        itClientRenders("a controlled checkbox", async render => {
           let changeCount = 0;
           const e = await render(
-            <ControlledCheckbox onChange={() => changeCount++} />,
+            <ControlledCheckbox onChange={() => changeCount++} />
           );
           expect(changeCount).toBe(0);
           expect(e.checked).toBe(true);
@@ -485,24 +486,24 @@ describe('ReactDOMServerIntegration', () => {
           expect(e.checked).toBe(false);
         });
 
-        itClientRenders('a controlled select', async render => {
+        itClientRenders("a controlled select", async render => {
           let changeCount = 0;
           const e = await render(
-            <ControlledSelect onChange={() => changeCount++} />,
+            <ControlledSelect onChange={() => changeCount++} />
           );
           expect(changeCount).toBe(0);
-          expect(e.value).toBe('Hello');
+          expect(e.value).toBe("Hello");
 
           // simulate a user typing.
-          e.value = 'Goodbye';
+          e.value = "Goodbye";
           ReactTestUtils.Simulate.change(e);
 
           expect(changeCount).toBe(1);
-          expect(e.value).toBe('Goodbye');
+          expect(e.value).toBe("Goodbye");
         });
       });
 
-      describe('user interaction with inputs before client render', function() {
+      describe("user interaction with inputs before client render", function() {
         // renders the element and changes the value **before** the client
         // code has a chance to render; this simulates what happens when a
         // user starts to interact with a server-rendered form before
@@ -510,9 +511,9 @@ describe('ReactDOMServerIntegration', () => {
         // the changes the user has made.
         const testUserInteractionBeforeClientRender = async (
           element,
-          initialValue = 'Hello',
-          changedValue = 'Goodbye',
-          valueKey = 'value',
+          initialValue = "Hello",
+          changedValue = "Goodbye",
+          valueKey = "value"
         ) => {
           const field = await serverRender(element);
           expect(field[valueKey]).toBe(initialValue);
@@ -525,7 +526,7 @@ describe('ReactDOMServerIntegration', () => {
           const clientField = await renderIntoDom(
             element,
             field.parentNode,
-            true,
+            true
           );
           // verify that the input field was not replaced.
           // Note that we cannot use expect(clientField).toBe(field) because
@@ -535,15 +536,15 @@ describe('ReactDOMServerIntegration', () => {
           expect(clientField[valueKey]).toBe(changedValue);
         };
 
-        it('should not blow away user-entered text on successful reconnect to an uncontrolled input', () =>
+        it("should not blow away user-entered text on successful reconnect to an uncontrolled input", () =>
           testUserInteractionBeforeClientRender(
-            <input defaultValue="Hello" />,
+            <input defaultValue="Hello" />
           ));
 
-        it('should not blow away user-entered text on successful reconnect to a controlled input', async () => {
+        it("should not blow away user-entered text on successful reconnect to a controlled input", async () => {
           let changeCount = 0;
           await testUserInteractionBeforeClientRender(
-            <ControlledInput onChange={() => changeCount++} />,
+            <ControlledInput onChange={() => changeCount++} />
           );
           // note that there's a strong argument to be made that the DOM revival
           // algorithm should notice that the user has changed the value and fire
@@ -551,43 +552,43 @@ describe('ReactDOMServerIntegration', () => {
           expect(changeCount).toBe(0);
         });
 
-        it('should not blow away user-entered text on successful reconnect to an uncontrolled checkbox', () =>
+        it("should not blow away user-entered text on successful reconnect to an uncontrolled checkbox", () =>
           testUserInteractionBeforeClientRender(
             <input type="checkbox" defaultChecked={true} />,
             true,
             false,
-            'checked',
+            "checked"
           ));
 
-        it('should not blow away user-entered text on successful reconnect to a controlled checkbox', async () => {
+        it("should not blow away user-entered text on successful reconnect to a controlled checkbox", async () => {
           let changeCount = 0;
           await testUserInteractionBeforeClientRender(
             <ControlledCheckbox onChange={() => changeCount++} />,
             true,
             false,
-            'checked',
+            "checked"
           );
           expect(changeCount).toBe(0);
         });
 
         // skipping this test because React 15 does the wrong thing. it blows
         // away the user's typing in the textarea.
-        xit('should not blow away user-entered text on successful reconnect to an uncontrolled textarea', () =>
+        xit("should not blow away user-entered text on successful reconnect to an uncontrolled textarea", () =>
           testUserInteractionBeforeClientRender(
-            <textarea defaultValue="Hello" />,
+            <textarea defaultValue="Hello" />
           ));
 
         // skipping this test because React 15 does the wrong thing. it blows
         // away the user's typing in the textarea.
-        xit('should not blow away user-entered text on successful reconnect to a controlled textarea', async () => {
+        xit("should not blow away user-entered text on successful reconnect to a controlled textarea", async () => {
           let changeCount = 0;
           await testUserInteractionBeforeClientRender(
-            <ControlledTextArea onChange={() => changeCount++} />,
+            <ControlledTextArea onChange={() => changeCount++} />
           );
           expect(changeCount).toBe(0);
         });
 
-        it('should not blow away user-selected value on successful reconnect to an uncontrolled select', () =>
+        it("should not blow away user-selected value on successful reconnect to an uncontrolled select", () =>
           testUserInteractionBeforeClientRender(
             <select defaultValue="Hello">
               <option key="1" value="Hello">
@@ -596,13 +597,13 @@ describe('ReactDOMServerIntegration', () => {
               <option key="2" value="Goodbye">
                 Goodbye
               </option>
-            </select>,
+            </select>
           ));
 
-        it('should not blow away user-selected value on successful reconnect to an controlled select', async () => {
+        it("should not blow away user-selected value on successful reconnect to an controlled select", async () => {
           let changeCount = 0;
           await testUserInteractionBeforeClientRender(
-            <ControlledSelect onChange={() => changeCount++} />,
+            <ControlledSelect onChange={() => changeCount++} />
           );
           expect(changeCount).toBe(0);
         });

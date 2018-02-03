@@ -7,11 +7,11 @@
  * @flow
  */
 
-import {isStartish, isEndish} from 'events/EventPluginUtils';
-import {accumulateTwoPhaseDispatches} from 'events/EventPropagators';
-import TouchEventUtils from 'fbjs/lib/TouchEventUtils';
+import { isStartish, isEndish } from "events/EventPluginUtils";
+import { accumulateTwoPhaseDispatches } from "events/EventPropagators";
+import TouchEventUtils from "fbjs/lib/TouchEventUtils";
 
-import SyntheticUIEvent from './SyntheticUIEvent';
+import SyntheticUIEvent from "./SyntheticUIEvent";
 
 /**
  * We are extending the Flow 'Touch' declaration to enable using bracket
@@ -20,7 +20,7 @@ import SyntheticUIEvent from './SyntheticUIEvent';
  * "Indexable signature not found in Touch".
  * See https://github.com/facebook/flow/issues/1323
  */
-type TouchPropertyKey = 'clientX' | 'clientY' | 'pageX' | 'pageY';
+type TouchPropertyKey = "clientX" | "clientY" | "pageX" | "pageY";
 
 declare class _Touch extends Touch {
   [key: TouchPropertyKey]: number;
@@ -29,17 +29,17 @@ declare class _Touch extends Touch {
 type AxisCoordinateData = {
   page: TouchPropertyKey,
   client: TouchPropertyKey,
-  envScroll: 'currentPageScrollLeft' | 'currentPageScrollTop',
+  envScroll: "currentPageScrollLeft" | "currentPageScrollTop"
 };
 
 type AxisType = {
   x: AxisCoordinateData,
-  y: AxisCoordinateData,
+  y: AxisCoordinateData
 };
 
 type CoordinatesType = {
   x: number,
-  y: number,
+  y: number
 };
 
 /**
@@ -47,16 +47,16 @@ type CoordinatesType = {
  * in order to still be considered a 'tap' event.
  */
 const tapMoveThreshold = 10;
-const startCoords: CoordinatesType = {x: 0, y: 0};
+const startCoords: CoordinatesType = { x: 0, y: 0 };
 
 const Axis: AxisType = {
-  x: {page: 'pageX', client: 'clientX', envScroll: 'currentPageScrollLeft'},
-  y: {page: 'pageY', client: 'clientY', envScroll: 'currentPageScrollTop'},
+  x: { page: "pageX", client: "clientX", envScroll: "currentPageScrollLeft" },
+  y: { page: "pageY", client: "clientY", envScroll: "currentPageScrollTop" }
 };
 
 function getAxisCoordOfEvent(
   axis: AxisCoordinateData,
-  nativeEvent: _Touch,
+  nativeEvent: _Touch
 ): number {
   const singleTouch = TouchEventUtils.extractSingleTouch(nativeEvent);
   if (singleTouch) {
@@ -70,29 +70,29 @@ function getDistance(coords: CoordinatesType, nativeEvent: _Touch): number {
   const pageY = getAxisCoordOfEvent(Axis.y, nativeEvent);
   return Math.pow(
     Math.pow(pageX - coords.x, 2) + Math.pow(pageY - coords.y, 2),
-    0.5,
+    0.5
   );
 }
 
 const touchEvents = [
-  'topTouchStart',
-  'topTouchCancel',
-  'topTouchEnd',
-  'topTouchMove',
+  "topTouchStart",
+  "topTouchCancel",
+  "topTouchEnd",
+  "topTouchMove"
 ];
 
-const dependencies = ['topMouseDown', 'topMouseMove', 'topMouseUp'].concat(
-  touchEvents,
+const dependencies = ["topMouseDown", "topMouseMove", "topMouseUp"].concat(
+  touchEvents
 );
 
 const eventTypes = {
   touchTap: {
     phasedRegistrationNames: {
-      bubbled: 'onTouchTap',
-      captured: 'onTouchTapCapture',
+      bubbled: "onTouchTap",
+      captured: "onTouchTapCapture"
     },
-    dependencies: dependencies,
-  },
+    dependencies: dependencies
+  }
 };
 
 let usedTouch = false;
@@ -108,7 +108,7 @@ const TapEventPlugin = {
     topLevelType: mixed,
     targetInst: mixed,
     nativeEvent: _Touch,
-    nativeEventTarget: EventTarget,
+    nativeEventTarget: EventTarget
   ) {
     if (!isStartish(topLevelType) && !isEndish(topLevelType)) {
       return null;
@@ -131,7 +131,7 @@ const TapEventPlugin = {
         eventTypes.touchTap,
         targetInst,
         nativeEvent,
-        nativeEventTarget,
+        nativeEventTarget
       );
     }
     if (isStartish(topLevelType)) {
@@ -143,7 +143,7 @@ const TapEventPlugin = {
     }
     accumulateTwoPhaseDispatches(event);
     return event;
-  },
+  }
 };
 
 export default TapEventPlugin;

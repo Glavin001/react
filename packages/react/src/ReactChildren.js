@@ -5,20 +5,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import emptyFunction from 'fbjs/lib/emptyFunction';
-import invariant from 'fbjs/lib/invariant';
-import warning from 'fbjs/lib/warning';
+import emptyFunction from "fbjs/lib/emptyFunction";
+import invariant from "fbjs/lib/invariant";
+import warning from "fbjs/lib/warning";
 import {
   getIteratorFn,
   REACT_ELEMENT_TYPE,
-  REACT_PORTAL_TYPE,
-} from 'shared/ReactSymbols';
+  REACT_PORTAL_TYPE
+} from "shared/ReactSymbols";
 
-import {isValidElement, cloneAndReplaceKey} from './ReactElement';
-import ReactDebugCurrentFrame from './ReactDebugCurrentFrame';
+import { isValidElement, cloneAndReplaceKey } from "./ReactElement";
+import ReactDebugCurrentFrame from "./ReactDebugCurrentFrame";
 
-const SEPARATOR = '.';
-const SUBSEPARATOR = ':';
+const SEPARATOR = ".";
+const SUBSEPARATOR = ":";
 
 /**
  * Escape and wrap key so it is safe to use as a reactid
@@ -29,14 +29,14 @@ const SUBSEPARATOR = ':';
 function escape(key) {
   const escapeRegex = /[=:]/g;
   const escaperLookup = {
-    '=': '=0',
-    ':': '=2',
+    "=": "=0",
+    ":": "=2"
   };
-  const escapedString = ('' + key).replace(escapeRegex, function(match) {
+  const escapedString = ("" + key).replace(escapeRegex, function(match) {
     return escaperLookup[match];
   });
 
-  return '$' + escapedString;
+  return "$" + escapedString;
 }
 
 /**
@@ -48,7 +48,7 @@ let didWarnAboutMaps = false;
 
 const userProvidedKeyEscapeRegex = /\/+/g;
 function escapeUserProvidedKey(text) {
-  return ('' + text).replace(userProvidedKeyEscapeRegex, '$&/');
+  return ("" + text).replace(userProvidedKeyEscapeRegex, "$&/");
 }
 
 const POOL_SIZE = 10;
@@ -57,7 +57,7 @@ function getPooledTraverseContext(
   mapResult,
   keyPrefix,
   mapFunction,
-  mapContext,
+  mapContext
 ) {
   if (traverseContextPool.length) {
     const traverseContext = traverseContextPool.pop();
@@ -73,7 +73,7 @@ function getPooledTraverseContext(
       keyPrefix: keyPrefix,
       func: mapFunction,
       context: mapContext,
-      count: 0,
+      count: 0
     };
   }
 }
@@ -101,11 +101,11 @@ function traverseAllChildrenImpl(
   children,
   nameSoFar,
   callback,
-  traverseContext,
+  traverseContext
 ) {
   const type = typeof children;
 
-  if (type === 'undefined' || type === 'boolean') {
+  if (type === "undefined" || type === "boolean") {
     // All of the above are perceived as null.
     children = null;
   }
@@ -116,11 +116,11 @@ function traverseAllChildrenImpl(
     invokeCallback = true;
   } else {
     switch (type) {
-      case 'string':
-      case 'number':
+      case "string":
+      case "number":
         invokeCallback = true;
         break;
-      case 'object':
+      case "object":
         switch (children.$$typeof) {
           case REACT_ELEMENT_TYPE:
           case REACT_PORTAL_TYPE:
@@ -135,7 +135,7 @@ function traverseAllChildrenImpl(
       children,
       // If it's the only child, treat the name as if it was wrapped in an array
       // so that it's consistent if the number of children grows.
-      nameSoFar === '' ? SEPARATOR + getComponentKey(children, 0) : nameSoFar,
+      nameSoFar === "" ? SEPARATOR + getComponentKey(children, 0) : nameSoFar
     );
     return 1;
   }
@@ -144,7 +144,7 @@ function traverseAllChildrenImpl(
   let nextName;
   let subtreeCount = 0; // Count of children found in the current subtree.
   const nextNamePrefix =
-    nameSoFar === '' ? SEPARATOR : nameSoFar + SUBSEPARATOR;
+    nameSoFar === "" ? SEPARATOR : nameSoFar + SUBSEPARATOR;
 
   if (Array.isArray(children)) {
     for (let i = 0; i < children.length; i++) {
@@ -154,21 +154,21 @@ function traverseAllChildrenImpl(
         child,
         nextName,
         callback,
-        traverseContext,
+        traverseContext
       );
     }
   } else {
     const iteratorFn = getIteratorFn(children);
-    if (typeof iteratorFn === 'function') {
+    if (typeof iteratorFn === "function") {
       if (__DEV__) {
         // Warn about using Maps as children
         if (iteratorFn === children.entries) {
           warning(
             didWarnAboutMaps,
-            'Using Maps as children is unsupported and will likely yield ' +
-              'unexpected results. Convert it to a sequence/iterable of keyed ' +
-              'ReactElements instead.%s',
-            ReactDebugCurrentFrame.getStackAddendum(),
+            "Using Maps as children is unsupported and will likely yield " +
+              "unexpected results. Convert it to a sequence/iterable of keyed " +
+              "ReactElements instead.%s",
+            ReactDebugCurrentFrame.getStackAddendum()
           );
           didWarnAboutMaps = true;
         }
@@ -184,25 +184,25 @@ function traverseAllChildrenImpl(
           child,
           nextName,
           callback,
-          traverseContext,
+          traverseContext
         );
       }
-    } else if (type === 'object') {
-      let addendum = '';
+    } else if (type === "object") {
+      let addendum = "";
       if (__DEV__) {
         addendum =
-          ' If you meant to render a collection of children, use an array ' +
-          'instead.' +
+          " If you meant to render a collection of children, use an array " +
+          "instead." +
           ReactDebugCurrentFrame.getStackAddendum();
       }
-      const childrenString = '' + children;
+      const childrenString = "" + children;
       invariant(
         false,
-        'Objects are not valid as a React child (found: %s).%s',
-        childrenString === '[object Object]'
-          ? 'object with keys {' + Object.keys(children).join(', ') + '}'
+        "Objects are not valid as a React child (found: %s).%s",
+        childrenString === "[object Object]"
+          ? "object with keys {" + Object.keys(children).join(", ") + "}"
           : childrenString,
-        addendum,
+        addendum
       );
     }
   }
@@ -231,7 +231,7 @@ function traverseAllChildren(children, callback, traverseContext) {
     return 0;
   }
 
-  return traverseAllChildrenImpl(children, '', callback, traverseContext);
+  return traverseAllChildrenImpl(children, "", callback, traverseContext);
 }
 
 /**
@@ -245,7 +245,7 @@ function getComponentKey(component, index) {
   // Do some typechecking here since we call this blindly. We want to ensure
   // that we don't block potential future ES APIs.
   if (
-    typeof component === 'object' &&
+    typeof component === "object" &&
     component !== null &&
     component.key != null
   ) {
@@ -257,7 +257,7 @@ function getComponentKey(component, index) {
 }
 
 function forEachSingleChild(bookKeeping, child, name) {
-  const {func, context} = bookKeeping;
+  const { func, context } = bookKeeping;
   func.call(context, child, bookKeeping.count++);
 }
 
@@ -281,14 +281,14 @@ function forEachChildren(children, forEachFunc, forEachContext) {
     null,
     null,
     forEachFunc,
-    forEachContext,
+    forEachContext
   );
   traverseAllChildren(children, forEachSingleChild, traverseContext);
   releaseTraverseContext(traverseContext);
 }
 
 function mapSingleChildIntoContext(bookKeeping, child, childKey) {
-  const {result, keyPrefix, func, context} = bookKeeping;
+  const { result, keyPrefix, func, context } = bookKeeping;
 
   let mappedChild = func.call(context, child, bookKeeping.count++);
   if (Array.isArray(mappedChild)) {
@@ -296,7 +296,7 @@ function mapSingleChildIntoContext(bookKeeping, child, childKey) {
       mappedChild,
       result,
       childKey,
-      emptyFunction.thatReturnsArgument,
+      emptyFunction.thatReturnsArgument
     );
   } else if (mappedChild != null) {
     if (isValidElement(mappedChild)) {
@@ -306,9 +306,9 @@ function mapSingleChildIntoContext(bookKeeping, child, childKey) {
         // traverseAllChildren used to do for objects as children
         keyPrefix +
           (mappedChild.key && (!child || child.key !== mappedChild.key)
-            ? escapeUserProvidedKey(mappedChild.key) + '/'
-            : '') +
-          childKey,
+            ? escapeUserProvidedKey(mappedChild.key) + "/"
+            : "") +
+          childKey
       );
     }
     result.push(mappedChild);
@@ -316,15 +316,15 @@ function mapSingleChildIntoContext(bookKeeping, child, childKey) {
 }
 
 function mapIntoWithKeyPrefixInternal(children, array, prefix, func, context) {
-  let escapedPrefix = '';
+  let escapedPrefix = "";
   if (prefix != null) {
-    escapedPrefix = escapeUserProvidedKey(prefix) + '/';
+    escapedPrefix = escapeUserProvidedKey(prefix) + "/";
   }
   const traverseContext = getPooledTraverseContext(
     array,
     escapedPrefix,
     func,
-    context,
+    context
   );
   traverseAllChildren(children, mapSingleChildIntoContext, traverseContext);
   releaseTraverseContext(traverseContext);
@@ -377,7 +377,7 @@ function toArray(children) {
     children,
     result,
     null,
-    emptyFunction.thatReturnsArgument,
+    emptyFunction.thatReturnsArgument
   );
   return result;
 }
@@ -399,7 +399,7 @@ function toArray(children) {
 function onlyChild(children) {
   invariant(
     isValidElement(children),
-    'React.Children.only expected to receive a single React element child.',
+    "React.Children.only expected to receive a single React element child."
   );
   return children;
 }
@@ -409,5 +409,5 @@ export {
   mapChildren as map,
   countChildren as count,
   onlyChild as only,
-  toArray,
+  toArray
 };

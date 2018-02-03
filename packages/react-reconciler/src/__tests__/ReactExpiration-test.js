@@ -5,23 +5,23 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactNoop;
 
-describe('ReactExpiration', () => {
+describe("ReactExpiration", () => {
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
-    ReactNoop = require('react-noop-renderer');
+    React = require("react");
+    ReactNoop = require("react-noop-renderer");
   });
 
   function span(prop) {
-    return {type: 'span', children: [], prop};
+    return { type: "span", children: [], prop };
   }
 
-  it('increases priority of updates as time progresses', () => {
+  it("increases priority of updates as time progresses", () => {
     ReactNoop.render(<span prop="done" />);
 
     expect(ReactNoop.getChildren()).toEqual([]);
@@ -38,6 +38,6 @@ describe('ReactExpiration', () => {
     // Advance by another second. Now the update should expire and flush.
     ReactNoop.expire(1000);
     ReactNoop.flushExpired();
-    expect(ReactNoop.getChildren()).toEqual([span('done')]);
+    expect(ReactNoop.getChildren()).toEqual([span("done")]);
   });
 });

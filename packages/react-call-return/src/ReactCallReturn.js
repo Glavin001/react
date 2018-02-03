@@ -10,10 +10,10 @@
 import {
   REACT_CALL_TYPE,
   REACT_RETURN_TYPE,
-  REACT_ELEMENT_TYPE,
-} from 'shared/ReactSymbols';
+  REACT_ELEMENT_TYPE
+} from "shared/ReactSymbols";
 
-import type {ReactCall, ReactNodeList, ReactReturn} from 'shared/ReactTypes';
+import type { ReactCall, ReactNodeList, ReactReturn } from "shared/ReactTypes";
 
 type CallHandler<T, V> = (props: T, returns: Array<V>) => ReactNodeList;
 
@@ -21,19 +21,19 @@ export function unstable_createCall<T, V>(
   children: ReactNodeList,
   handler: CallHandler<T, V>,
   props: T,
-  key: ?string = null,
+  key: ?string = null
 ): ReactCall<V> {
   const call = {
     // This tag allow us to uniquely identify this as a React Call
     $$typeof: REACT_ELEMENT_TYPE,
     type: REACT_CALL_TYPE,
-    key: key == null ? null : '' + key,
+    key: key == null ? null : "" + key,
     ref: null,
     props: {
       props,
       handler,
-      children: children,
-    },
+      children: children
+    }
   };
 
   if (__DEV__) {
@@ -55,8 +55,8 @@ export function unstable_createReturn<V>(value: V): ReactReturn<V> {
     key: null,
     ref: null,
     props: {
-      value,
-    },
+      value
+    }
   };
 
   if (__DEV__) {
@@ -74,7 +74,7 @@ export function unstable_createReturn<V>(value: V): ReactReturn<V> {
  */
 export function unstable_isCall(object: mixed): boolean {
   return (
-    typeof object === 'object' &&
+    typeof object === "object" &&
     object !== null &&
     object.type === REACT_CALL_TYPE
   );
@@ -85,7 +85,7 @@ export function unstable_isCall(object: mixed): boolean {
  */
 export function unstable_isReturn(object: mixed): boolean {
   return (
-    typeof object === 'object' &&
+    typeof object === "object" &&
     object !== null &&
     object.type === REACT_RETURN_TYPE
   );

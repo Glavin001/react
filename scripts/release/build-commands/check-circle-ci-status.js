@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
-const chalk = require('chalk');
-const http = require('request-promise-json');
-const {execRead, logPromise} = require('../utils');
+const chalk = require("chalk");
+const http = require("request-promise-json");
+const { execRead, logPromise } = require("../utils");
 
 // https://circleci.com/docs/api/v1-reference/#projects
 const CIRCLE_CI_BASE_URL =
-  'https://circleci.com/api/v1.1/project/github/facebook/react/tree/master';
+  "https://circleci.com/api/v1.1/project/github/facebook/react/tree/master";
 
-const check = async ({cwd}) => {
+const check = async ({ cwd }) => {
   const token = process.env.CIRCLE_CI_API_TOKEN;
   const uri = `${CIRCLE_CI_BASE_URL}?circle-token=${token}&limit=1`;
 
   const response = await http.get(uri, true);
-  const {outcome, status, vcs_revision: ciRevision} = response[0];
+  const { outcome, status, vcs_revision: ciRevision } = response[0];
 
-  const gitRevision = await execRead('git rev-parse HEAD', {cwd});
+  const gitRevision = await execRead("git rev-parse HEAD", { cwd });
 
   if (gitRevision !== ciRevision) {
     throw Error(
@@ -29,7 +29,7 @@ const check = async ({cwd}) => {
       {white Please wait for CircleCI to catch up.}
     `
     );
-  } else if (outcome !== 'success') {
+  } else if (outcome !== "success") {
     throw Error(
       chalk`
       CircleCI failed
@@ -43,5 +43,5 @@ const check = async ({cwd}) => {
 };
 
 module.exports = async params => {
-  return logPromise(check(params), 'Checking CircleCI status');
+  return logPromise(check(params), "Checking CircleCI status");
 };

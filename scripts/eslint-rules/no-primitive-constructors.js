@@ -7,7 +7,7 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 module.exports = function(context) {
   function report(node, name, msg) {
@@ -17,27 +17,27 @@ module.exports = function(context) {
   function check(node) {
     const name = node.callee.name;
     switch (name) {
-      case 'Boolean':
+      case "Boolean":
         report(
           node,
           name,
-          'To cast a value to a boolean, use double negation: !!value'
+          "To cast a value to a boolean, use double negation: !!value"
         );
         break;
-      case 'String':
+      case "String":
         report(
           node,
           name,
-          'To cast a value to a string, concat it with the empty string ' +
+          "To cast a value to a string, concat it with the empty string " +
             "(unless it's a symbol, which has different semantics): " +
             "'' + value"
         );
         break;
-      case 'Number':
+      case "Number":
         report(
           node,
           name,
-          'To cast a value to a number, use the plus operator: +value'
+          "To cast a value to a number, use the plus operator: +value"
         );
         break;
     }
@@ -45,6 +45,6 @@ module.exports = function(context) {
 
   return {
     CallExpression: check,
-    NewExpression: check,
+    NewExpression: check
   };
 };

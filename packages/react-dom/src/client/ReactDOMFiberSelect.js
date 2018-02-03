@@ -8,14 +8,14 @@
  */
 
 // TODO: direct imports like some-package/src/* are bad. Fix me.
-import ReactDebugCurrentFiber from 'react-reconciler/src/ReactDebugCurrentFiber';
-import warning from 'fbjs/lib/warning';
+import ReactDebugCurrentFiber from "react-reconciler/src/ReactDebugCurrentFiber";
+import warning from "fbjs/lib/warning";
 
-import ReactControlledValuePropTypes from '../shared/ReactControlledValuePropTypes';
+import ReactControlledValuePropTypes from "../shared/ReactControlledValuePropTypes";
 
 const {
   getCurrentFiberOwnerName,
-  getCurrentFiberStackAddendum,
+  getCurrentFiberStackAddendum
 } = ReactDebugCurrentFiber;
 
 let didWarnValueDefaultValue;
@@ -27,28 +27,28 @@ if (__DEV__) {
 type SelectWithWrapperState = HTMLSelectElement & {
   _wrapperState: {
     initialValue: ?string,
-    wasMultiple: boolean,
-  },
+    wasMultiple: boolean
+  }
 };
 
 function getDeclarationErrorAddendum() {
   const ownerName = getCurrentFiberOwnerName();
   if (ownerName) {
-    return '\n\nCheck the render method of `' + ownerName + '`.';
+    return "\n\nCheck the render method of `" + ownerName + "`.";
   }
-  return '';
+  return "";
 }
 
-const valuePropNames = ['value', 'defaultValue'];
+const valuePropNames = ["value", "defaultValue"];
 
 /**
  * Validation function for `value` and `defaultValue`.
  */
 function checkSelectPropTypes(props) {
   ReactControlledValuePropTypes.checkPropTypes(
-    'select',
+    "select",
     props,
-    getCurrentFiberStackAddendum,
+    getCurrentFiberStackAddendum
   );
 
   for (let i = 0; i < valuePropNames.length; i++) {
@@ -60,18 +60,18 @@ function checkSelectPropTypes(props) {
     if (props.multiple && !isArray) {
       warning(
         false,
-        'The `%s` prop supplied to <select> must be an array if ' +
-          '`multiple` is true.%s',
+        "The `%s` prop supplied to <select> must be an array if " +
+          "`multiple` is true.%s",
         propName,
-        getDeclarationErrorAddendum(),
+        getDeclarationErrorAddendum()
       );
     } else if (!props.multiple && isArray) {
       warning(
         false,
-        'The `%s` prop supplied to <select> must be a scalar ' +
-          'value if `multiple` is false.%s',
+        "The `%s` prop supplied to <select> must be a scalar " +
+          "value if `multiple` is false.%s",
         propName,
-        getDeclarationErrorAddendum(),
+        getDeclarationErrorAddendum()
       );
     }
   }
@@ -81,10 +81,10 @@ function updateOptions(
   node: HTMLSelectElement,
   multiple: boolean,
   propValue: any,
-  setDefaultSelected: boolean,
+  setDefaultSelected: boolean
 ) {
   type IndexableHTMLOptionsCollection = HTMLOptionsCollection & {
-    [key: number]: HTMLOptionElement,
+    [key: number]: HTMLOptionElement
   };
   const options: IndexableHTMLOptionsCollection = node.options;
 
@@ -93,10 +93,10 @@ function updateOptions(
     let selectedValue = {};
     for (let i = 0; i < selectedValues.length; i++) {
       // Prefix to avoid chaos with special keys.
-      selectedValue['$' + selectedValues[i]] = true;
+      selectedValue["$" + selectedValues[i]] = true;
     }
     for (let i = 0; i < options.length; i++) {
-      const selected = selectedValue.hasOwnProperty('$' + options[i].value);
+      const selected = selectedValue.hasOwnProperty("$" + options[i].value);
       if (options[i].selected !== selected) {
         options[i].selected = selected;
       }
@@ -107,7 +107,7 @@ function updateOptions(
   } else {
     // Do not set `select.value` as exact behavior isn't consistent across all
     // browsers for all cases.
-    let selectedValue = '' + (propValue: string);
+    let selectedValue = "" + (propValue: string);
     let defaultSelected = null;
     for (let i = 0; i < options.length; i++) {
       if (options[i].value === selectedValue) {
@@ -145,7 +145,7 @@ function updateOptions(
 
 export function getHostProps(element: Element, props: Object) {
   return Object.assign({}, props, {
-    value: undefined,
+    value: undefined
   });
 }
 
@@ -158,7 +158,7 @@ export function initWrapperState(element: Element, props: Object) {
   const value = props.value;
   node._wrapperState = {
     initialValue: value != null ? value : props.defaultValue,
-    wasMultiple: !!props.multiple,
+    wasMultiple: !!props.multiple
   };
 
   if (__DEV__) {
@@ -169,11 +169,11 @@ export function initWrapperState(element: Element, props: Object) {
     ) {
       warning(
         false,
-        'Select elements must be either controlled or uncontrolled ' +
-          '(specify either the value prop, or the defaultValue prop, but not ' +
-          'both). Decide between using a controlled or uncontrolled select ' +
-          'element and remove one of these props. More info: ' +
-          'https://fb.me/react-controlled-components',
+        "Select elements must be either controlled or uncontrolled " +
+          "(specify either the value prop, or the defaultValue prop, but not " +
+          "both). Decide between using a controlled or uncontrolled select " +
+          "element and remove one of these props. More info: " +
+          "https://fb.me/react-controlled-components"
       );
       didWarnValueDefaultValue = true;
     }
@@ -209,7 +209,7 @@ export function postUpdateWrapper(element: Element, props: Object) {
       updateOptions(node, !!props.multiple, props.defaultValue, true);
     } else {
       // Revert the select back to its default unselected state.
-      updateOptions(node, !!props.multiple, props.multiple ? [] : '', false);
+      updateOptions(node, !!props.multiple, props.multiple ? [] : "", false);
     }
   }
 }

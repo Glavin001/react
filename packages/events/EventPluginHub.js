@@ -6,25 +6,25 @@
  * @flow
  */
 
-import ReactErrorUtils from 'shared/ReactErrorUtils';
-import invariant from 'fbjs/lib/invariant';
+import ReactErrorUtils from "shared/ReactErrorUtils";
+import invariant from "fbjs/lib/invariant";
 
 import {
   injectEventPluginOrder,
   injectEventPluginsByName,
-  plugins,
-} from './EventPluginRegistry';
+  plugins
+} from "./EventPluginRegistry";
 import {
   executeDispatchesInOrder,
-  getFiberCurrentPropsFromNode,
-} from './EventPluginUtils';
-import accumulateInto from './accumulateInto';
-import forEachAccumulated from './forEachAccumulated';
+  getFiberCurrentPropsFromNode
+} from "./EventPluginUtils";
+import accumulateInto from "./accumulateInto";
+import forEachAccumulated from "./forEachAccumulated";
 
-import type {PluginModule} from './PluginModuleType';
-import type {ReactSyntheticEvent} from './ReactSyntheticEventType';
-import type {Fiber} from 'react-reconciler/src/ReactFiber';
-import type {AnyNativeEvent} from './PluginModuleType';
+import type { PluginModule } from "./PluginModuleType";
+import type { ReactSyntheticEvent } from "./ReactSyntheticEventType";
+import type { Fiber } from "react-reconciler/src/ReactFiber";
+import type { AnyNativeEvent } from "./PluginModuleType";
 
 /**
  * Internal queue of events that have accumulated their dispatches and are
@@ -41,7 +41,7 @@ let eventQueue: ?(Array<ReactSyntheticEvent> | ReactSyntheticEvent) = null;
  */
 const executeDispatchesAndRelease = function(
   event: ReactSyntheticEvent,
-  simulated: boolean,
+  simulated: boolean
 ) {
   if (event) {
     executeDispatchesInOrder(event, simulated);
@@ -60,25 +60,25 @@ const executeDispatchesAndReleaseTopLevel = function(e) {
 
 function isInteractive(tag) {
   return (
-    tag === 'button' ||
-    tag === 'input' ||
-    tag === 'select' ||
-    tag === 'textarea'
+    tag === "button" ||
+    tag === "input" ||
+    tag === "select" ||
+    tag === "textarea"
   );
 }
 
 function shouldPreventMouseEvent(name, type, props) {
   switch (name) {
-    case 'onClick':
-    case 'onClickCapture':
-    case 'onDoubleClick':
-    case 'onDoubleClickCapture':
-    case 'onMouseDown':
-    case 'onMouseDownCapture':
-    case 'onMouseMove':
-    case 'onMouseMoveCapture':
-    case 'onMouseUp':
-    case 'onMouseUpCapture':
+    case "onClick":
+    case "onClickCapture":
+    case "onDoubleClick":
+    case "onDoubleClickCapture":
+    case "onMouseDown":
+    case "onMouseDownCapture":
+    case "onMouseMove":
+    case "onMouseMoveCapture":
+    case "onMouseUp":
+    case "onMouseUpCapture":
       return !!(props.disabled && isInteractive(type));
     default:
       return false;
@@ -121,7 +121,7 @@ export const injection = {
   /**
    * @param {object} injectedNamesToPlugins Map from names to plugin modules.
    */
-  injectEventPluginsByName,
+  injectEventPluginsByName
 };
 
 /**
@@ -149,10 +149,10 @@ export function getListener(inst: Fiber, registrationName: string) {
     return null;
   }
   invariant(
-    !listener || typeof listener === 'function',
-    'Expected `%s` listener to be a function, instead got a value of `%s` type.',
+    !listener || typeof listener === "function",
+    "Expected `%s` listener to be a function, instead got a value of `%s` type.",
     registrationName,
-    typeof listener,
+    typeof listener
   );
   return listener;
 }
@@ -168,7 +168,7 @@ export function extractEvents(
   topLevelType: string,
   targetInst: Fiber,
   nativeEvent: AnyNativeEvent,
-  nativeEventTarget: EventTarget,
+  nativeEventTarget: EventTarget
 ) {
   let events;
   for (let i = 0; i < plugins.length; i++) {
@@ -179,7 +179,7 @@ export function extractEvents(
         topLevelType,
         targetInst,
         nativeEvent,
-        nativeEventTarget,
+        nativeEventTarget
       );
       if (extractedEvents) {
         events = accumulateInto(events, extractedEvents);
@@ -197,7 +197,7 @@ export function extractEvents(
  * @internal
  */
 export function enqueueEvents(
-  events: Array<ReactSyntheticEvent> | ReactSyntheticEvent,
+  events: Array<ReactSyntheticEvent> | ReactSyntheticEvent
 ) {
   if (events) {
     eventQueue = accumulateInto(eventQueue, events);
@@ -222,18 +222,18 @@ export function processEventQueue(simulated: boolean) {
   if (simulated) {
     forEachAccumulated(
       processingEventQueue,
-      executeDispatchesAndReleaseSimulated,
+      executeDispatchesAndReleaseSimulated
     );
   } else {
     forEachAccumulated(
       processingEventQueue,
-      executeDispatchesAndReleaseTopLevel,
+      executeDispatchesAndReleaseTopLevel
     );
   }
   invariant(
     !eventQueue,
-    'processEventQueue(): Additional events were enqueued while processing ' +
-      'an event queue. Support for this has not yet been implemented.',
+    "processEventQueue(): Additional events were enqueued while processing " +
+      "an event queue. Support for this has not yet been implemented."
   );
   // This would be a good time to rethrow if any of the event handlers threw.
   ReactErrorUtils.rethrowCaughtError();

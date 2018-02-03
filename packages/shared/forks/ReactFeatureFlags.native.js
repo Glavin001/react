@@ -7,13 +7,13 @@
  * @flow
  */
 
-import invariant from 'fbjs/lib/invariant';
+import invariant from "fbjs/lib/invariant";
 
-import typeof * as FeatureFlagsType from 'shared/ReactFeatureFlags';
-import typeof * as FeatureFlagsShimType from './ReactFeatureFlags.native';
+import typeof * as FeatureFlagsType from "shared/ReactFeatureFlags";
+import typeof * as FeatureFlagsShimType from "./ReactFeatureFlags.native";
 
 // Re-export dynamic flags from the fbsource version.
-export const {debugRenderPhaseSideEffects} = require('ReactFeatureFlags');
+export const { debugRenderPhaseSideEffects } = require("ReactFeatureFlags");
 
 // The rest of the flags are static for better dead code elimination.
 export const enableAsyncSubtreeAPI = true;
@@ -26,7 +26,7 @@ export const enablePersistentReconciler = false;
 
 // Only used in www builds.
 export function addUserTimingListener() {
-  invariant(false, 'Not implemented.');
+  invariant(false, "Not implemented.");
 }
 
 // Flow magic to verify the exports of this file match the original version.

@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import emptyFunction from 'fbjs/lib/emptyFunction';
-import camelizeStyleName from 'fbjs/lib/camelizeStyleName';
-import warning from 'fbjs/lib/warning';
+import emptyFunction from "fbjs/lib/emptyFunction";
+import camelizeStyleName from "fbjs/lib/camelizeStyleName";
+import warning from "fbjs/lib/warning";
 
 let warnValidStyle = emptyFunction;
 
@@ -31,10 +31,10 @@ if (__DEV__) {
     warnedStyleNames[name] = true;
     warning(
       false,
-      'Unsupported style property %s. Did you mean %s?%s',
+      "Unsupported style property %s. Did you mean %s?%s",
       name,
       camelizeStyleName(name),
-      getStack(),
+      getStack()
     );
   };
 
@@ -46,10 +46,10 @@ if (__DEV__) {
     warnedStyleNames[name] = true;
     warning(
       false,
-      'Unsupported vendor-prefixed style property %s. Did you mean %s?%s',
+      "Unsupported vendor-prefixed style property %s. Did you mean %s?%s",
       name,
       name.charAt(0).toUpperCase() + name.slice(1),
-      getStack(),
+      getStack()
     );
   };
 
@@ -64,8 +64,8 @@ if (__DEV__) {
       "Style property values shouldn't contain a semicolon. " +
         'Try "%s: %s" instead.%s',
       name,
-      value.replace(badStyleValueWithSemicolonPattern, ''),
-      getStack(),
+      value.replace(badStyleValueWithSemicolonPattern, ""),
+      getStack()
     );
   };
 
@@ -77,9 +77,9 @@ if (__DEV__) {
     warnedForNaNValue = true;
     warning(
       false,
-      '`NaN` is an invalid value for the `%s` css style property.%s',
+      "`NaN` is an invalid value for the `%s` css style property.%s",
       name,
-      getStack(),
+      getStack()
     );
   };
 
@@ -91,14 +91,14 @@ if (__DEV__) {
     warnedForInfinityValue = true;
     warning(
       false,
-      '`Infinity` is an invalid value for the `%s` css style property.%s',
+      "`Infinity` is an invalid value for the `%s` css style property.%s",
       name,
-      getStack(),
+      getStack()
     );
   };
 
   warnValidStyle = function(name, value, getStack) {
-    if (name.indexOf('-') > -1) {
+    if (name.indexOf("-") > -1) {
       warnHyphenatedStyleName(name, getStack);
     } else if (badVendoredStyleNamePattern.test(name)) {
       warnBadVendoredStyleName(name, getStack);
@@ -106,7 +106,7 @@ if (__DEV__) {
       warnStyleValueWithSemicolon(name, value, getStack);
     }
 
-    if (typeof value === 'number') {
+    if (typeof value === "number") {
       if (isNaN(value)) {
         warnStyleValueIsNaN(name, value, getStack);
       } else if (!isFinite(value)) {

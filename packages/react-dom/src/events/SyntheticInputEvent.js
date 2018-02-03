@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import SyntheticEvent from 'events/SyntheticEvent';
+import SyntheticEvent from "events/SyntheticEvent";
 
 /**
  * @interface Event
@@ -13,7 +13,7 @@ import SyntheticEvent from 'events/SyntheticEvent';
  *      /#events-inputevents
  */
 const SyntheticInputEvent = SyntheticEvent.extend({
-  data: null,
+  data: null
 });
 
 export default SyntheticInputEvent;

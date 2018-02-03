@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
 // TODO: this is special because it gets imported during build.
-module.exports = '16.2.0';
+module.exports = "16.2.0";

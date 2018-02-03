@@ -9,10 +9,10 @@
 
 import type {
   ReactNativeBaseComponentViewConfig,
-  ViewConfigGetter,
-} from './ReactNativeTypes';
+  ViewConfigGetter
+} from "./ReactNativeTypes";
 
-import invariant from 'fbjs/lib/invariant';
+import invariant from "fbjs/lib/invariant";
 
 const viewConfigCallbacks = new Map();
 const viewConfigs = new Map();
@@ -26,8 +26,8 @@ const viewConfigs = new Map();
 export function register(name: string, callback: ViewConfigGetter): string {
   invariant(
     !viewConfigCallbacks.has(name),
-    'Tried to register two views with the same name %s',
-    name,
+    "Tried to register two views with the same name %s",
+    name
   );
   viewConfigCallbacks.set(name, callback);
   return name;
@@ -43,9 +43,9 @@ export function get(name: string): ReactNativeBaseComponentViewConfig {
   if (!viewConfigs.has(name)) {
     const callback = viewConfigCallbacks.get(name);
     invariant(
-      typeof callback === 'function',
-      'View config not found for name %s',
-      name,
+      typeof callback === "function",
+      "View config not found for name %s",
+      name
     );
     viewConfigCallbacks.set(name, null);
     viewConfig = callback();
@@ -53,6 +53,6 @@ export function get(name: string): ReactNativeBaseComponentViewConfig {
   } else {
     viewConfig = viewConfigs.get(name);
   }
-  invariant(viewConfig, 'View config not found for name %s', name);
+  invariant(viewConfig, "View config not found for name %s", name);
   return viewConfig;
 }

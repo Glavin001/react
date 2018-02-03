@@ -8,15 +8,15 @@
  * @flow
  */
 
-import type {Fiber} from 'react-reconciler/src/ReactFiber';
+import type { Fiber } from "react-reconciler/src/ReactFiber";
 
 export type DispatchConfig = {
   dependencies: Array<string>,
   phasedRegistrationNames?: {
     bubbled: string,
-    captured: string,
+    captured: string
   },
-  registrationName?: string,
+  registrationName?: string
 };
 
 export type ReactSyntheticEvent = {
@@ -25,7 +25,7 @@ export type ReactSyntheticEvent = {
     dispatchConfig: DispatchConfig,
     targetInst: Fiber,
     nativeTarget: Event,
-    nativeEventTarget: EventTarget,
+    nativeEventTarget: EventTarget
   ) => ReactSyntheticEvent,
-  isPersistent: () => boolean,
+  isPersistent: () => boolean
 } & SyntheticEvent<>;

@@ -7,20 +7,20 @@
  * @flow
  */
 
-import invariant from 'fbjs/lib/invariant';
-import warning from 'fbjs/lib/warning';
+import invariant from "fbjs/lib/invariant";
+import warning from "fbjs/lib/warning";
 // TODO: direct imports like some-package/src/* are bad. Fix me.
-import ReactDebugCurrentFiber from 'react-reconciler/src/ReactDebugCurrentFiber';
+import ReactDebugCurrentFiber from "react-reconciler/src/ReactDebugCurrentFiber";
 
-import ReactControlledValuePropTypes from '../shared/ReactControlledValuePropTypes';
+import ReactControlledValuePropTypes from "../shared/ReactControlledValuePropTypes";
 
-const {getCurrentFiberStackAddendum} = ReactDebugCurrentFiber;
+const { getCurrentFiberStackAddendum } = ReactDebugCurrentFiber;
 let didWarnValDefaultVal = false;
 
 type TextAreaWithWrapperState = HTMLTextAreaElement & {
   _wrapperState: {
-    initialValue: string,
-  },
+    initialValue: string
+  }
 };
 
 /**
@@ -43,7 +43,7 @@ export function getHostProps(element: Element, props: Object) {
   const node = ((element: any): TextAreaWithWrapperState);
   invariant(
     props.dangerouslySetInnerHTML == null,
-    '`dangerouslySetInnerHTML` does not make sense on <textarea>.',
+    "`dangerouslySetInnerHTML` does not make sense on <textarea>."
   );
 
   // Always set children to the same thing. In IE9, the selection range will
@@ -56,7 +56,7 @@ export function getHostProps(element: Element, props: Object) {
     ...props,
     value: undefined,
     defaultValue: undefined,
-    children: '' + node._wrapperState.initialValue,
+    children: "" + node._wrapperState.initialValue
   };
 
   return hostProps;
@@ -66,9 +66,9 @@ export function initWrapperState(element: Element, props: Object) {
   const node = ((element: any): TextAreaWithWrapperState);
   if (__DEV__) {
     ReactControlledValuePropTypes.checkPropTypes(
-      'textarea',
+      "textarea",
       props,
-      getCurrentFiberStackAddendum,
+      getCurrentFiberStackAddendum
     );
     if (
       props.value !== undefined &&
@@ -77,11 +77,11 @@ export function initWrapperState(element: Element, props: Object) {
     ) {
       warning(
         false,
-        'Textarea elements must be either controlled or uncontrolled ' +
-          '(specify either the value prop, or the defaultValue prop, but not ' +
-          'both). Decide between using a controlled or uncontrolled textarea ' +
-          'and remove one of these props. More info: ' +
-          'https://fb.me/react-controlled-components',
+        "Textarea elements must be either controlled or uncontrolled " +
+          "(specify either the value prop, or the defaultValue prop, but not " +
+          "both). Decide between using a controlled or uncontrolled textarea " +
+          "and remove one of these props. More info: " +
+          "https://fb.me/react-controlled-components"
       );
       didWarnValDefaultVal = true;
     }
@@ -98,32 +98,32 @@ export function initWrapperState(element: Element, props: Object) {
       if (__DEV__) {
         warning(
           false,
-          'Use the `defaultValue` or `value` props instead of setting ' +
-            'children on <textarea>.',
+          "Use the `defaultValue` or `value` props instead of setting " +
+            "children on <textarea>."
         );
       }
       invariant(
         defaultValue == null,
-        'If you supply `defaultValue` on a <textarea>, do not pass children.',
+        "If you supply `defaultValue` on a <textarea>, do not pass children."
       );
       if (Array.isArray(children)) {
         invariant(
           children.length <= 1,
-          '<textarea> can only have at most one child.',
+          "<textarea> can only have at most one child."
         );
         children = children[0];
       }
 
-      defaultValue = '' + children;
+      defaultValue = "" + children;
     }
     if (defaultValue == null) {
-      defaultValue = '';
+      defaultValue = "";
     }
     initialValue = defaultValue;
   }
 
   node._wrapperState = {
-    initialValue: '' + initialValue,
+    initialValue: "" + initialValue
   };
 }
 
@@ -133,7 +133,7 @@ export function updateWrapper(element: Element, props: Object) {
   if (value != null) {
     // Cast `value` to a string to ensure the value is set correctly. While
     // browsers typically do this as necessary, jsdom doesn't.
-    const newValue = '' + value;
+    const newValue = "" + value;
 
     // To avoid side effects (such as losing text selection), only set value if changed
     if (newValue !== node.value) {

@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
-const eslintrc = require('../../.eslintrc');
+const eslintrc = require("../../.eslintrc");
 
 const ERROR = 2;
 
@@ -16,16 +16,16 @@ const ERROR = 2;
 // They can, however, use other ES6 features.
 
 module.exports = Object.assign({}, eslintrc, {
-  parser: 'espree',
+  parser: "espree",
   parserOptions: {
     ecmaVersion: 2017,
-    sourceType: 'script',
+    sourceType: "script",
     ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-    },
+      experimentalObjectRestSpread: true
+    }
   },
   rules: Object.assign({}, eslintrc.rules, {
-    'no-var': ERROR,
-    strict: ERROR,
-  }),
+    "no-var": ERROR,
+    strict: ERROR
+  })
 });

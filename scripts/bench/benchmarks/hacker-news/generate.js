@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const fetch = require('node-fetch');
-const {writeFileSync} = require('fs');
+const fetch = require("node-fetch");
+const { writeFileSync } = require("fs");
 const stories = 50;
 
 async function getStory(id) {
@@ -13,7 +13,7 @@ async function getStory(id) {
 
 async function getTopStories() {
   const topStoriesRes = await fetch(
-    'https://hacker-news.firebaseio.com/v0/topstories.js'
+    "https://hacker-news.firebaseio.com/v0/topstories.js"
   );
   const topStoriesIds = await topStoriesRes.json();
 
@@ -25,7 +25,7 @@ async function getTopStories() {
   }
 
   writeFileSync(
-    'top-stories.json',
+    "top-stories.json",
     `window.stories = ${JSON.stringify(topStories)}`
   );
 }

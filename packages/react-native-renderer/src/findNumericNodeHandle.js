@@ -7,7 +7,7 @@
  * @flow
  */
 
-import findNodeHandle from './findNodeHandle';
+import findNodeHandle from "./findNodeHandle";
 
 /**
  * External users of findNodeHandle() expect the host tag number return type.
@@ -15,10 +15,10 @@ import findNodeHandle from './findNodeHandle';
  * See NativeMethodsMixin#setNativeProps for more info on why this is done.
  */
 export default function findNumericNodeHandleFiber(
-  componentOrHandle: any,
+  componentOrHandle: any
 ): ?number {
   const instance: any = findNodeHandle(componentOrHandle);
-  if (instance == null || typeof instance === 'number') {
+  if (instance == null || typeof instance === "number") {
     return instance;
   }
   return instance._nativeTag;

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment';
+import ExecutionEnvironment from "fbjs/lib/ExecutionEnvironment";
 
 /**
  * Checks if an event is supported in the current execution environment.
@@ -24,18 +24,18 @@ import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment';
 function isEventSupported(eventNameSuffix, capture) {
   if (
     !ExecutionEnvironment.canUseDOM ||
-    (capture && !('addEventListener' in document))
+    (capture && !("addEventListener" in document))
   ) {
     return false;
   }
 
-  const eventName = 'on' + eventNameSuffix;
+  const eventName = "on" + eventNameSuffix;
   let isSupported = eventName in document;
 
   if (!isSupported) {
-    const element = document.createElement('div');
-    element.setAttribute(eventName, 'return;');
-    isSupported = typeof element[eventName] === 'function';
+    const element = document.createElement("div");
+    element.setAttribute(eventName, "return;");
+    isSupported = typeof element[eventName] === "function";
   }
 
   return isSupported;

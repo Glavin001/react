@@ -1,7 +1,7 @@
-import Fixture from '../../Fixture';
-import FixtureSet from '../../FixtureSet';
-import TestCase from '../../TestCase';
-import InputTestCase from './InputTestCase';
+import Fixture from "../../Fixture";
+import FixtureSet from "../../FixtureSet";
+import TestCase from "../../TestCase";
+import InputTestCase from "./InputTestCase";
 
 const React = window.React;
 
@@ -10,7 +10,8 @@ class TextInputFixtures extends React.Component {
     return (
       <FixtureSet
         title="Inputs"
-        description="Common behavior across controlled and uncontrolled inputs">
+        description="Common behavior across controlled and uncontrolled inputs"
+      >
         <TestCase title="Numbers in a controlled text field with no handler">
           <TestCase.Steps>
             <li>Move the cursor to after "2" in the text field</li>
@@ -30,7 +31,7 @@ class TextInputFixtures extends React.Component {
 
               <fieldset>
                 <legend>Value as string</legend>
-                <input value={'2'} onChange={() => {}} />
+                <input value={"2"} onChange={() => {}} />
               </fieldset>
             </div>
           </Fixture>
@@ -45,20 +46,21 @@ class TextInputFixtures extends React.Component {
         <TestCase
           title="Required Inputs"
           affectedBrowsers="Firefox"
-          relatedIssues="8395">
+          relatedIssues="8395"
+        >
           <TestCase.Steps>
             <li>View this test in Firefox</li>
           </TestCase.Steps>
 
           <TestCase.ExpectedResult>
-            You should{' '}
+            You should{" "}
             <b>
               <i>not</i>
-            </b>{' '}
+            </b>{" "}
             see a red aura, indicating the input is invalid.
             <br />
             This aura looks roughly like:
-            <input style={{boxShadow: '0 0 1px 1px red', marginLeft: 8}} />
+            <input style={{ boxShadow: "0 0 1px 1px red", marginLeft: 8 }} />
           </TestCase.ExpectedResult>
 
           <Fixture>

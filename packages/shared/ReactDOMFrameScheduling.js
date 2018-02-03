@@ -15,26 +15,26 @@
 // layout, paint and other browser work is counted against the available time.
 // The frame rate is dynamically adjusted.
 
-import type {Deadline} from 'react-reconciler';
+import type { Deadline } from "react-reconciler";
 
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment';
-import warning from 'fbjs/lib/warning';
+import ExecutionEnvironment from "fbjs/lib/ExecutionEnvironment";
+import warning from "fbjs/lib/warning";
 
 if (__DEV__) {
   if (
     ExecutionEnvironment.canUseDOM &&
-    typeof requestAnimationFrame !== 'function'
+    typeof requestAnimationFrame !== "function"
   ) {
     warning(
       false,
-      'React depends on requestAnimationFrame. Make sure that you load a ' +
-        'polyfill in older browsers. https://fb.me/react-polyfills',
+      "React depends on requestAnimationFrame. Make sure that you load a " +
+        "polyfill in older browsers. https://fb.me/react-polyfills"
     );
   }
 }
 
 const hasNativePerformanceNow =
-  typeof performance === 'object' && typeof performance.now === 'function';
+  typeof performance === "object" && typeof performance.now === "function";
 
 let now;
 if (hasNativePerformanceNow) {
@@ -49,19 +49,19 @@ if (hasNativePerformanceNow) {
 
 // TODO: There's no way to cancel, because Fiber doesn't atm.
 let rIC: (
-  callback: (deadline: Deadline, options?: {timeout: number}) => void,
+  callback: (deadline: Deadline, options?: { timeout: number }) => void
 ) => number;
 let cIC: (callbackID: number) => void;
 
 if (!ExecutionEnvironment.canUseDOM) {
   rIC = function(
-    frameCallback: (deadline: Deadline, options?: {timeout: number}) => void,
+    frameCallback: (deadline: Deadline, options?: { timeout: number }) => void
   ): number {
     return setTimeout(() => {
       frameCallback({
         timeRemaining() {
           return Infinity;
-        },
+        }
       });
     });
   };
@@ -69,8 +69,8 @@ if (!ExecutionEnvironment.canUseDOM) {
     clearTimeout(timeoutID);
   };
 } else if (
-  typeof requestIdleCallback !== 'function' ||
-  typeof cancelIdleCallback !== 'function'
+  typeof requestIdleCallback !== "function" ||
+  typeof cancelIdleCallback !== "function"
 ) {
   // Polyfill requestIdleCallback and cancelIdleCallback
 
@@ -96,7 +96,7 @@ if (!ExecutionEnvironment.canUseDOM) {
         // gets a performance timer value. Not sure if this is always true.
         const remaining = frameDeadline - performance.now();
         return remaining > 0 ? remaining : 0;
-      },
+      }
     };
   } else {
     frameDeadlineObject = {
@@ -105,13 +105,13 @@ if (!ExecutionEnvironment.canUseDOM) {
         // Fallback to Date.now()
         const remaining = frameDeadline - Date.now();
         return remaining > 0 ? remaining : 0;
-      },
+      }
     };
   }
 
   // We use the postMessage trick to defer idle work until after the repaint.
   const messageKey =
-    '__reactIdleCallback$' +
+    "__reactIdleCallback$" +
     Math.random()
       .toString(36)
       .slice(2);
@@ -154,7 +154,7 @@ if (!ExecutionEnvironment.canUseDOM) {
   };
   // Assumes that we have addEventListener in this environment. Might need
   // something better for old IE.
-  window.addEventListener('message', idleTick, false);
+  window.addEventListener("message", idleTick, false);
 
   const animationTick = function(rafTime) {
     isAnimationFrameScheduled = false;
@@ -183,18 +183,18 @@ if (!ExecutionEnvironment.canUseDOM) {
     frameDeadline = rafTime + activeFrameTime;
     if (!isIdleScheduled) {
       isIdleScheduled = true;
-      window.postMessage(messageKey, '*');
+      window.postMessage(messageKey, "*");
     }
   };
 
   rIC = function(
     callback: (deadline: Deadline) => void,
-    options?: {timeout: number},
+    options?: { timeout: number }
   ): number {
     // This assumes that we only schedule one callback at a time because that's
     // how Fiber uses it.
     scheduledRICCallback = callback;
-    if (options != null && typeof options.timeout === 'number') {
+    if (options != null && typeof options.timeout === "number") {
       timeoutTime = now() + options.timeout;
     }
     if (!isAnimationFrameScheduled) {
@@ -218,4 +218,4 @@ if (!ExecutionEnvironment.canUseDOM) {
   cIC = window.cancelIdleCallback;
 }
 
-export {now, rIC, cIC};
+export { now, rIC, cIC };

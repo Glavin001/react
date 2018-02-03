@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import SyntheticUIEvent from './SyntheticUIEvent';
-import getEventModifierState from './getEventModifierState';
+import SyntheticUIEvent from "./SyntheticUIEvent";
+import getEventModifierState from "./getEventModifierState";
 
 /**
  * @interface MouseEvent
@@ -33,7 +33,7 @@ const SyntheticMouseEvent = SyntheticUIEvent.extend({
         ? event.toElement
         : event.fromElement)
     );
-  },
+  }
 });
 
 export default SyntheticMouseEvent;

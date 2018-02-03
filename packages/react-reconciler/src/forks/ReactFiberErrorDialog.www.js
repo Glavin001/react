@@ -7,15 +7,15 @@
  * @flow
  */
 
-import type {CapturedError} from '../ReactFiberScheduler';
+import type { CapturedError } from "../ReactFiberScheduler";
 
-import invariant from 'fbjs/lib/invariant';
+import invariant from "fbjs/lib/invariant";
 
 // Provided by www
-const ReactFiberErrorDialogWWW = require('ReactFiberErrorDialog');
+const ReactFiberErrorDialogWWW = require("ReactFiberErrorDialog");
 invariant(
-  typeof ReactFiberErrorDialogWWW.showErrorDialog === 'function',
-  'Expected ReactFiberErrorDialog.showErrorDialog to existbe a function.',
+  typeof ReactFiberErrorDialogWWW.showErrorDialog === "function",
+  "Expected ReactFiberErrorDialog.showErrorDialog to existbe a function."
 );
 
 export function showErrorDialog(capturedError: CapturedError): boolean {

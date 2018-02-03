@@ -7,13 +7,13 @@
  * @flow
  */
 
-import React from 'react';
-import warning from 'fbjs/lib/warning';
+import React from "react";
+import warning from "fbjs/lib/warning";
 
 let didWarnSelectedSetOnOption = false;
 
 function flattenChildren(children) {
-  let content = '';
+  let content = "";
 
   // Flatten children and warn if they aren't strings or numbers;
   // invalid types are ignored.
@@ -23,7 +23,7 @@ function flattenChildren(children) {
     if (child == null) {
       return;
     }
-    if (typeof child === 'string' || typeof child === 'number') {
+    if (typeof child === "string" || typeof child === "number") {
       content += child;
     }
   });
@@ -41,8 +41,8 @@ export function validateProps(element: Element, props: Object) {
     if (props.selected != null && !didWarnSelectedSetOnOption) {
       warning(
         false,
-        'Use the `defaultValue` or `value` props on <select> instead of ' +
-          'setting `selected` on <option>.',
+        "Use the `defaultValue` or `value` props on <select> instead of " +
+          "setting `selected` on <option>."
       );
       didWarnSelectedSetOnOption = true;
     }
@@ -52,12 +52,12 @@ export function validateProps(element: Element, props: Object) {
 export function postMountWrapper(element: Element, props: Object) {
   // value="" should make a value attribute (#6219)
   if (props.value != null) {
-    element.setAttribute('value', props.value);
+    element.setAttribute("value", props.value);
   }
 }
 
 export function getHostProps(element: Element, props: Object) {
-  const hostProps = {children: undefined, ...props};
+  const hostProps = { children: undefined, ...props };
   const content = flattenChildren(props.children);
 
   if (content) {

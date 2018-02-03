@@ -7,8 +7,8 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-const Rectangle = require('./npm/Rectangle');
+const Rectangle = require("./npm/Rectangle");
 
 module.exports = Rectangle;

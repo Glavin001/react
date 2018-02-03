@@ -9,37 +9,37 @@
 
 /* eslint-disable */
 
-declare module 'deepDiffer' {
+declare module "deepDiffer" {
   declare module.exports: (one: any, two: any) => boolean;
 }
-declare module 'deepFreezeAndThrowOnMutationInDev' {
+declare module "deepFreezeAndThrowOnMutationInDev" {
   declare module.exports: <T>(obj: T) => T;
 }
-declare module 'flattenStyle' {
+declare module "flattenStyle" {
 }
-declare module 'InitializeCore' {
+declare module "InitializeCore" {
 }
-declare module 'RCTEventEmitter' {
+declare module "RCTEventEmitter" {
   declare function register(mixed): void;
 }
-declare module 'TextInputState' {
+declare module "TextInputState" {
   declare function blurTextInput(object: any): void;
   declare function focusTextInput(object: any): void;
 }
-declare module 'ExceptionsManager' {
+declare module "ExceptionsManager" {
   declare function handleException(error: Error, isFatal: boolean): void;
 }
-declare module 'Platform' {
+declare module "Platform" {
   declare var OS: string;
 }
-declare module 'UIManager' {
+declare module "UIManager" {
   declare var customBubblingEventTypes: Object;
   declare var customDirectEventTypes: Object;
   declare function createView(
     reactTag: number,
     viewName: string,
     rootTag: number,
-    props: ?Object,
+    props: ?Object
   ): void;
   declare function manageChildren(
     containerTag: number,
@@ -47,57 +47,57 @@ declare module 'UIManager' {
     moveToIndices: Array<number>,
     addChildReactTags: Array<number>,
     addAtIndices: Array<number>,
-    removeAtIndices: Array<number>,
+    removeAtIndices: Array<number>
   ): void;
   declare function measure(hostComponent: mixed, callback: Function): void;
   declare function measureInWindow(
     nativeTag: ?number,
-    callback: Function,
+    callback: Function
   ): void;
   declare function measureLayout(
     nativeTag: mixed,
     nativeNode: number,
     onFail: Function,
-    onSuccess: Function,
+    onSuccess: Function
   ): void;
   declare function removeRootView(containerTag: number): void;
   declare function removeSubviewsFromContainerWithID(containerId: number): void;
   declare function replaceExistingNonRootView(): void;
   declare function setChildren(
     containerTag: number,
-    reactTags: Array<number>,
+    reactTags: Array<number>
   ): void;
   declare function updateView(
     reactTag: number,
     viewName: string,
-    props: ?Object,
+    props: ?Object
   ): void;
   declare function __takeSnapshot(
-    view?: 'window' | Element<any> | number,
+    view?: "window" | Element<any> | number,
     options?: {
       width?: number,
       height?: number,
-      format?: 'png' | 'jpeg',
-      quality?: number,
-    },
+      format?: "png" | "jpeg",
+      quality?: number
+    }
   ): Promise<any>;
 }
-declare module 'View' {
+declare module "View" {
   declare module.exports: typeof React$Component;
 }
 
-declare module 'RTManager' {
+declare module "RTManager" {
   declare function createNode(
     tag: number,
     classType: string,
-    props: ?Object,
+    props: ?Object
   ): void;
 
   declare function beginUpdates(): void;
 
   declare function appendChildToContext(
     contextTag: number,
-    childTag: number,
+    childTag: number
   ): void;
   declare function appendChild(parentTag: number, childTag: number): void;
   declare function prependChild(childTag: number, beforeTag: number): void;
@@ -107,15 +107,15 @@ declare module 'RTManager' {
   declare function completeUpdates(): void;
 }
 
-declare module 'BatchedBridge' {
+declare module "BatchedBridge" {
   declare function registerCallableModule(name: string, module: Object): void;
 }
 
-declare module 'CSComponent' {
+declare module "CSComponent" {
   declare type Element = any;
   declare type Options<Instance> = any;
 }
 
-declare module 'CSStatefulComponent' {
+declare module "CSStatefulComponent" {
   declare function CSStatefulComponent(spec: any): any;
 }

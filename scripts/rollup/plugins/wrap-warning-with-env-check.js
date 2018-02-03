@@ -4,14 +4,14 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
+"use strict";
 
 module.exports = function(babel, options) {
   const t = babel.types;
 
-  const DEV_EXPRESSION = t.identifier('__DEV__');
+  const DEV_EXPRESSION = t.identifier("__DEV__");
 
-  const SEEN_SYMBOL = Symbol('expression.seen');
+  const SEEN_SYMBOL = Symbol("expression.seen");
 
   return {
     visitor: {
@@ -24,7 +24,7 @@ module.exports = function(babel, options) {
             return;
           }
 
-          if (path.get('callee').isIdentifier({name: 'warning'})) {
+          if (path.get("callee").isIdentifier({ name: "warning" })) {
             node[SEEN_SYMBOL] = true;
 
             // Turns this code:
@@ -45,8 +45,8 @@ module.exports = function(babel, options) {
               )
             );
           }
-        },
-      },
-    },
+        }
+      }
+    }
   };
 };

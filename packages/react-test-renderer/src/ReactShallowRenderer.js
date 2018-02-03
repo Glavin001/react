@@ -6,13 +6,13 @@
  *
  */
 
-import React from 'react';
-import describeComponentFrame from 'shared/describeComponentFrame';
-import getComponentName from 'shared/getComponentName';
-import emptyObject from 'fbjs/lib/emptyObject';
-import invariant from 'fbjs/lib/invariant';
-import shallowEqual from 'fbjs/lib/shallowEqual';
-import checkPropTypes from 'prop-types/checkPropTypes';
+import React from "react";
+import describeComponentFrame from "shared/describeComponentFrame";
+import getComponentName from "shared/getComponentName";
+import emptyObject from "fbjs/lib/emptyObject";
+import invariant from "fbjs/lib/invariant";
+import shallowEqual from "fbjs/lib/shallowEqual";
+import checkPropTypes from "prop-types/checkPropTypes";
 
 class ReactShallowRenderer {
   static createRenderer = function() {
@@ -41,27 +41,27 @@ class ReactShallowRenderer {
   render(element, context = emptyObject) {
     invariant(
       React.isValidElement(element),
-      'ReactShallowRenderer render(): Invalid component element.%s',
-      typeof element === 'function'
-        ? ' Instead of passing a component class, make sure to instantiate ' +
-          'it by passing it to React.createElement.'
-        : '',
+      "ReactShallowRenderer render(): Invalid component element.%s",
+      typeof element === "function"
+        ? " Instead of passing a component class, make sure to instantiate " +
+          "it by passing it to React.createElement."
+        : ""
     );
     // Show a special message for host elements since it's a common case.
     invariant(
-      typeof element.type !== 'string',
-      'ReactShallowRenderer render(): Shallow rendering works only with custom ' +
-        'components, not primitives (%s). Instead of calling `.render(el)` and ' +
-        'inspecting the rendered output, look at `el.props` directly instead.',
-      element.type,
+      typeof element.type !== "string",
+      "ReactShallowRenderer render(): Shallow rendering works only with custom " +
+        "components, not primitives (%s). Instead of calling `.render(el)` and " +
+        "inspecting the rendered output, look at `el.props` directly instead.",
+      element.type
     );
     invariant(
-      typeof element.type === 'function',
-      'ReactShallowRenderer render(): Shallow rendering works only with custom ' +
-        'components, but the provided element type was `%s`.',
+      typeof element.type === "function",
+      "ReactShallowRenderer render(): Shallow rendering works only with custom " +
+        "components, but the provided element type was `%s`.",
       Array.isArray(element.type)
-        ? 'array'
-        : element.type === null ? 'null' : typeof element.type,
+        ? "array"
+        : element.type === null ? "null" : typeof element.type
     );
 
     if (this._rendering) {
@@ -79,18 +79,18 @@ class ReactShallowRenderer {
         this._instance = new element.type(
           element.props,
           context,
-          this._updater,
+          this._updater
         );
 
-        if (element.type.hasOwnProperty('contextTypes')) {
+        if (element.type.hasOwnProperty("contextTypes")) {
           currentlyValidatingElement = element;
 
           checkPropTypes(
             element.type.contextTypes,
             context,
-            'context',
+            "context",
             getName(element.type, this._instance),
-            getStackAddendum,
+            getStackAddendum
           );
 
           currentlyValidatingElement = null;
@@ -110,7 +110,7 @@ class ReactShallowRenderer {
 
   unmount() {
     if (this._instance) {
-      if (typeof this._instance.componentWillUnmount === 'function') {
+      if (typeof this._instance.componentWillUnmount === "function") {
         this._instance.componentWillUnmount();
       }
     }
@@ -128,7 +128,7 @@ class ReactShallowRenderer {
     this._instance.state = this._instance.state || emptyObject;
     this._instance.updater = this._updater;
 
-    if (typeof this._instance.componentWillMount === 'function') {
+    if (typeof this._instance.componentWillMount === "function") {
       const beforeState = this._newState;
 
       this._instance.componentWillMount();
@@ -150,7 +150,7 @@ class ReactShallowRenderer {
 
     if (
       oldProps !== props &&
-      typeof this._instance.componentWillReceiveProps === 'function'
+      typeof this._instance.componentWillReceiveProps === "function"
     ) {
       this._instance.componentWillReceiveProps(props, context);
     }
@@ -161,11 +161,11 @@ class ReactShallowRenderer {
     if (this._forcedUpdate) {
       shouldUpdate = true;
       this._forcedUpdate = false;
-    } else if (typeof this._instance.shouldComponentUpdate === 'function') {
+    } else if (typeof this._instance.shouldComponentUpdate === "function") {
       shouldUpdate = !!this._instance.shouldComponentUpdate(
         props,
         state,
-        context,
+        context
       );
     } else if (type.prototype && type.prototype.isPureReactComponent) {
       shouldUpdate =
@@ -173,7 +173,7 @@ class ReactShallowRenderer {
     }
 
     if (shouldUpdate) {
-      if (typeof this._instance.componentWillUpdate === 'function') {
+      if (typeof this._instance.componentWillUpdate === "function") {
         this._instance.componentWillUpdate(props, state, context);
       }
     }
@@ -197,10 +197,10 @@ class Updater {
   }
 
   _enqueueCallback(callback, publicInstance) {
-    if (typeof callback === 'function' && publicInstance) {
+    if (typeof callback === "function" && publicInstance) {
       this._callbacks.push({
         callback,
-        publicInstance,
+        publicInstance
       });
     }
   }
@@ -209,7 +209,7 @@ class Updater {
     const callbacks = this._callbacks;
     this._callbacks = [];
 
-    callbacks.forEach(({callback, publicInstance}) => {
+    callbacks.forEach(({ callback, publicInstance }) => {
       callback.call(publicInstance);
     });
   }
@@ -234,13 +234,13 @@ class Updater {
     this._enqueueCallback(callback, publicInstance);
     const currentState = this._renderer._newState || publicInstance.state;
 
-    if (typeof partialState === 'function') {
+    if (typeof partialState === "function") {
       partialState = partialState(currentState, publicInstance.props);
     }
 
     this._renderer._newState = {
       ...currentState,
-      ...partialState,
+      ...partialState
     };
 
     this._renderer.render(this._renderer._element, this._renderer._context);
@@ -251,25 +251,25 @@ let currentlyValidatingElement = null;
 
 function getDisplayName(element) {
   if (element == null) {
-    return '#empty';
-  } else if (typeof element === 'string' || typeof element === 'number') {
-    return '#text';
-  } else if (typeof element.type === 'string') {
+    return "#empty";
+  } else if (typeof element === "string" || typeof element === "number") {
+    return "#text";
+  } else if (typeof element.type === "string") {
     return element.type;
   } else {
-    return element.type.displayName || element.type.name || 'Unknown';
+    return element.type.displayName || element.type.name || "Unknown";
   }
 }
 
 function getStackAddendum() {
-  let stack = '';
+  let stack = "";
   if (currentlyValidatingElement) {
     const name = getDisplayName(currentlyValidatingElement);
     const owner = currentlyValidatingElement._owner;
     stack += describeComponentFrame(
       name,
       currentlyValidatingElement._source,
-      owner && getComponentName(owner),
+      owner && getComponentName(owner)
     );
   }
   return stack;

@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 
-import Chrome from './Chrome';
-import Page from './Page';
+import Chrome from "./Chrome";
+import Page from "./Page";
 
 export default class App extends Component {
   render() {

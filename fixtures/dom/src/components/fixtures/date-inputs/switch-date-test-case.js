@@ -8,7 +8,7 @@ const startDate = new Date();
 class SwitchDateTestCase extends React.Component {
   state = {
     fullDate: false,
-    date: startDate,
+    date: startDate
   };
 
   render() {
@@ -30,7 +30,7 @@ class SwitchDateTestCase extends React.Component {
               type="checkbox"
               checked={this.state.fullDate}
               onChange={this.updateFullDate}
-            />{' '}
+            />{" "}
             Switch type
           </label>
         </p>
@@ -41,25 +41,25 @@ class SwitchDateTestCase extends React.Component {
   inputAttrs() {
     if (this.state.fullDate) {
       return {
-        type: 'datetime-local',
-        value: this.state.date.toISOString().replace(/\..*Z/, ''),
+        type: "datetime-local",
+        value: this.state.date.toISOString().replace(/\..*Z/, "")
       };
     } else {
       return {
-        type: 'date',
-        value: this.state.date.toISOString().replace(/T.*/, ''),
+        type: "date",
+        value: this.state.date.toISOString().replace(/T.*/, "")
       };
     }
   }
 
-  onInputChange = ({target: {value}}) => {
+  onInputChange = ({ target: { value } }) => {
     const date = value ? new Date(Date.parse(value)) : startDate;
-    this.setState({date});
+    this.setState({ date });
   };
 
   updateFullDate = () => {
     this.setState({
-      fullDate: !this.state.fullDate,
+      fullDate: !this.state.fullDate
     });
   };
 }

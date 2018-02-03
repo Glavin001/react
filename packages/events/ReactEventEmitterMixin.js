@@ -8,8 +8,8 @@
 import {
   enqueueEvents,
   processEventQueue,
-  extractEvents,
-} from './EventPluginHub';
+  extractEvents
+} from "./EventPluginHub";
 
 function runEventQueueInBatch(events) {
   enqueueEvents(events);
@@ -24,13 +24,13 @@ export function handleTopLevel(
   topLevelType,
   targetInst,
   nativeEvent,
-  nativeEventTarget,
+  nativeEventTarget
 ) {
   const events = extractEvents(
     topLevelType,
     targetInst,
     nativeEvent,
-    nativeEventTarget,
+    nativeEventTarget
   );
   runEventQueueInBatch(events);
 }

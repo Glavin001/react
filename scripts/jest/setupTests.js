@@ -1,17 +1,17 @@
-'use strict';
+"use strict";
 
 if (process.env.REACT_CLASS_EQUIVALENCE_TEST) {
   // Inside the class equivalence tester, we have a custom environment, let's
   // require that instead.
-  require('./spec-equivalence-reporter/setupTests.js');
+  require("./spec-equivalence-reporter/setupTests.js");
 } else {
   const env = jasmine.getEnv();
-  const errorMap = require('../error-codes/codes.json');
+  const errorMap = require("../error-codes/codes.json");
 
   // TODO: Stop using spyOn in all the test since that seem deprecated.
   // This is a legacy upgrade path strategy from:
   // https://github.com/facebook/jest/blob/v20.0.4/packages/jest-matchers/src/spyMatchers.js#L160
-  const isSpy = spy => spy.calls && typeof spy.calls.count === 'function';
+  const isSpy = spy => spy.calls && typeof spy.calls.count === "function";
 
   const spyOn = global.spyOn;
   const noop = function() {};
@@ -23,13 +23,13 @@ if (process.env.REACT_CLASS_EQUIVALENCE_TEST) {
   // Spying on both dev and prod will require using both spyOnDev() and spyOnProd().
   global.spyOn = function() {
     throw new Error(
-      'Do not use spyOn(). ' +
-        'It can accidentally hide unexpected errors in production builds. ' +
-        'Use spyOnDev(), spyOnProd(), or spyOnDevAndProd() instead.'
+      "Do not use spyOn(). " +
+        "It can accidentally hide unexpected errors in production builds. " +
+        "Use spyOnDev(), spyOnProd(), or spyOnDevAndProd() instead."
     );
   };
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === "production") {
     global.spyOnDev = noop;
     global.spyOnProd = spyOn;
     global.spyOnDevAndProd = spyOn;
@@ -55,7 +55,7 @@ if (process.env.REACT_CLASS_EQUIVALENCE_TEST) {
     }
   });
 
-  ['error', 'warn'].forEach(methodName => {
+  ["error", "warn"].forEach(methodName => {
     const oldMethod = console[methodName];
     const newMethod = function() {
       newMethod.__callCount++;
@@ -77,17 +77,15 @@ if (process.env.REACT_CLASS_EQUIVALENCE_TEST) {
       if (console[methodName].__callCount !== 0) {
         throw new Error(
           `Expected test not to call console.${methodName}(). ` +
-            'If the warning is expected, mock it out using ' +
-            `spyOnDev(console, '${methodName}') or spyOnProd(console, '${
-              methodName
-            }'), ` +
-            'and test that the warning occurs.'
+            "If the warning is expected, mock it out using " +
+            `spyOnDev(console, '${methodName}') or spyOnProd(console, '${methodName}'), ` +
+            "and test that the warning occurs."
         );
       }
     });
   });
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === "production") {
     // In production, we strip error messages and turn them into codes.
     // This decodes them back so that the test assertions on them work.
     const decodeErrorMessage = function(message) {
@@ -101,9 +99,9 @@ if (process.env.REACT_CLASS_EQUIVALENCE_TEST) {
       }
       const code = parseInt(matches[1], 10);
       const args = matches[2]
-        .split('&')
-        .filter(s => s.startsWith('args[]='))
-        .map(s => s.substr('args[]='.length))
+        .split("&")
+        .filter(s => s.startsWith("args[]="))
+        .map(s => s.substr("args[]=".length))
         .map(decodeURIComponent);
       const format = errorMap[code];
       let argIndex = 0;
@@ -120,11 +118,11 @@ if (process.env.REACT_CLASS_EQUIVALENCE_TEST) {
         const error = Reflect.construct(target, argumentsList, newTarget);
         error.message = decodeErrorMessage(error.message);
         return error;
-      },
+      }
     });
     ErrorProxy.OriginalError = OriginalError;
     global.Error = ErrorProxy;
   }
 
-  require('jasmine-check').install();
+  require("jasmine-check").install();
 }

@@ -7,17 +7,17 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-describe('ReactDOMComponentTree', () => {
+describe("ReactDOMComponentTree", () => {
   let React;
   let ReactDOM;
   let container;
 
   beforeEach(() => {
-    React = require('react');
-    ReactDOM = require('react-dom');
-    container = document.createElement('div');
+    React = require("react");
+    ReactDOM = require("react-dom");
+    container = document.createElement("div");
     document.body.appendChild(container);
   });
 
@@ -26,9 +26,9 @@ describe('ReactDOMComponentTree', () => {
     container = null;
   });
 
-  it('finds nodes for instances on events', () => {
-    const mouseOverID = 'mouseOverID';
-    const clickID = 'clickID';
+  it("finds nodes for instances on events", () => {
+    const mouseOverID = "mouseOverID";
+    const clickID = "clickID";
     let currentTargetID = null;
     // the current target of an event is set to result of getNodeFromInstance
     // when an event is dispatched so we can test behavior by invoking
@@ -49,7 +49,7 @@ describe('ReactDOMComponentTree', () => {
 
     function simulateMouseEvent(elem, type) {
       const event = new MouseEvent(type, {
-        bubbles: true,
+        bubbles: true
       });
       elem.dispatchEvent(event);
     }
@@ -57,16 +57,16 @@ describe('ReactDOMComponentTree', () => {
     const component = <Component />;
     ReactDOM.render(component, container);
     expect(currentTargetID).toBe(null);
-    simulateMouseEvent(document.getElementById(mouseOverID), 'mouseover');
+    simulateMouseEvent(document.getElementById(mouseOverID), "mouseover");
     expect(currentTargetID).toBe(mouseOverID);
-    simulateMouseEvent(document.getElementById(clickID), 'click');
+    simulateMouseEvent(document.getElementById(clickID), "click");
     expect(currentTargetID).toBe(clickID);
   });
 
-  it('finds closest instance for node when an event happens', () => {
-    const nonReactElemID = 'aID';
-    const innerHTML = {__html: `<div id="${nonReactElemID}"></div>`};
-    const closestInstanceID = 'closestInstance';
+  it("finds closest instance for node when an event happens", () => {
+    const nonReactElemID = "aID";
+    const innerHTML = { __html: `<div id="${nonReactElemID}"></div>` };
+    const closestInstanceID = "closestInstance";
     let currentTargetID = null;
 
     class ClosestInstance extends React.Component {
@@ -85,8 +85,8 @@ describe('ReactDOMComponentTree', () => {
     }
 
     function simulateClick(elem) {
-      const event = new MouseEvent('click', {
-        bubbles: true,
+      const event = new MouseEvent("click", {
+        bubbles: true
       });
       elem.dispatchEvent(event);
     }
@@ -98,23 +98,23 @@ describe('ReactDOMComponentTree', () => {
     expect(currentTargetID).toBe(closestInstanceID);
   });
 
-  it('updates event handlers from fiber props', () => {
-    let action = '';
+  it("updates event handlers from fiber props", () => {
+    let action = "";
     let instance;
-    const handlerA = () => (action = 'A');
-    const handlerB = () => (action = 'B');
+    const handlerA = () => (action = "A");
+    const handlerB = () => (action = "B");
 
     function simulateMouseOver(target) {
-      const event = new MouseEvent('mouseover', {
-        bubbles: true,
+      const event = new MouseEvent("mouseover", {
+        bubbles: true
       });
       target.dispatchEvent(event);
     }
 
     class HandlerFlipper extends React.Component {
-      state = {flip: false};
+      state = { flip: false };
       flip() {
-        this.setState({flip: true});
+        this.setState({ flip: true });
       }
       render() {
         return (
@@ -128,27 +128,27 @@ describe('ReactDOMComponentTree', () => {
 
     ReactDOM.render(
       <HandlerFlipper key="1" ref={n => (instance = n)} />,
-      container,
+      container
     );
     const node = container.firstChild;
     simulateMouseOver(node);
-    expect(action).toEqual('A');
-    action = '';
+    expect(action).toEqual("A");
+    action = "";
     // Render with the other event handler.
     instance.flip();
     simulateMouseOver(node);
-    expect(action).toEqual('B');
+    expect(action).toEqual("B");
   });
 
-  it('finds a controlled instance from node and gets its current fiber props', () => {
-    const inputID = 'inputID';
+  it("finds a controlled instance from node and gets its current fiber props", () => {
+    const inputID = "inputID";
     const startValue = undefined;
-    const finishValue = 'finish';
+    const finishValue = "finish";
 
     class Controlled extends React.Component {
-      state = {value: startValue};
+      state = { value: startValue };
       a = null;
-      _onChange = e => this.setState({value: e.currentTarget.value});
+      _onChange = e => this.setState({ value: e.currentTarget.value });
       render() {
         return (
           <input
@@ -164,12 +164,12 @@ describe('ReactDOMComponentTree', () => {
 
     const setUntrackedInputValue = Object.getOwnPropertyDescriptor(
       HTMLInputElement.prototype,
-      'value',
+      "value"
     ).set;
 
     function simulateInput(elem, value) {
-      const inputEvent = new Event('input', {
-        bubbles: true,
+      const inputEvent = new Event("input", {
+        bubbles: true
       });
       setUntrackedInputValue.call(elem, value);
       elem.dispatchEvent(inputEvent);
@@ -177,7 +177,7 @@ describe('ReactDOMComponentTree', () => {
 
     const component = <Controlled />;
     const instance = ReactDOM.render(component, container);
-    spyOnDev(console, 'error');
+    spyOnDev(console, "error");
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(0);
     }
@@ -185,18 +185,18 @@ describe('ReactDOMComponentTree', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Warning: A component is changing an uncontrolled input of ' +
-          'type text to be controlled. Input elements should not ' +
-          'switch from uncontrolled to controlled (or vice versa). ' +
-          'Decide between using a controlled or uncontrolled input ' +
-          'element for the lifetime of the component. More info: ' +
-          'https://fb.me/react-controlled-components',
+        "Warning: A component is changing an uncontrolled input of " +
+          "type text to be controlled. Input elements should not " +
+          "switch from uncontrolled to controlled (or vice versa). " +
+          "Decide between using a controlled or uncontrolled input " +
+          "element for the lifetime of the component. More info: " +
+          "https://fb.me/react-controlled-components"
       );
     }
   });
 
-  it('finds instance of node that is attempted to be unmounted', () => {
-    spyOnDev(console, 'error');
+  it("finds instance of node that is attempted to be unmounted", () => {
+    spyOnDev(console, "error");
     const component = <div />;
     const node = ReactDOM.render(<div>{component}</div>, container);
     ReactDOM.unmountComponentAtNode(node);
@@ -204,15 +204,15 @@ describe('ReactDOMComponentTree', () => {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
         "unmountComponentAtNode(): The node you're attempting to unmount " +
-          'was rendered by React and is not a top-level container. You may ' +
-          'have accidentally passed in a React root node instead of its ' +
-          'container.',
+          "was rendered by React and is not a top-level container. You may " +
+          "have accidentally passed in a React root node instead of its " +
+          "container."
       );
     }
   });
 
-  it('finds instance from node to stop rendering over other react rendered components', () => {
-    spyOnDev(console, 'error');
+  it("finds instance from node to stop rendering over other react rendered components", () => {
+    spyOnDev(console, "error");
     const component = (
       <div>
         <span>Hello</span>
@@ -224,10 +224,10 @@ describe('ReactDOMComponentTree', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'render(...): Replacing React-rendered children with a new root ' +
-          'component. If you intended to update the children of this node, ' +
-          'you should instead have the existing children update their state ' +
-          'and render the new components instead of calling ReactDOM.render.',
+        "render(...): Replacing React-rendered children with a new root " +
+          "component. If you intended to update the children of this node, " +
+          "you should instead have the existing children update their state " +
+          "and render the new components instead of calling ReactDOM.render."
       );
     }
   });

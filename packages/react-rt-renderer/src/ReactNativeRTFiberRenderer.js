@@ -7,17 +7,17 @@
  * @flow
  */
 
-import ReactFiberReconciler from 'react-reconciler';
-import emptyObject from 'fbjs/lib/emptyObject';
-import invariant from 'fbjs/lib/invariant';
+import ReactFiberReconciler from "react-reconciler";
+import emptyObject from "fbjs/lib/emptyObject";
+import invariant from "fbjs/lib/invariant";
 // Module provided by RN:
-import RTManager from 'RTManager';
+import RTManager from "RTManager";
 
 import {
   precacheFiberNode,
-  updateFiberProps,
-} from './ReactNativeRTComponentTree';
-import ReactNativeRTTagHandles from './ReactNativeRTTagHandles';
+  updateFiberProps
+} from "./ReactNativeRTComponentTree";
+import ReactNativeRTTagHandles from "./ReactNativeRTTagHandles";
 
 export type Container = number;
 export type Instance = number;
@@ -27,16 +27,16 @@ export type TextInstance = number;
 function processProps(instance: number, props: Props): Object {
   const propsPayload = {};
   for (const key in props) {
-    if (key === 'children') {
+    if (key === "children") {
       // Skip special case.
       continue;
     }
     let value = props[key];
-    if (typeof value === 'function') {
+    if (typeof value === "function") {
       value = {
-        style: 'rt-event',
+        style: "rt-event",
         event: key,
-        tag: instance,
+        tag: instance
       };
     }
     propsPayload[key] = value;
@@ -47,7 +47,7 @@ function processProps(instance: number, props: Props): Object {
 function arePropsEqual(oldProps: Props, newProps: Props): boolean {
   let key;
   for (key in newProps) {
-    if (key === 'children') {
+    if (key === "children") {
       // Skip special case.
       continue;
     }
@@ -56,7 +56,7 @@ function arePropsEqual(oldProps: Props, newProps: Props): boolean {
     }
   }
   for (key in oldProps) {
-    if (key === 'children') {
+    if (key === "children") {
       // Skip special case.
       continue;
     }
@@ -70,7 +70,7 @@ function arePropsEqual(oldProps: Props, newProps: Props): boolean {
 const NativeRTRenderer = ReactFiberReconciler({
   appendInitialChild(
     parentInstance: Instance,
-    child: Instance | TextInstance,
+    child: Instance | TextInstance
   ): void {
     RTManager.appendChild(parentInstance, child);
   },
@@ -80,7 +80,7 @@ const NativeRTRenderer = ReactFiberReconciler({
     props: Props,
     rootContainerInstance: Container,
     hostContext: {},
-    internalInstanceHandle: Object,
+    internalInstanceHandle: Object
   ): Instance {
     const tag = ReactNativeRTTagHandles.allocateTag();
     precacheFiberNode(internalInstanceHandle, tag);
@@ -93,16 +93,16 @@ const NativeRTRenderer = ReactFiberReconciler({
     text: string,
     rootContainerInstance: Container,
     hostContext: {},
-    internalInstanceHandle: Object,
+    internalInstanceHandle: Object
   ): TextInstance {
-    invariant(false, 'Text components are not supported for now.');
+    invariant(false, "Text components are not supported for now.");
   },
 
   finalizeInitialChildren(
     parentInstance: Instance,
     type: string,
     props: Props,
-    rootContainerInstance: Container,
+    rootContainerInstance: Container
   ): boolean {
     return false;
   },
@@ -129,7 +129,7 @@ const NativeRTRenderer = ReactFiberReconciler({
     oldProps: Props,
     newProps: Props,
     rootContainerInstance: Container,
-    hostContext: {},
+    hostContext: {}
   ): null | Object {
     if (arePropsEqual(oldProps, newProps)) {
       return null;
@@ -163,14 +163,14 @@ const NativeRTRenderer = ReactFiberReconciler({
   mutation: {
     appendChild(
       parentInstance: Instance,
-      child: Instance | TextInstance,
+      child: Instance | TextInstance
     ): void {
       RTManager.appendChild(parentInstance, child);
     },
 
     appendChildToContainer(
       parentInstance: Container,
-      child: Instance | TextInstance,
+      child: Instance | TextInstance
     ): void {
       RTManager.appendChildToContext(parentInstance, child);
     },
@@ -178,16 +178,16 @@ const NativeRTRenderer = ReactFiberReconciler({
     commitTextUpdate(
       textInstance: TextInstance,
       oldText: string,
-      newText: string,
+      newText: string
     ): void {
-      invariant(false, 'Text components are not yet supported.');
+      invariant(false, "Text components are not yet supported.");
     },
 
     commitMount(
       instance: Instance,
       type: string,
       newProps: Props,
-      internalInstanceHandle: Object,
+      internalInstanceHandle: Object
     ): void {
       // Noop
     },
@@ -198,7 +198,7 @@ const NativeRTRenderer = ReactFiberReconciler({
       type: string,
       oldProps: Props,
       newProps: Props,
-      internalInstanceHandle: Object,
+      internalInstanceHandle: Object
     ): void {
       updateFiberProps(instance, newProps);
       RTManager.updateNode(instance, updatePayload);
@@ -207,7 +207,7 @@ const NativeRTRenderer = ReactFiberReconciler({
     insertBefore(
       parentInstance: Instance,
       child: Instance | TextInstance,
-      beforeChild: Instance | TextInstance,
+      beforeChild: Instance | TextInstance
     ): void {
       RTManager.prependChild(child, beforeChild);
     },
@@ -215,14 +215,14 @@ const NativeRTRenderer = ReactFiberReconciler({
     insertInContainerBefore(
       parentInstance: Container,
       child: Instance | TextInstance,
-      beforeChild: Instance | TextInstance,
+      beforeChild: Instance | TextInstance
     ): void {
       RTManager.prependChild(child, beforeChild);
     },
 
     removeChild(
       parentInstance: Instance,
-      child: Instance | TextInstance,
+      child: Instance | TextInstance
     ): void {
       // TODO: recursively uncache, by traversing fibers, this will currently leak
       RTManager.deleteChild(child);
@@ -230,7 +230,7 @@ const NativeRTRenderer = ReactFiberReconciler({
 
     removeChildFromContainer(
       parentInstance: Container,
-      child: Instance | TextInstance,
+      child: Instance | TextInstance
     ): void {
       // TODO: recursively uncache, by traversing fibers, this will currently leak
       RTManager.deleteChild(child);
@@ -238,8 +238,8 @@ const NativeRTRenderer = ReactFiberReconciler({
 
     resetTextContent(instance: Instance): void {
       // Noop
-    },
-  },
+    }
+  }
 });
 
 export default NativeRTRenderer;

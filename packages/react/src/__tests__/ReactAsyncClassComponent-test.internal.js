@@ -7,68 +7,68 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactFeatureFlags;
 let ReactTestRenderer;
 
-describe('ReactAsyncClassComponent', () => {
-  describe('debugRenderPhaseSideEffects', () => {
+describe("ReactAsyncClassComponent", () => {
+  describe("debugRenderPhaseSideEffects", () => {
     beforeEach(() => {
       jest.resetModules();
-      ReactFeatureFlags = require('shared/ReactFeatureFlags');
+      ReactFeatureFlags = require("shared/ReactFeatureFlags");
       ReactFeatureFlags.debugRenderPhaseSideEffects = true;
-      React = require('react');
-      ReactTestRenderer = require('react-test-renderer');
+      React = require("react");
+      ReactTestRenderer = require("react-test-renderer");
     });
 
-    it('should invoke precommit lifecycle methods twice', () => {
+    it("should invoke precommit lifecycle methods twice", () => {
       let log = [];
       let shouldComponentUpdate = false;
       class ClassComponent extends React.Component {
         state = {};
         constructor(props) {
           super(props);
-          log.push('constructor');
+          log.push("constructor");
         }
         componentDidMount() {
-          log.push('componentDidMount');
+          log.push("componentDidMount");
         }
         componentDidUpdate() {
-          log.push('componentDidUpdate');
+          log.push("componentDidUpdate");
         }
         componentWillMount() {
-          log.push('componentWillMount');
+          log.push("componentWillMount");
         }
         componentWillReceiveProps() {
-          log.push('componentWillReceiveProps');
+          log.push("componentWillReceiveProps");
         }
         componentWillUnmount() {
-          log.push('componentWillUnmount');
+          log.push("componentWillUnmount");
         }
         componentWillUpdate() {
-          log.push('componentWillUpdate');
+          log.push("componentWillUpdate");
         }
         shouldComponentUpdate() {
-          log.push('shouldComponentUpdate');
+          log.push("shouldComponentUpdate");
           return shouldComponentUpdate;
         }
         render() {
-          log.push('render');
+          log.push("render");
           return null;
         }
       }
 
       const component = ReactTestRenderer.create(<ClassComponent />);
       expect(log).toEqual([
-        'constructor',
-        'componentWillMount',
-        'constructor',
-        'componentWillMount',
-        'render',
-        'render',
-        'componentDidMount',
+        "constructor",
+        "componentWillMount",
+        "constructor",
+        "componentWillMount",
+        "render",
+        "render",
+        "componentDidMount"
       ]);
 
       log = [];
@@ -76,15 +76,15 @@ describe('ReactAsyncClassComponent', () => {
 
       component.update(<ClassComponent />);
       expect(log).toEqual([
-        'componentWillReceiveProps',
-        'componentWillReceiveProps',
-        'shouldComponentUpdate',
-        'shouldComponentUpdate',
-        'componentWillUpdate',
-        'componentWillUpdate',
-        'render',
-        'render',
-        'componentDidUpdate',
+        "componentWillReceiveProps",
+        "componentWillReceiveProps",
+        "shouldComponentUpdate",
+        "shouldComponentUpdate",
+        "componentWillUpdate",
+        "componentWillUpdate",
+        "render",
+        "render",
+        "componentDidUpdate"
       ]);
 
       log = [];
@@ -92,17 +92,17 @@ describe('ReactAsyncClassComponent', () => {
 
       component.update(<ClassComponent />);
       expect(log).toEqual([
-        'componentWillReceiveProps',
-        'componentWillReceiveProps',
-        'shouldComponentUpdate',
-        'shouldComponentUpdate',
+        "componentWillReceiveProps",
+        "componentWillReceiveProps",
+        "shouldComponentUpdate",
+        "shouldComponentUpdate"
       ]);
     });
 
-    it('should invoke setState callbacks twice', () => {
+    it("should invoke setState callbacks twice", () => {
       class ClassComponent extends React.Component {
         state = {
-          count: 1,
+          count: 1
         };
         render() {
           return null;
@@ -116,7 +116,7 @@ describe('ReactAsyncClassComponent', () => {
       instance.setState(state => {
         setStateCount++;
         return {
-          count: state.count + 1,
+          count: state.count + 1
         };
       });
 

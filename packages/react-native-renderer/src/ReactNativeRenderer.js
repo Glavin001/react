@@ -7,32 +7,32 @@
  * @flow
  */
 
-import type {ReactNativeType} from './ReactNativeTypes';
-import type {ReactNodeList} from 'shared/ReactTypes';
+import type { ReactNativeType } from "./ReactNativeTypes";
+import type { ReactNodeList } from "shared/ReactTypes";
 
-import './ReactNativeInjection';
+import "./ReactNativeInjection";
 
-import * as ReactPortal from 'shared/ReactPortal';
-import * as ReactGenericBatching from 'events/ReactGenericBatching';
-import TouchHistoryMath from 'events/TouchHistoryMath';
-import * as ReactGlobalSharedState from 'shared/ReactGlobalSharedState';
-import ReactVersion from 'shared/ReactVersion';
+import * as ReactPortal from "shared/ReactPortal";
+import * as ReactGenericBatching from "events/ReactGenericBatching";
+import TouchHistoryMath from "events/TouchHistoryMath";
+import * as ReactGlobalSharedState from "shared/ReactGlobalSharedState";
+import ReactVersion from "shared/ReactVersion";
 // Module provided by RN:
-import UIManager from 'UIManager';
+import UIManager from "UIManager";
 
-import NativeMethodsMixin from './NativeMethodsMixin';
-import ReactNativeBridgeEventPlugin from './ReactNativeBridgeEventPlugin';
-import ReactNativeComponent from './ReactNativeComponent';
-import * as ReactNativeComponentTree from './ReactNativeComponentTree';
-import ReactNativeFiberRenderer from './ReactNativeFiberRenderer';
-import ReactNativePropRegistry from './ReactNativePropRegistry';
-import {getInspectorDataForViewTag} from './ReactNativeFiberInspector';
-import createReactNativeComponentClass from './createReactNativeComponentClass';
-import findNumericNodeHandle from './findNumericNodeHandle';
-import takeSnapshot from './takeSnapshot';
+import NativeMethodsMixin from "./NativeMethodsMixin";
+import ReactNativeBridgeEventPlugin from "./ReactNativeBridgeEventPlugin";
+import ReactNativeComponent from "./ReactNativeComponent";
+import * as ReactNativeComponentTree from "./ReactNativeComponentTree";
+import ReactNativeFiberRenderer from "./ReactNativeFiberRenderer";
+import ReactNativePropRegistry from "./ReactNativePropRegistry";
+import { getInspectorDataForViewTag } from "./ReactNativeFiberInspector";
+import createReactNativeComponentClass from "./createReactNativeComponentClass";
+import findNumericNodeHandle from "./findNumericNodeHandle";
+import takeSnapshot from "./takeSnapshot";
 
 ReactGenericBatching.injection.injectFiberBatchedUpdates(
-  ReactNativeFiberRenderer.batchedUpdates,
+  ReactNativeFiberRenderer.batchedUpdates
 );
 
 const roots = new Map();
@@ -51,7 +51,7 @@ const ReactNativeRenderer: ReactNativeType = {
       root = ReactNativeFiberRenderer.createContainer(
         containerTag,
         false,
-        false,
+        false
       );
       roots.set(containerTag, root);
     }
@@ -80,7 +80,7 @@ const ReactNativeRenderer: ReactNativeType = {
   createPortal(
     children: ReactNodeList,
     containerTag: number,
-    key: ?string = null,
+    key: ?string = null
   ) {
     return ReactPortal.createPortal(children, containerTag, null, key);
   },
@@ -99,8 +99,8 @@ const ReactNativeRenderer: ReactNativeType = {
     ReactNativePropRegistry, // flattenStyle, Stylesheet
     TouchHistoryMath, // PanResponder
     createReactNativeComponentClass, // RCTText, RCTView, ReactNativeART
-    takeSnapshot, // react-native-implementation
-  },
+    takeSnapshot // react-native-implementation
+  }
 };
 
 if (__DEV__) {
@@ -112,16 +112,16 @@ if (__DEV__) {
       // Used by RCTRenderingPerf, Systrace:
       ReactDebugTool: {
         addHook() {},
-        removeHook() {},
+        removeHook() {}
       },
       // Used by ReactPerfStallHandler, RCTRenderingPerf:
       ReactPerf: {
         start() {},
         stop() {},
         printInclusive() {},
-        printWasted() {},
-      },
-    },
+        printWasted() {}
+      }
+    }
   );
 }
 
@@ -130,7 +130,7 @@ ReactNativeFiberRenderer.injectIntoDevTools({
   getInspectorDataForViewTag: getInspectorDataForViewTag,
   bundleType: __DEV__ ? 1 : 0,
   version: ReactVersion,
-  rendererPackageName: 'react-native-renderer',
+  rendererPackageName: "react-native-renderer"
 });
 
 export default ReactNativeRenderer;

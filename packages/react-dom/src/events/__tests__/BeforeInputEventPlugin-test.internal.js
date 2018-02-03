@@ -7,22 +7,22 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-const React = require('react');
-const ReactTestUtils = require('react-dom/test-utils');
+const React = require("react");
+const ReactTestUtils = require("react-dom/test-utils");
 
 const EventMapping = {
-  compositionstart: 'topCompositionStart',
-  compositionend: 'topCompositionEnd',
-  keyup: 'topKeyUp',
-  keydown: 'topKeyDown',
-  keypress: 'topKeyPress',
-  textInput: 'topTextInput',
-  textinput: null, // Not defined now
+  compositionstart: "topCompositionStart",
+  compositionend: "topCompositionEnd",
+  keyup: "topKeyUp",
+  keydown: "topKeyDown",
+  keypress: "topKeyPress",
+  textInput: "topTextInput",
+  textinput: null // Not defined now
 };
 
-describe('BeforeInputEventPlugin', function() {
+describe("BeforeInputEventPlugin", function() {
   let ModuleCache;
 
   function simulateIE11() {
@@ -46,24 +46,24 @@ describe('BeforeInputEventPlugin', function() {
 
     // Modules which have dependency on BeforeInputEventPlugin are stored
     // in ModuleCache so that we can use these modules ouside test functions.
-    this.ReactDOM = require('react-dom');
+    this.ReactDOM = require("react-dom");
 
     // TODO: can we express this test with only public API?
-    this.ReactDOMComponentTree = require('../../client/ReactDOMComponentTree');
-    this.SyntheticCompositionEvent = require('../SyntheticCompositionEvent').default;
-    this.SyntheticInputEvent = require('../SyntheticInputEvent').default;
-    this.BeforeInputEventPlugin = require('../BeforeInputEventPlugin').default;
+    this.ReactDOMComponentTree = require("../../client/ReactDOMComponentTree");
+    this.SyntheticCompositionEvent = require("../SyntheticCompositionEvent").default;
+    this.SyntheticInputEvent = require("../SyntheticInputEvent").default;
+    this.BeforeInputEventPlugin = require("../BeforeInputEventPlugin").default;
   }
 
   function extract(node, eventType, optionalData) {
-    let evt = document.createEvent('HTMLEvents');
+    let evt = document.createEvent("HTMLEvents");
     evt.initEvent(eventType, true, true);
     evt = Object.assign(evt, optionalData);
     return ModuleCache.BeforeInputEventPlugin.extractEvents(
       EventMapping[eventType],
       ModuleCache.ReactDOMComponentTree.getInstanceFromNode(node),
       evt,
-      node,
+      node
     );
   }
 
@@ -86,8 +86,8 @@ describe('BeforeInputEventPlugin', function() {
   }
 
   function EventMismatchError(idx, message) {
-    this.name = 'EventMismatchError';
-    this.message = '[' + idx + '] ' + message;
+    this.name = "EventMismatchError";
+    this.message = "[" + idx + "] " + message;
   }
   EventMismatchError.prototype = Object.create(Error.prototype);
 
@@ -99,21 +99,21 @@ describe('BeforeInputEventPlugin', function() {
         if (actual === null && expected.type === null) {
           // Both are null.  Expected.
         } else if (actual === null) {
-          throw new EventMismatchError(idx, 'Expected not to be null');
+          throw new EventMismatchError(idx, "Expected not to be null");
         } else if (
           expected.type === null ||
           !(actual instanceof expected.type)
         ) {
-          throw new EventMismatchError(idx, 'Unexpected type: ' + actual);
+          throw new EventMismatchError(idx, "Unexpected type: " + actual);
         } else {
           // Type match.
           Object.keys(expected.data).forEach(function(expectedKey) {
             if (!(expectedKey in actual)) {
-              throw new EventMismatchError(idx, 'KeyNotFound: ' + expectedKey);
+              throw new EventMismatchError(idx, "KeyNotFound: " + expectedKey);
             } else if (actual[expectedKey] !== expected.data[expectedKey]) {
               throw new EventMismatchError(
                 idx,
-                'ValueMismatch: ' + actual[expectedKey],
+                "ValueMismatch: " + actual[expectedKey]
               );
             }
           });
@@ -128,26 +128,26 @@ describe('BeforeInputEventPlugin', function() {
   // this scenario data for future use.
   const Test_Scenario = [
     // Composition test
-    {run: accumulateEvents, arg: ['compositionstart', {data: ''}]},
-    {run: accumulateEvents, arg: ['textInput', {data: 'A'}]},
-    {run: accumulateEvents, arg: ['textinput', {data: 'A'}]},
-    {run: accumulateEvents, arg: ['keyup', {keyCode: 65}]},
-    {run: setElementText, arg: ['ABC']},
-    {run: accumulateEvents, arg: ['textInput', {data: 'abc'}]},
-    {run: accumulateEvents, arg: ['textinput', {data: 'abc'}]},
-    {run: accumulateEvents, arg: ['keyup', {keyCode: 32}]},
-    {run: setElementText, arg: ['XYZ']},
-    {run: accumulateEvents, arg: ['textInput', {data: 'xyz'}]},
-    {run: accumulateEvents, arg: ['textinput', {data: 'xyz'}]},
-    {run: accumulateEvents, arg: ['keyup', {keyCode: 32}]},
-    {run: accumulateEvents, arg: ['compositionend', {data: 'Hello'}]},
+    { run: accumulateEvents, arg: ["compositionstart", { data: "" }] },
+    { run: accumulateEvents, arg: ["textInput", { data: "A" }] },
+    { run: accumulateEvents, arg: ["textinput", { data: "A" }] },
+    { run: accumulateEvents, arg: ["keyup", { keyCode: 65 }] },
+    { run: setElementText, arg: ["ABC"] },
+    { run: accumulateEvents, arg: ["textInput", { data: "abc" }] },
+    { run: accumulateEvents, arg: ["textinput", { data: "abc" }] },
+    { run: accumulateEvents, arg: ["keyup", { keyCode: 32 }] },
+    { run: setElementText, arg: ["XYZ"] },
+    { run: accumulateEvents, arg: ["textInput", { data: "xyz" }] },
+    { run: accumulateEvents, arg: ["textinput", { data: "xyz" }] },
+    { run: accumulateEvents, arg: ["keyup", { keyCode: 32 }] },
+    { run: accumulateEvents, arg: ["compositionend", { data: "Hello" }] },
 
     // Emoji test
     {
       run: accumulateEvents,
-      arg: ['keypress', {char: '\uD83D\uDE0A', which: 65}],
+      arg: ["keypress", { char: "\uD83D\uDE0A", which: 65 }]
     },
-    {run: accumulateEvents, arg: ['textInput', {data: '\uD83D\uDE0A'}]},
+    { run: accumulateEvents, arg: ["textInput", { data: "\uD83D\uDE0A" }] }
   ];
 
   /* Defined expected results as a factory of result data because we need
@@ -160,19 +160,19 @@ describe('BeforeInputEventPlugin', function() {
   // textInput, SyntheticCompositionEvent at composition, and nothing from
   // keyUp.
   const Expected_Webkit = () => [
-    {type: ModuleCache.SyntheticCompositionEvent, data: {}},
-    {type: ModuleCache.SyntheticInputEvent, data: {data: 'A'}},
+    { type: ModuleCache.SyntheticCompositionEvent, data: {} },
+    { type: ModuleCache.SyntheticInputEvent, data: { data: "A" } },
     // textinput of A
     // keyUp of 65
-    {type: ModuleCache.SyntheticInputEvent, data: {data: 'abc'}},
+    { type: ModuleCache.SyntheticInputEvent, data: { data: "abc" } },
     // textinput of abc
     // keyUp of 32
-    {type: ModuleCache.SyntheticInputEvent, data: {data: 'xyz'}},
+    { type: ModuleCache.SyntheticInputEvent, data: { data: "xyz" } },
     // textinput of xyz
     // keyUp of 32
-    {type: ModuleCache.SyntheticCompositionEvent, data: {data: 'Hello'}},
+    { type: ModuleCache.SyntheticCompositionEvent, data: { data: "Hello" } },
     // Emoji test
-    {type: ModuleCache.SyntheticInputEvent, data: {data: '\uD83D\uDE0A'}},
+    { type: ModuleCache.SyntheticInputEvent, data: { data: "\uD83D\uDE0A" } }
   ];
 
   // For IE11, we use fallback data instead of IE's textinput events.
@@ -180,7 +180,7 @@ describe('BeforeInputEventPlugin', function() {
   // expected to be triggered at compositionend with a text of the target
   // element, not event data.
   const Expected_IE11 = () => [
-    {type: ModuleCache.SyntheticCompositionEvent, data: {}},
+    { type: ModuleCache.SyntheticCompositionEvent, data: {} },
     // textInput of A
     // textinput of A
     // keyUp of 65
@@ -193,10 +193,10 @@ describe('BeforeInputEventPlugin', function() {
     // keyUp of 32
     // fallbackData is retrieved from the element, which is XYZ,
     // at a time of compositionend
-    {type: ModuleCache.SyntheticCompositionEvent, data: {}},
-    {type: ModuleCache.SyntheticInputEvent, data: {data: 'XYZ'}},
+    { type: ModuleCache.SyntheticCompositionEvent, data: {} },
+    { type: ModuleCache.SyntheticInputEvent, data: { data: "XYZ" } },
     // Emoji test
-    {type: ModuleCache.SyntheticInputEvent, data: {data: '\uD83D\uDE0A'}},
+    { type: ModuleCache.SyntheticInputEvent, data: { data: "\uD83D\uDE0A" } }
   ];
 
   function TestEditableReactComponent(Emulator, Scenario, ExpectedResult) {
@@ -216,11 +216,11 @@ describe('BeforeInputEventPlugin', function() {
     verifyEvents(events, ExpectedResult());
   }
 
-  it('extract onBeforeInput from native textinput events', function() {
+  it("extract onBeforeInput from native textinput events", function() {
     TestEditableReactComponent(simulateWebkit, Test_Scenario, Expected_Webkit);
   });
 
-  it('extract onBeforeInput from fallback objects', function() {
+  it("extract onBeforeInput from fallback objects", function() {
     TestEditableReactComponent(simulateIE11, Test_Scenario, Expected_IE11);
   });
 });

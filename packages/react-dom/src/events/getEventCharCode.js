@@ -19,7 +19,7 @@ function getEventCharCode(nativeEvent) {
   let charCode;
   const keyCode = nativeEvent.keyCode;
 
-  if ('charCode' in nativeEvent) {
+  if ("charCode" in nativeEvent) {
     charCode = nativeEvent.charCode;
 
     // FF does not set `charCode` for the Enter-key, check against `keyCode`.

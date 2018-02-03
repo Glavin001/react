@@ -7,9 +7,9 @@
  * @flow
  */
 
-import type {CapturedError} from './ReactFiberScheduler';
+import type { CapturedError } from "./ReactFiberScheduler";
 
-import {showErrorDialog} from './ReactFiberErrorDialog';
+import { showErrorDialog } from "./ReactFiberErrorDialog";
 
 export function logCapturedError(capturedError: CapturedError): void {
   const logError = showErrorDialog(capturedError);
@@ -32,12 +32,12 @@ export function logCapturedError(capturedError: CapturedError): void {
       componentStack,
       errorBoundaryName,
       errorBoundaryFound,
-      willRetry,
+      willRetry
     } = capturedError;
 
     const componentNameMessage = componentName
       ? `The above error occurred in the <${componentName}> component:`
-      : 'The above error occurred in one of your React components:';
+      : "The above error occurred in one of your React components:";
 
     let errorBoundaryMessage;
     // errorBoundaryFound check is sufficient; errorBoundaryName check is to satisfy Flow.
@@ -48,15 +48,13 @@ export function logCapturedError(capturedError: CapturedError): void {
           `using the error boundary you provided, ${errorBoundaryName}.`;
       } else {
         errorBoundaryMessage =
-          `This error was initially handled by the error boundary ${
-            errorBoundaryName
-          }.\n` +
+          `This error was initially handled by the error boundary ${errorBoundaryName}.\n` +
           `Recreating the tree from scratch failed so React will unmount the tree.`;
       }
     } else {
       errorBoundaryMessage =
-        'Consider adding an error boundary to your tree to customize error handling behavior.\n' +
-        'Visit https://fb.me/react-error-boundaries to learn more about error boundaries.';
+        "Consider adding an error boundary to your tree to customize error handling behavior.\n" +
+        "Visit https://fb.me/react-error-boundaries to learn more about error boundaries.";
     }
     const combinedMessage =
       `${componentNameMessage}${componentStack}\n\n` +

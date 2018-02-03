@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
-const eslintrc = require('../../.eslintrc');
+const eslintrc = require("../../.eslintrc");
 
 const ERROR = 2;
 
@@ -15,12 +15,12 @@ const ERROR = 2;
 // They must be ES5.
 
 module.exports = Object.assign({}, eslintrc, {
-  parser: 'espree',
+  parser: "espree",
   parserOptions: {
     ecmaVersion: 5,
-    sourceType: 'script',
+    sourceType: "script"
   },
   rules: {
-    strict: ERROR,
-  },
+    strict: ERROR
+  }
 });

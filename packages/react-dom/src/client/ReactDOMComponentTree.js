@@ -5,14 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {HostComponent, HostText} from 'shared/ReactTypeOfWork';
-import invariant from 'fbjs/lib/invariant';
+import { HostComponent, HostText } from "shared/ReactTypeOfWork";
+import invariant from "fbjs/lib/invariant";
 
 const randomKey = Math.random()
   .toString(36)
   .slice(2);
-const internalInstanceKey = '__reactInternalInstance$' + randomKey;
-const internalEventHandlersKey = '__reactEventHandlers$' + randomKey;
+const internalInstanceKey = "__reactInternalInstance$" + randomKey;
+const internalEventHandlersKey = "__reactEventHandlers$" + randomKey;
 
 export function precacheFiberNode(hostInst, node) {
   node[internalInstanceKey] = hostInst;
@@ -82,7 +82,7 @@ export function getNodeFromInstance(inst) {
 
   // Without this first invariant, passing a non-DOM-component triggers the next
   // invariant for a missing parent, which is super confusing.
-  invariant(false, 'getNodeFromInstance: Invalid argument.');
+  invariant(false, "getNodeFromInstance: Invalid argument.");
 }
 
 export function getFiberCurrentPropsFromNode(node) {

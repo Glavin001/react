@@ -1,29 +1,29 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
-const chalk = require('chalk');
-const {readJson} = require('fs-extra');
-const {join} = require('path');
-const semver = require('semver');
-const {execRead, execUnlessDry, logPromise} = require('../utils');
+const chalk = require("chalk");
+const { readJson } = require("fs-extra");
+const { join } = require("path");
+const semver = require("semver");
+const { execRead, execUnlessDry, logPromise } = require("../utils");
 
-const push = async ({cwd, dry, packages, version}) => {
+const push = async ({ cwd, dry, packages, version }) => {
   const errors = [];
   const isPrerelease = semver.prerelease(version);
-  const tag = isPrerelease ? 'next' : 'latest';
+  const tag = isPrerelease ? "next" : "latest";
 
   const publishProject = async project => {
     try {
-      const path = join(cwd, 'build', 'packages', project);
-      await execUnlessDry(`npm publish --tag ${tag}`, {cwd: path, dry});
+      const path = join(cwd, "build", "packages", project);
+      await execUnlessDry(`npm publish --tag ${tag}`, { cwd: path, dry });
 
       const packagePath = join(
         cwd,
-        'build',
-        'packages',
+        "build",
+        "packages",
         project,
-        'package.json'
+        "package.json"
       );
       const packageJSON = await readJson(packagePath);
       const packageVersion = packageJSON.version;
@@ -43,9 +43,7 @@ const push = async ({cwd, dry, packages, version}) => {
         if (remoteVersion !== packageVersion) {
           throw Error(
             chalk`Published version {yellow.bold ${packageVersion}} for ` +
-              chalk`{bold ${project}} but NPM shows {yellow.bold ${
-                remoteVersion
-              }}`
+              chalk`{bold ${project}} but NPM shows {yellow.bold ${remoteVersion}}`
           );
         }
 
@@ -54,7 +52,7 @@ const push = async ({cwd, dry, packages, version}) => {
         if (!isPrerelease) {
           await execUnlessDry(
             `npm dist-tag add ${project}@${packageVersion} next`,
-            {cwd: path, dry}
+            { cwd: path, dry }
           );
         }
       }
@@ -70,11 +68,11 @@ const push = async ({cwd, dry, packages, version}) => {
       chalk`
       Failure publishing to NPM
 
-      {white ${errors.join('\n\n')}}`
+      {white ${errors.join("\n\n")}}`
     );
   }
 };
 
 module.exports = async params => {
-  return logPromise(push(params), 'Publishing packages to NPM');
+  return logPromise(push(params), "Publishing packages to NPM");
 };

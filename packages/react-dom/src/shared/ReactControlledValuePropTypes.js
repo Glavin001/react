@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import checkPropTypes from 'prop-types/checkPropTypes';
+import checkPropTypes from "prop-types/checkPropTypes";
 
 const ReactControlledValuePropTypes = {
-  checkPropTypes: null,
+  checkPropTypes: null
 };
 
 if (__DEV__) {
@@ -19,7 +19,7 @@ if (__DEV__) {
     hidden: true,
     radio: true,
     reset: true,
-    submit: true,
+    submit: true
   };
 
   const propTypes = {
@@ -34,10 +34,10 @@ if (__DEV__) {
         return null;
       }
       return new Error(
-        'You provided a `value` prop to a form field without an ' +
-          '`onChange` handler. This will render a read-only field. If ' +
-          'the field should be mutable use `defaultValue`. Otherwise, ' +
-          'set either `onChange` or `readOnly`.',
+        "You provided a `value` prop to a form field without an " +
+          "`onChange` handler. This will render a read-only field. If " +
+          "the field should be mutable use `defaultValue`. Otherwise, " +
+          "set either `onChange` or `readOnly`."
       );
     },
     checked: function(props, propName, componentName) {
@@ -50,12 +50,12 @@ if (__DEV__) {
         return null;
       }
       return new Error(
-        'You provided a `checked` prop to a form field without an ' +
-          '`onChange` handler. This will render a read-only field. If ' +
-          'the field should be mutable use `defaultChecked`. Otherwise, ' +
-          'set either `onChange` or `readOnly`.',
+        "You provided a `checked` prop to a form field without an " +
+          "`onChange` handler. This will render a read-only field. If " +
+          "the field should be mutable use `defaultChecked`. Otherwise, " +
+          "set either `onChange` or `readOnly`."
       );
-    },
+    }
   };
 
   /**
@@ -65,9 +65,9 @@ if (__DEV__) {
   ReactControlledValuePropTypes.checkPropTypes = function(
     tagName,
     props,
-    getStack,
+    getStack
   ) {
-    checkPropTypes(propTypes, props, 'prop', tagName, getStack);
+    checkPropTypes(propTypes, props, "prop", tagName, getStack);
   };
 }
 

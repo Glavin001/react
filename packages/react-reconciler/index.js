@@ -7,16 +7,16 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
 // TODO: bundle Flow types with the package.
 export type {
   HostConfig,
   Deadline,
-  Reconciler,
-} from './src/ReactFiberReconciler';
+  Reconciler
+} from "./src/ReactFiberReconciler";
 
-const ReactFiberReconciler = require('./src/ReactFiberReconciler');
+const ReactFiberReconciler = require("./src/ReactFiberReconciler");
 
 // TODO: decide on the top-level export form.
 // This is hacky but makes it work with both Rollup and Jest.

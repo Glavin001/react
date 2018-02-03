@@ -5,21 +5,21 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
-const path = require('path');
-const spawn = require('child_process').spawn;
+const path = require("path");
+const spawn = require("child_process").spawn;
 
-const extension = process.platform === 'win32' ? '.cmd' : '';
+const extension = process.platform === "win32" ? ".cmd" : "";
 
-spawn(path.join('node_modules', '.bin', 'flow' + extension), ['check', '.'], {
+spawn(path.join("node_modules", ".bin", "flow" + extension), ["check", "."], {
   // Allow colors to pass through
-  stdio: 'inherit',
-}).on('close', function(code) {
+  stdio: "inherit"
+}).on("close", function(code) {
   if (code !== 0) {
-    console.error('Flow failed');
+    console.error("Flow failed");
   } else {
-    console.log('Flow passed');
+    console.log("Flow passed");
   }
 
   process.exit(code);

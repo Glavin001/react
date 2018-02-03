@@ -7,16 +7,16 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-const stream = require('stream');
+const stream = require("stream");
 
 module.exports = function(initModules) {
   let ReactDOM;
   let ReactDOMServer;
 
   function resetModules() {
-    ({ReactDOM, ReactDOMServer} = initModules());
+    ({ ReactDOM, ReactDOMServer } = initModules());
   }
 
   // Helper functions for rendering tests
@@ -41,7 +41,7 @@ module.exports = function(initModules) {
     if (console.error.calls && console.error.calls.reset) {
       console.error.calls.reset();
     } else {
-      spyOnDev(console, 'error');
+      spyOnDev(console, "error");
     }
 
     const result = await fn();
@@ -51,9 +51,7 @@ module.exports = function(initModules) {
       console.error.calls.count() !== 0
     ) {
       console.log(
-        `We expected ${
-          count
-        } warning(s), but saw ${console.error.calls.count()} warning(s).`,
+        `We expected ${count} warning(s), but saw ${console.error.calls.count()} warning(s).`
       );
       if (console.error.calls.count() > 0) {
         console.log(`We saw these warnings:`);
@@ -74,7 +72,7 @@ module.exports = function(initModules) {
     reactElement,
     domElement,
     forceHydrate,
-    errorCount = 0,
+    errorCount = 0
   ) {
     return expectErrors(async () => {
       await asyncReactDOMRender(reactElement, domElement, forceHydrate);
@@ -86,9 +84,9 @@ module.exports = function(initModules) {
     return await expectErrors(
       () =>
         new Promise(resolve =>
-          resolve(ReactDOMServer.renderToString(reactElement)),
+          resolve(ReactDOMServer.renderToString(reactElement))
         ),
-      errorCount,
+      errorCount
     );
   }
 
@@ -97,7 +95,7 @@ module.exports = function(initModules) {
   // Does not render on client or perform client-side revival.
   async function serverRender(reactElement, errorCount = 0) {
     const markup = await renderIntoString(reactElement, errorCount);
-    const domElement = document.createElement('div');
+    const domElement = document.createElement("div");
     domElement.innerHTML = markup;
     return domElement.firstChild;
   }
@@ -107,7 +105,7 @@ module.exports = function(initModules) {
   class DrainWritable extends stream.Writable {
     constructor(options) {
       super(options);
-      this.buffer = '';
+      this.buffer = "";
     }
 
     _write(chunk, encoding, cb) {
@@ -122,9 +120,9 @@ module.exports = function(initModules) {
         new Promise(resolve => {
           let writable = new DrainWritable();
           ReactDOMServer.renderToNodeStream(reactElement).pipe(writable);
-          writable.on('finish', () => resolve(writable.buffer));
+          writable.on("finish", () => resolve(writable.buffer));
         }),
-      errorCount,
+      errorCount
     );
   }
 
@@ -133,13 +131,13 @@ module.exports = function(initModules) {
   // Does not render on client or perform client-side revival.
   async function streamRender(reactElement, errorCount = 0) {
     const markup = await renderIntoStream(reactElement, errorCount);
-    const domElement = document.createElement('div');
+    const domElement = document.createElement("div");
     domElement.innerHTML = markup;
     return domElement.firstChild;
   }
 
   const clientCleanRender = (element, errorCount = 0) => {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     return renderIntoDom(element, div, false, errorCount);
   };
 
@@ -147,7 +145,7 @@ module.exports = function(initModules) {
     const markup = await renderIntoString(element, errorCount);
     resetModules();
 
-    const domElement = document.createElement('div');
+    const domElement = document.createElement("div");
     domElement.innerHTML = markup;
     let serverNode = domElement.firstChild;
 
@@ -155,7 +153,7 @@ module.exports = function(initModules) {
       element,
       domElement,
       true,
-      errorCount,
+      errorCount
     );
     let clientNode = firstClientNode;
 
@@ -178,7 +176,7 @@ module.exports = function(initModules) {
 
   const clientRenderOnBadMarkup = async (element, errorCount = 0) => {
     // First we render the top of bad mark up.
-    const domElement = document.createElement('div');
+    const domElement = document.createElement("div");
     domElement.innerHTML =
       '<div id="badIdWhichWillCauseMismatch" data-reactroot="" data-reactid="1"></div>';
     await renderIntoDom(element, domElement, true, errorCount + 1);
@@ -187,7 +185,7 @@ module.exports = function(initModules) {
     const hydratedTextContent = domElement.textContent;
 
     // Next we render the element into a clean DOM node client side.
-    const cleanDomElement = document.createElement('div');
+    const cleanDomElement = document.createElement("div");
     await asyncReactDOMRender(element, cleanDomElement, true);
     // This gives us the expected text content.
     const cleanTextContent = cleanDomElement.textContent;
@@ -235,9 +233,7 @@ module.exports = function(initModules) {
       testFn(clientCleanRender));
     it(`renders ${desc} with client render on top of good server markup`, () =>
       testFn(clientRenderOnServerString));
-    it(`renders ${
-      desc
-    } with client render on top of bad server markup`, async () => {
+    it(`renders ${desc} with client render on top of bad server markup`, async () => {
       try {
         await testFn(clientRenderOnBadMarkup);
       } catch (x) {
@@ -253,11 +249,11 @@ module.exports = function(initModules) {
   function itThrows(desc, testFn, partialMessage) {
     it(`throws ${desc}`, () => {
       return testFn().then(
-        () => expect(false).toBe('The promise resolved and should not have.'),
+        () => expect(false).toBe("The promise resolved and should not have."),
         err => {
           expect(err).toBeInstanceOf(Error);
           expect(err.message).toContain(partialMessage);
-        },
+        }
       );
     });
   }
@@ -266,12 +262,12 @@ module.exports = function(initModules) {
     itThrows(
       `when rendering ${desc} with server string render`,
       () => testFn(serverRender),
-      partialMessage,
+      partialMessage
     );
     itThrows(
       `when rendering ${desc} with clean client render`,
       () => testFn(clientCleanRender),
-      partialMessage,
+      partialMessage
     );
 
     // we subtract one from the warning count here because the throw means that it won't
@@ -280,9 +276,9 @@ module.exports = function(initModules) {
       `when rendering ${desc} with client render on top of bad server markup`,
       () =>
         testFn((element, warningCount = 0) =>
-          clientRenderOnBadMarkup(element, warningCount - 1),
+          clientRenderOnBadMarkup(element, warningCount - 1)
         ),
-      partialMessage,
+      partialMessage
     );
   }
 
@@ -296,7 +292,7 @@ module.exports = function(initModules) {
       clientElement,
       domElement.parentNode,
       true,
-      shouldMatch ? 0 : 1,
+      shouldMatch ? 0 : 1
     );
   }
 
@@ -323,6 +319,6 @@ module.exports = function(initModules) {
     serverRender,
     clientRenderOnServerString,
     renderIntoDom,
-    streamRender,
+    streamRender
   };
 };

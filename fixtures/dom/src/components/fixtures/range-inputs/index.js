@@ -1,9 +1,9 @@
 const React = window.React;
 
 class RangeInputs extends React.Component {
-  state = {value: 0.5};
+  state = { value: 0.5 };
   onChange = event => {
-    this.setState({value: event.target.value});
+    this.setState({ value: event.target.value });
   };
   render() {
     return (

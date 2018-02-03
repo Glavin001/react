@@ -7,53 +7,53 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactDOM;
 let ReactTestUtils;
 
-describe('ReactEventIndependence', () => {
+describe("ReactEventIndependence", () => {
   beforeEach(() => {
     jest.resetModules();
 
-    React = require('react');
-    ReactDOM = require('react-dom');
-    ReactTestUtils = require('react-dom/test-utils');
+    React = require("react");
+    ReactDOM = require("react-dom");
+    ReactTestUtils = require("react-dom/test-utils");
   });
 
-  it('does not crash with other react inside', () => {
+  it("does not crash with other react inside", () => {
     let clicks = 0;
     const div = ReactTestUtils.renderIntoDocument(
       <div
         onClick={() => clicks++}
         dangerouslySetInnerHTML={{
-          __html: '<button data-reactid=".z">click me</div>',
+          __html: '<button data-reactid=".z">click me</div>'
         }}
-      />,
+      />
     );
     ReactTestUtils.SimulateNative.click(div.firstChild);
     expect(clicks).toBe(1);
   });
 
-  it('does not crash with other react outside', () => {
+  it("does not crash with other react outside", () => {
     let clicks = 0;
-    const outer = document.createElement('div');
-    outer.setAttribute('data-reactid', '.z');
+    const outer = document.createElement("div");
+    outer.setAttribute("data-reactid", ".z");
     const inner = ReactDOM.render(
       <button onClick={() => clicks++}>click me</button>,
-      outer,
+      outer
     );
     ReactTestUtils.SimulateNative.click(inner);
     expect(clicks).toBe(1);
   });
 
-  it('does not when event fired on unmounted tree', () => {
+  it("does not when event fired on unmounted tree", () => {
     let clicks = 0;
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const button = ReactDOM.render(
       <button onClick={() => clicks++}>click me</button>,
-      container,
+      container
     );
 
     // Now we unmount the component, as if caused by a non-React event handler

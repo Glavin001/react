@@ -4,24 +4,24 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
+"use strict";
 
-const path = require('path');
-const semver = require('semver');
+const path = require("path");
+const semver = require("semver");
 
 function resolveRelatively(importee, importer) {
-  if (semver.gte(process.version, '8.9.0')) {
+  if (semver.gte(process.version, "8.9.0")) {
     return require.resolve(importee, {
-      paths: [path.dirname(importer)],
+      paths: [path.dirname(importer)]
     });
   } else {
     // `paths` argument is not available in older Node.
     // This works though.
     // https://github.com/nodejs/node/issues/5963
-    const Module = require('module');
+    const Module = require("module");
     return Module._findPath(importee, [
       path.dirname(importer),
-      ...module.paths,
+      ...module.paths
     ]);
   }
 }
@@ -41,7 +41,7 @@ function useForks(forks) {
       if (!importer || !importee) {
         return null;
       }
-      if (importee.startsWith('\u0000')) {
+      if (importee.startsWith("\u0000")) {
         // Internal Rollup reference, ignore.
         // Passing that to Node file functions can fatal.
         return null;
@@ -66,7 +66,7 @@ function useForks(forks) {
         return resolvedForks.get(resolvedImportee);
       }
       return null;
-    },
+    }
   };
 }
 

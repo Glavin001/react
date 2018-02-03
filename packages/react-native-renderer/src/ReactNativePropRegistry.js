@@ -30,7 +30,7 @@ class ReactNativePropRegistry {
 
     const object = objects[id];
     if (!object) {
-      console.warn('Invalid style with id `' + id + '`. Skipping ...');
+      console.warn("Invalid style with id `" + id + "`. Skipping ...");
       return emptyObject;
     }
     return object;

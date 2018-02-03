@@ -6,16 +6,16 @@
  *
  */
 
-import type {ReactElement, Source} from 'shared/ReactElementType';
-import type {ReactFragment, ReactPortal} from 'shared/ReactTypes';
-import type {TypeOfWork} from 'shared/ReactTypeOfWork';
-import type {TypeOfInternalContext} from './ReactTypeOfInternalContext';
-import type {TypeOfSideEffect} from 'shared/ReactTypeOfSideEffect';
-import type {ExpirationTime} from './ReactFiberExpirationTime';
-import type {UpdateQueue} from './ReactFiberUpdateQueue';
+import type { ReactElement, Source } from "shared/ReactElementType";
+import type { ReactFragment, ReactPortal } from "shared/ReactTypes";
+import type { TypeOfWork } from "shared/ReactTypeOfWork";
+import type { TypeOfInternalContext } from "./ReactTypeOfInternalContext";
+import type { TypeOfSideEffect } from "shared/ReactTypeOfSideEffect";
+import type { ExpirationTime } from "./ReactFiberExpirationTime";
+import type { UpdateQueue } from "./ReactFiberUpdateQueue";
 
-import invariant from 'fbjs/lib/invariant';
-import {NoEffect} from 'shared/ReactTypeOfSideEffect';
+import invariant from "fbjs/lib/invariant";
+import { NoEffect } from "shared/ReactTypeOfSideEffect";
 import {
   IndeterminateComponent,
   ClassComponent,
@@ -25,17 +25,17 @@ import {
   HostPortal,
   CallComponent,
   ReturnComponent,
-  Fragment,
-} from 'shared/ReactTypeOfWork';
-import getComponentName from 'shared/getComponentName';
+  Fragment
+} from "shared/ReactTypeOfWork";
+import getComponentName from "shared/getComponentName";
 
-import {NoWork} from './ReactFiberExpirationTime';
-import {NoContext, AsyncUpdates} from './ReactTypeOfInternalContext';
+import { NoWork } from "./ReactFiberExpirationTime";
+import { NoContext, AsyncUpdates } from "./ReactTypeOfInternalContext";
 import {
   REACT_FRAGMENT_TYPE,
   REACT_RETURN_TYPE,
-  REACT_CALL_TYPE,
-} from 'shared/ReactSymbols';
+  REACT_CALL_TYPE
+} from "shared/ReactSymbols";
 
 let hasBadMapPolyfill;
 
@@ -100,7 +100,7 @@ export type Fiber = {|
 
   // The ref last used to attach this node.
   // I'll avoid adding an owner field for prod and model that as functions.
-  ref: null | (((handle: mixed) => void) & {_stringRef: ?string}),
+  ref: null | (((handle: mixed) => void) & { _stringRef: ?string }),
 
   // Input is the data coming into process this fiber. Arguments. Props.
   pendingProps: any, // This type will be more specific once we overload the tag.
@@ -148,7 +148,7 @@ export type Fiber = {|
   _debugID?: number,
   _debugSource?: Source | null,
   _debugOwner?: Fiber | null,
-  _debugIsCurrentlyTiming?: boolean,
+  _debugIsCurrentlyTiming?: boolean
 |};
 
 let debugCounter;
@@ -161,7 +161,7 @@ function FiberNode(
   tag: TypeOfWork,
   pendingProps: mixed,
   key: null | string,
-  internalContextTag: TypeOfInternalContext,
+  internalContextTag: TypeOfInternalContext
 ) {
   // Instance
   this.tag = tag;
@@ -200,7 +200,7 @@ function FiberNode(
     this._debugSource = null;
     this._debugOwner = null;
     this._debugIsCurrentlyTiming = false;
-    if (!hasBadMapPolyfill && typeof Object.preventExtensions === 'function') {
+    if (!hasBadMapPolyfill && typeof Object.preventExtensions === "function") {
       Object.preventExtensions(this);
     }
   }
@@ -223,7 +223,7 @@ const createFiber = function(
   tag: TypeOfWork,
   pendingProps: mixed,
   key: null | string,
-  internalContextTag: TypeOfInternalContext,
+  internalContextTag: TypeOfInternalContext
 ): Fiber {
   // $FlowFixMe: the shapes are exact here but Flow doesn't like constructors
   return new FiberNode(tag, pendingProps, key, internalContextTag);
@@ -237,7 +237,7 @@ function shouldConstruct(Component) {
 export function createWorkInProgress(
   current: Fiber,
   pendingProps: any,
-  expirationTime: ExpirationTime,
+  expirationTime: ExpirationTime
 ): Fiber {
   let workInProgress = current.alternate;
   if (workInProgress === null) {
@@ -250,7 +250,7 @@ export function createWorkInProgress(
       current.tag,
       pendingProps,
       current.key,
-      current.internalContextTag,
+      current.internalContextTag
     );
     workInProgress.type = current.type;
     workInProgress.stateNode = current.stateNode;
@@ -300,7 +300,7 @@ export function createHostRootFiber(isAsync): Fiber {
 export function createFiberFromElement(
   element: ReactElement,
   internalContextTag: TypeOfInternalContext,
-  expirationTime: ExpirationTime,
+  expirationTime: ExpirationTime
 ): Fiber {
   let owner = null;
   if (__DEV__) {
@@ -311,17 +311,17 @@ export function createFiberFromElement(
   const type = element.type;
   const key = element.key;
   const pendingProps = element.props;
-  if (typeof type === 'function') {
+  if (typeof type === "function") {
     fiber = shouldConstruct(type)
       ? createFiber(ClassComponent, pendingProps, key, internalContextTag)
       : createFiber(
           IndeterminateComponent,
           pendingProps,
           key,
-          internalContextTag,
+          internalContextTag
         );
     fiber.type = type;
-  } else if (typeof type === 'string') {
+  } else if (typeof type === "string") {
     fiber = createFiber(HostComponent, pendingProps, key, internalContextTag);
     fiber.type = type;
   } else {
@@ -331,14 +331,14 @@ export function createFiberFromElement(
           pendingProps.children,
           internalContextTag,
           expirationTime,
-          key,
+          key
         );
       case REACT_CALL_TYPE:
         fiber = createFiber(
           CallComponent,
           pendingProps,
           key,
-          internalContextTag,
+          internalContextTag
         );
         fiber.type = REACT_CALL_TYPE;
         break;
@@ -347,15 +347,15 @@ export function createFiberFromElement(
           ReturnComponent,
           pendingProps,
           key,
-          internalContextTag,
+          internalContextTag
         );
         fiber.type = REACT_RETURN_TYPE;
         break;
       default: {
         if (
-          typeof type === 'object' &&
+          typeof type === "object" &&
           type !== null &&
-          typeof type.tag === 'number'
+          typeof type.tag === "number"
         ) {
           // Currently assumed to be a continuation and therefore is a
           // fiber already.
@@ -368,31 +368,31 @@ export function createFiberFromElement(
           fiber = ((type: any): Fiber);
           fiber.pendingProps = pendingProps;
         } else {
-          let info = '';
+          let info = "";
           if (__DEV__) {
             if (
               type === undefined ||
-              (typeof type === 'object' &&
+              (typeof type === "object" &&
                 type !== null &&
                 Object.keys(type).length === 0)
             ) {
               info +=
-                ' You likely forgot to export your component from the file ' +
+                " You likely forgot to export your component from the file " +
                 "it's defined in, or you might have mixed up default and " +
-                'named imports.';
+                "named imports.";
             }
             const ownerName = owner ? getComponentName(owner) : null;
             if (ownerName) {
-              info += '\n\nCheck the render method of `' + ownerName + '`.';
+              info += "\n\nCheck the render method of `" + ownerName + "`.";
             }
           }
           invariant(
             false,
-            'Element type is invalid: expected a string (for built-in ' +
-              'components) or a class/function (for composite components) ' +
-              'but got: %s.%s',
+            "Element type is invalid: expected a string (for built-in " +
+              "components) or a class/function (for composite components) " +
+              "but got: %s.%s",
             type == null ? type : typeof type,
-            info,
+            info
           );
         }
       }
@@ -413,7 +413,7 @@ export function createFiberFromFragment(
   elements: ReactFragment,
   internalContextTag: TypeOfInternalContext,
   expirationTime: ExpirationTime,
-  key: null | string,
+  key: null | string
 ): Fiber {
   const fiber = createFiber(Fragment, elements, key, internalContextTag);
   fiber.expirationTime = expirationTime;
@@ -423,7 +423,7 @@ export function createFiberFromFragment(
 export function createFiberFromText(
   content: string,
   internalContextTag: TypeOfInternalContext,
-  expirationTime: ExpirationTime,
+  expirationTime: ExpirationTime
 ): Fiber {
   const fiber = createFiber(HostText, content, null, internalContextTag);
   fiber.expirationTime = expirationTime;
@@ -432,27 +432,27 @@ export function createFiberFromText(
 
 export function createFiberFromHostInstanceForDeletion(): Fiber {
   const fiber = createFiber(HostComponent, null, null, NoContext);
-  fiber.type = 'DELETED';
+  fiber.type = "DELETED";
   return fiber;
 }
 
 export function createFiberFromPortal(
   portal: ReactPortal,
   internalContextTag: TypeOfInternalContext,
-  expirationTime: ExpirationTime,
+  expirationTime: ExpirationTime
 ): Fiber {
   const pendingProps = portal.children !== null ? portal.children : [];
   const fiber = createFiber(
     HostPortal,
     pendingProps,
     portal.key,
-    internalContextTag,
+    internalContextTag
   );
   fiber.expirationTime = expirationTime;
   fiber.stateNode = {
     containerInfo: portal.containerInfo,
     pendingChildren: null, // Used by persistent updates
-    implementation: portal.implementation,
+    implementation: portal.implementation
   };
   return fiber;
 }

@@ -1,6 +1,6 @@
-import React from 'react';
-import {hydrate} from 'react-dom';
+import React from "react";
+import { hydrate } from "react-dom";
 
-import App from './components/App';
+import App from "./components/App";
 
 hydrate(<App assets={window.assetManifest} />, document);

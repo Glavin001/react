@@ -7,11 +7,11 @@
  * @flow
  */
 
-import {batchedUpdates} from 'events/ReactGenericBatching';
+import { batchedUpdates } from "events/ReactGenericBatching";
 // Module provided by RN:
-import BatchedBridge from 'BatchedBridge';
+import BatchedBridge from "BatchedBridge";
 
-import {getFiberCurrentPropsFromTag} from './ReactNativeRTComponentTree';
+import { getFiberCurrentPropsFromTag } from "./ReactNativeRTComponentTree";
 
 const ReactNativeRTEventEmitter = {
   /**
@@ -24,7 +24,7 @@ const ReactNativeRTEventEmitter = {
   receiveEvent: function(
     tag: number,
     topLevelType: string,
-    nativeEventParam: Object,
+    nativeEventParam: Object
   ) {
     const nativeEvent = nativeEventParam;
     const props = getFiberCurrentPropsFromTag(tag);
@@ -32,16 +32,16 @@ const ReactNativeRTEventEmitter = {
       return;
     }
     const eventHandler = props[topLevelType];
-    if (typeof eventHandler !== 'function') {
+    if (typeof eventHandler !== "function") {
       return;
     }
     batchedUpdates(function() {
       eventHandler(nativeEvent);
     });
-  },
+  }
 };
 
 BatchedBridge.registerCallableModule(
-  'RTEventEmitter',
-  ReactNativeRTEventEmitter,
+  "RTEventEmitter",
+  ReactNativeRTEventEmitter
 );

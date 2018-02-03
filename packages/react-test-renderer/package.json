@@ -4,11 +4,7 @@
   "description": "React package for snapshot testing.",
   "main": "index.js",
   "repository": "facebook/react",
-  "keywords": [
-    "react",
-    "react-native",
-    "react-testing"
-  ],
+  "keywords": ["react", "react-native", "react-testing"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/facebook/react/issues"
@@ -22,11 +18,5 @@
   "peerDependencies": {
     "react": "^16.0.0"
   },
-  "files": [
-    "LICENSE",
-    "README.md",
-    "index.js",
-    "shallow.js",
-    "cjs/"
-  ]
+  "files": ["LICENSE", "README.md", "index.js", "shallow.js", "cjs/"]
 }

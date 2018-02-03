@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {isUnitlessNumber} from './CSSProperty';
+import { isUnitlessNumber } from "./CSSProperty";
 
 /**
  * Convert a value into the proper css writable value. The style name `name`
@@ -27,21 +27,21 @@ function dangerousStyleValue(name, value, isCustomProperty) {
   // which has lead to a greater discussion about how we're going to
   // trust URLs moving forward. See #2115901
 
-  const isEmpty = value == null || typeof value === 'boolean' || value === '';
+  const isEmpty = value == null || typeof value === "boolean" || value === "";
   if (isEmpty) {
-    return '';
+    return "";
   }
 
   if (
     !isCustomProperty &&
-    typeof value === 'number' &&
+    typeof value === "number" &&
     value !== 0 &&
     !(isUnitlessNumber.hasOwnProperty(name) && isUnitlessNumber[name])
   ) {
-    return value + 'px'; // Presumes implicit 'px' suffix for unitless numbers
+    return value + "px"; // Presumes implicit 'px' suffix for unitless numbers
   }
 
-  return ('' + value).trim();
+  return ("" + value).trim();
 }
 
 export default dangerousStyleValue;

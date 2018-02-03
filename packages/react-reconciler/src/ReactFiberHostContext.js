@@ -7,13 +7,13 @@
  * @flow
  */
 
-import type {HostConfig} from 'react-reconciler';
-import type {Fiber} from './ReactFiber';
-import type {StackCursor} from './ReactFiberStack';
+import type { HostConfig } from "react-reconciler";
+import type { Fiber } from "./ReactFiber";
+import type { StackCursor } from "./ReactFiberStack";
 
-import invariant from 'fbjs/lib/invariant';
+import invariant from "fbjs/lib/invariant";
 
-import {createCursor, pop, push} from './ReactFiberStack';
+import { createCursor, pop, push } from "./ReactFiberStack";
 
 declare class NoContextT {}
 const NO_CONTEXT: NoContextT = ({}: any);
@@ -25,29 +25,29 @@ export type HostContext<C, CX> = {
   popHostContext(fiber: Fiber): void,
   pushHostContainer(fiber: Fiber, container: C): void,
   pushHostContext(fiber: Fiber): void,
-  resetHostContainer(): void,
+  resetHostContainer(): void
 };
 
 export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
-  config: HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL>,
+  config: HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL>
 ): HostContext<C, CX> {
-  const {getChildHostContext, getRootHostContext} = config;
+  const { getChildHostContext, getRootHostContext } = config;
 
   let contextStackCursor: StackCursor<CX | NoContextT> = createCursor(
-    NO_CONTEXT,
+    NO_CONTEXT
   );
   let contextFiberStackCursor: StackCursor<Fiber | NoContextT> = createCursor(
-    NO_CONTEXT,
+    NO_CONTEXT
   );
   let rootInstanceStackCursor: StackCursor<C | NoContextT> = createCursor(
-    NO_CONTEXT,
+    NO_CONTEXT
   );
 
   function requiredContext<Value>(c: Value | NoContextT): Value {
     invariant(
       c !== NO_CONTEXT,
-      'Expected host context to exist. This error is likely caused by a bug ' +
-        'in React. Please file an issue.',
+      "Expected host context to exist. This error is likely caused by a bug " +
+        "in React. Please file an issue."
     );
     return (c: any);
   }
@@ -120,6 +120,6 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     popHostContext,
     pushHostContainer,
     pushHostContext,
-    resetHostContainer,
+    resetHostContainer
   };
 }

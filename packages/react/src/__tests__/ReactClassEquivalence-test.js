@@ -7,32 +7,32 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-const spawnSync = require('child_process').spawnSync;
+const spawnSync = require("child_process").spawnSync;
 
-describe('ReactClassEquivalence', () => {
-  it('tests the same thing for es6 classes and CoffeeScript', () => {
-    const result1 = runJest('ReactCoffeeScriptClass-test.coffee');
-    const result2 = runJest('ReactES6Class-test.js');
+describe("ReactClassEquivalence", () => {
+  it("tests the same thing for es6 classes and CoffeeScript", () => {
+    const result1 = runJest("ReactCoffeeScriptClass-test.coffee");
+    const result2 = runJest("ReactES6Class-test.js");
     compareResults(result1, result2);
   });
 
-  it('tests the same thing for es6 classes and TypeScript', () => {
-    const result1 = runJest('ReactTypeScriptClass-test.ts');
-    const result2 = runJest('ReactES6Class-test.js');
+  it("tests the same thing for es6 classes and TypeScript", () => {
+    const result1 = runJest("ReactTypeScriptClass-test.ts");
+    const result2 = runJest("ReactES6Class-test.js");
     compareResults(result1, result2);
   });
 });
 
 function runJest(testFile) {
   const cwd = process.cwd();
-  const extension = process.platform === 'win32' ? '.cmd' : '';
-  const result = spawnSync('yarn' + extension, ['test', testFile], {
+  const extension = process.platform === "win32" ? ".cmd" : "";
+  const result = spawnSync("yarn" + extension, ["test", testFile], {
     cwd,
     env: Object.assign({}, process.env, {
-      REACT_CLASS_EQUIVALENCE_TEST: 'true',
-    }),
+      REACT_CLASS_EQUIVALENCE_TEST: "true"
+    })
   });
 
   if (result.error) {
@@ -41,13 +41,13 @@ function runJest(testFile) {
 
   if (result.status !== 0) {
     throw new Error(
-      'jest process exited with: ' +
+      "jest process exited with: " +
         result.status +
-        '\n' +
-        'stdout: ' +
+        "\n" +
+        "stdout: " +
         result.stdout.toString() +
-        'stderr: ' +
-        result.stderr.toString(),
+        "stderr: " +
+        result.stderr.toString()
     );
   }
 
@@ -56,11 +56,11 @@ function runJest(testFile) {
 
 function compareResults(a, b) {
   const regexp = /EQUIVALENCE.*$/gm;
-  const aSpecs = (a.match(regexp) || []).sort().join('\n');
-  const bSpecs = (b.match(regexp) || []).sort().join('\n');
+  const aSpecs = (a.match(regexp) || []).sort().join("\n");
+  const bSpecs = (b.match(regexp) || []).sort().join("\n");
 
   if (aSpecs.length === 0 && bSpecs.length === 0) {
-    throw new Error('No spec results found in the output');
+    throw new Error("No spec results found in the output");
   }
 
   expect(aSpecs).toEqual(bSpecs);

@@ -7,10 +7,10 @@
  * @flow
  */
 
-import type {Fiber} from 'react-reconciler/src/ReactFiber';
+import type { Fiber } from "react-reconciler/src/ReactFiber";
 
-const instanceCache: {[key: number]: Fiber} = {};
-const instanceProps: {[key: number]: Object} = {};
+const instanceCache: { [key: number]: Fiber } = {};
+const instanceProps: { [key: number]: Object } = {};
 
 export function precacheFiberNode(fiber: Fiber, tag: number): void {
   instanceCache[tag] = fiber;

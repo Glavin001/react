@@ -1,6 +1,6 @@
 window.stories = [
   {
-    by: 'rendx',
+    by: "rendx",
     descendants: 49,
     id: 14201562,
     kids: [
@@ -15,29 +15,29 @@ window.stories = [
       14201854,
       14201667,
       14201759,
-      14202073,
+      14202073
     ],
     score: 186,
     time: 1493197629,
     title:
-      'Postal: Open source mail delivery platform, alternative to Mailgun or Sendgrid',
-    type: 'story',
-    url: 'https://github.com/atech/postal',
+      "Postal: Open source mail delivery platform, alternative to Mailgun or Sendgrid",
+    type: "story",
+    url: "https://github.com/atech/postal"
   },
   {
-    by: 'rabyss',
+    by: "rabyss",
     descendants: 4,
     id: 14202124,
     kids: [14202293, 14202249],
     score: 16,
     time: 1493205989,
     title:
-      'Show HN: BreakLock – A hybrid of Mastermind and the Android pattern lock',
-    type: 'story',
-    url: 'https://maxwellito.github.io/breaklock/',
+      "Show HN: BreakLock – A hybrid of Mastermind and the Android pattern lock",
+    type: "story",
+    url: "https://maxwellito.github.io/breaklock/"
   },
   {
-    by: 'morid1n',
+    by: "morid1n",
     descendants: 137,
     id: 14200563,
     kids: [
@@ -53,16 +53,16 @@ window.stories = [
       14201083,
       14200706,
       14200785,
-      14201032,
+      14201032
     ],
     score: 178,
     time: 1493183234,
-    title: 'My Hackintosh Hardware Spec – clean, based on a 2013 iMac',
-    type: 'story',
-    url: 'https://infinitediaries.net/my-exact-hackintosh-spec/',
+    title: "My Hackintosh Hardware Spec – clean, based on a 2013 iMac",
+    type: "story",
+    url: "https://infinitediaries.net/my-exact-hackintosh-spec/"
   },
   {
-    by: 'robertwiblin',
+    by: "robertwiblin",
     descendants: 203,
     id: 14196731,
     kids: [
@@ -97,16 +97,16 @@ window.stories = [
       14197969,
       14199813,
       14197259,
-      14197503,
+      14197503
     ],
     score: 562,
     time: 1493145853,
     title: "Evidence-based advice we've found on how to be successful in a job",
-    type: 'story',
-    url: 'https://80000hours.org/career-guide/how-to-be-successful/',
+    type: "story",
+    url: "https://80000hours.org/career-guide/how-to-be-successful/"
   },
   {
-    by: 'ryan_j_naughton',
+    by: "ryan_j_naughton",
     descendants: 565,
     id: 14196812,
     kids: [
@@ -171,16 +171,16 @@ window.stories = [
       14198413,
       14197334,
       14197327,
-      14197234,
+      14197234
     ],
     score: 385,
     time: 1493146342,
-    title: 'Is Every Speed Limit Too Low?',
-    type: 'story',
-    url: 'https://priceonomics.com/is-every-speed-limit-too-low/',
+    title: "Is Every Speed Limit Too Low?",
+    type: "story",
+    url: "https://priceonomics.com/is-every-speed-limit-too-low/"
   },
   {
-    by: 'monort',
+    by: "monort",
     descendants: 63,
     id: 14196322,
     kids: [
@@ -204,38 +204,38 @@ window.stories = [
       14197278,
       14197888,
       14197742,
-      14197764,
+      14197764
     ],
     score: 316,
     time: 1493143464,
-    title: 'Experimental Nighttime Photography with Nexus and Pixel',
-    type: 'story',
+    title: "Experimental Nighttime Photography with Nexus and Pixel",
+    type: "story",
     url:
-      'https://research.googleblog.com/2017/04/experimental-nighttime-photography-with.html',
+      "https://research.googleblog.com/2017/04/experimental-nighttime-photography-with.html"
   },
   {
-    by: 'networked',
+    by: "networked",
     descendants: 9,
     id: 14199028,
     kids: [14201588, 14200361, 14200314, 14200338],
     score: 121,
     time: 1493161601,
-    title: 'JPEG Huffman Coding Tutorial',
-    type: 'story',
-    url: 'http://www.impulseadventure.com/photo/jpeg-huffman-coding.html',
+    title: "JPEG Huffman Coding Tutorial",
+    type: "story",
+    url: "http://www.impulseadventure.com/photo/jpeg-huffman-coding.html"
   },
   {
-    by: 'jasontan',
+    by: "jasontan",
     id: 14202227,
     score: 1,
     time: 1493207865,
     title:
-      'Are you adept at understanding concurrency problems? Sift Science is hiring',
-    type: 'job',
-    url: 'https://boards.greenhouse.io/siftscience/jobs/550699#.WPUZhlMrLfY',
+      "Are you adept at understanding concurrency problems? Sift Science is hiring",
+    type: "job",
+    url: "https://boards.greenhouse.io/siftscience/jobs/550699#.WPUZhlMrLfY"
   },
   {
-    by: 'pouwerkerk',
+    by: "pouwerkerk",
     descendants: 80,
     id: 14196077,
     kids: [
@@ -256,17 +256,17 @@ window.stories = [
       14197049,
       14197686,
       14198545,
-      14198475,
+      14198475
     ],
     score: 717,
     time: 1493142008,
     title:
-      'Painting with Code: Introducing our new open source library React Sketch.app',
-    type: 'story',
-    url: 'http://airbnb.design/painting-with-code/',
+      "Painting with Code: Introducing our new open source library React Sketch.app",
+    type: "story",
+    url: "http://airbnb.design/painting-with-code/"
   },
   {
-    by: 'mromnia',
+    by: "mromnia",
     descendants: 16,
     id: 14201670,
     kids: [
@@ -278,38 +278,38 @@ window.stories = [
       14201859,
       14202158,
       14201763,
-      14201902,
+      14201902
     ],
     score: 62,
     time: 1493198949,
-    title: 'How to mod a Porsche 911 to run Doom [video]',
-    type: 'story',
-    url: 'https://www.youtube.com/watch?v=NRMpNA86e8Q',
+    title: "How to mod a Porsche 911 to run Doom [video]",
+    type: "story",
+    url: "https://www.youtube.com/watch?v=NRMpNA86e8Q"
   },
   {
-    by: 'rbanffy',
+    by: "rbanffy",
     descendants: 16,
     id: 14192383,
     kids: [14197494, 14201805, 14197484],
     score: 194,
     time: 1493118160,
-    title: 'Go programming language secure coding practices guide',
-    type: 'story',
-    url: 'https://github.com/Checkmarx/Go-SCP',
+    title: "Go programming language secure coding practices guide",
+    type: "story",
+    url: "https://github.com/Checkmarx/Go-SCP"
   },
   {
-    by: 'intous',
+    by: "intous",
     descendants: 0,
     id: 14200446,
     score: 39,
     time: 1493181245,
-    title: 'Building Functional Chatbot for Messenger with Ruby on Rails',
-    type: 'story',
+    title: "Building Functional Chatbot for Messenger with Ruby on Rails",
+    type: "story",
     url:
-      'https://tutorials.botsfloor.com/chatbot-development-tutorial-how-to-build-a-fully-functional-weather-bot-on-facebook-messenger-c94ac7c59185',
+      "https://tutorials.botsfloor.com/chatbot-development-tutorial-how-to-build-a-fully-functional-weather-bot-on-facebook-messenger-c94ac7c59185"
   },
   {
-    by: 'nanospeck',
+    by: "nanospeck",
     descendants: 23,
     id: 14201207,
     kids: [
@@ -327,17 +327,17 @@ window.stories = [
       14201287,
       14201739,
       14202031,
-      14202018,
+      14202018
     ],
     score: 57,
     text:
-      'This question was asked on both 2015 &amp; 2016 in HN. I would like to ask it again today to know what are the newest options for this.<p>Q: What would you recommend as a reasonably priced (sub 150$) quad-copter&#x2F;drone, that has a camera, the ability to be programmed (so that I can process video&#x2F;write my own stability algorithms for it), good range, and reasonable flying time?\nIn the event nothing fits that price point, any pointers on what the state of the art is?<p>Thanks!',
+      "This question was asked on both 2015 &amp; 2016 in HN. I would like to ask it again today to know what are the newest options for this.<p>Q: What would you recommend as a reasonably priced (sub 150$) quad-copter&#x2F;drone, that has a camera, the ability to be programmed (so that I can process video&#x2F;write my own stability algorithms for it), good range, and reasonable flying time?\nIn the event nothing fits that price point, any pointers on what the state of the art is?<p>Thanks!",
     time: 1493192641,
-    title: 'Ask HN (again): What is the best affordable programmable drone?',
-    type: 'story',
+    title: "Ask HN (again): What is the best affordable programmable drone?",
+    type: "story"
   },
   {
-    by: 'geuis',
+    by: "geuis",
     descendants: 57,
     id: 14196708,
     kids: [
@@ -354,16 +354,16 @@ window.stories = [
       14200389,
       14198065,
       14197883,
-      14197908,
+      14197908
     ],
     score: 123,
     time: 1493145655,
-    title: 'Hackpad shutting down',
-    type: 'story',
-    url: 'https://hackpad.com/',
+    title: "Hackpad shutting down",
+    type: "story",
+    url: "https://hackpad.com/"
   },
   {
-    by: 'jfoutz',
+    by: "jfoutz",
     descendants: 55,
     id: 14195956,
     kids: [
@@ -380,16 +380,16 @@ window.stories = [
       14196777,
       14200177,
       14200422,
-      14198571,
+      14198571
     ],
     score: 167,
     time: 1493141367,
-    title: 'Linkerd 1.0',
-    type: 'story',
-    url: 'https://blog.buoyant.io/2017/04/25/announcing-linkerd-1.0/index.html',
+    title: "Linkerd 1.0",
+    type: "story",
+    url: "https://blog.buoyant.io/2017/04/25/announcing-linkerd-1.0/index.html"
   },
   {
-    by: 'DavidBuchanan',
+    by: "DavidBuchanan",
     descendants: 19,
     id: 14199364,
     kids: [
@@ -401,17 +401,17 @@ window.stories = [
       14201697,
       14200061,
       14199996,
-      14199867,
+      14199867
     ],
     score: 66,
     time: 1493164755,
     title:
       "Show HN: TARDIS – Warp a process's perspective of time by hooking syscalls",
-    type: 'story',
-    url: 'https://github.com/DavidBuchanan314/TARDIS',
+    type: "story",
+    url: "https://github.com/DavidBuchanan314/TARDIS"
   },
   {
-    by: 'rchen8',
+    by: "rchen8",
     descendants: 121,
     id: 14195664,
     kids: [
@@ -442,16 +442,16 @@ window.stories = [
       14198632,
       14196137,
       14200323,
-      14196346,
+      14196346
     ],
     score: 486,
     time: 1493139957,
-    title: 'How to Become Well-Connected',
-    type: 'story',
-    url: 'http://firstround.com/review/how-to-become-insanely-well-connected/',
+    title: "How to Become Well-Connected",
+    type: "story",
+    url: "http://firstround.com/review/how-to-become-insanely-well-connected/"
   },
   {
-    by: 'dbrgn',
+    by: "dbrgn",
     descendants: 89,
     id: 14191186,
     kids: [
@@ -477,28 +477,28 @@ window.stories = [
       14201206,
       14197995,
       14197830,
-      14199603,
+      14199603
     ],
     score: 135,
     time: 1493100791,
-    title: 'How to Say (Almost) Everything in a Hundred-Word Language (2015)',
-    type: 'story',
+    title: "How to Say (Almost) Everything in a Hundred-Word Language (2015)",
+    type: "story",
     url:
-      'https://www.theatlantic.com/technology/archive/2015/07/toki-pona-smallest-language/398363/?single_page=true',
+      "https://www.theatlantic.com/technology/archive/2015/07/toki-pona-smallest-language/398363/?single_page=true"
   },
   {
-    by: 'runesoerensen',
+    by: "runesoerensen",
     descendants: 62,
     id: 14198866,
     kids: [14199494, 14199495, 14200288, 14201118, 14199599],
     score: 155,
     time: 1493160263,
-    title: 'Nginx 1.13 released with TLS 1.3 support',
-    type: 'story',
-    url: 'http://mailman.nginx.org/pipermail/nginx-announce/2017/000195.html',
+    title: "Nginx 1.13 released with TLS 1.3 support",
+    type: "story",
+    url: "http://mailman.nginx.org/pipermail/nginx-announce/2017/000195.html"
   },
   {
-    by: 'bcherny',
+    by: "bcherny",
     descendants: 20,
     id: 14199299,
     kids: [
@@ -511,27 +511,27 @@ window.stories = [
       14201815,
       14201231,
       14201073,
-      14201124,
+      14201124
     ],
     score: 54,
     time: 1493163960,
-    title: 'Show HN: JSONSchema to TypeScript compiler',
-    type: 'story',
-    url: 'https://github.com/bcherny/json-schema-to-typescript',
+    title: "Show HN: JSONSchema to TypeScript compiler",
+    type: "story",
+    url: "https://github.com/bcherny/json-schema-to-typescript"
   },
   {
-    by: 'tormeh',
+    by: "tormeh",
     descendants: 37,
     id: 14198557,
     kids: [14201027, 14199082, 14201023, 14201160, 14200367, 14200647],
     score: 70,
     time: 1493158034,
-    title: 'A practitioner’s guide to hedonism (2007)',
-    type: 'story',
-    url: 'https://www.1843magazine.com/story/a-practitioners-guide-to-hedonism',
+    title: "A practitioner’s guide to hedonism (2007)",
+    type: "story",
+    url: "https://www.1843magazine.com/story/a-practitioners-guide-to-hedonism"
   },
   {
-    by: 'nickreiner',
+    by: "nickreiner",
     descendants: 33,
     id: 14199125,
     kids: [
@@ -542,16 +542,16 @@ window.stories = [
       14201157,
       14201898,
       14201969,
-      14201125,
+      14201125
     ],
     score: 52,
     time: 1493162517,
-    title: 'Best Linux Distros for Gaming in 2017',
-    type: 'story',
-    url: 'https://thishosting.rocks/best-linux-distros-for-gaming/',
+    title: "Best Linux Distros for Gaming in 2017",
+    type: "story",
+    url: "https://thishosting.rocks/best-linux-distros-for-gaming/"
   },
   {
-    by: 'BinaryIdiot',
+    by: "BinaryIdiot",
     descendants: 170,
     id: 14200486,
     kids: [
@@ -597,17 +597,17 @@ window.stories = [
       14200629,
       14201523,
       14200620,
-      14202099,
+      14202099
     ],
     score: 316,
     time: 1493181945,
-    title: 'Suicide of an Uber engineer: Widow blames job stress',
-    type: 'story',
+    title: "Suicide of an Uber engineer: Widow blames job stress",
+    type: "story",
     url:
-      'http://www.sfchronicle.com/business/article/Suicide-of-an-Uber-engineer-widow-blames-job-11095807.php?t=7e40d1f554&cmpid=fb-premium&cmpid=twitter-premium',
+      "http://www.sfchronicle.com/business/article/Suicide-of-an-Uber-engineer-widow-blames-job-11095807.php?t=7e40d1f554&cmpid=fb-premium&cmpid=twitter-premium"
   },
   {
-    by: 'catc',
+    by: "catc",
     descendants: 34,
     id: 14195522,
     kids: [
@@ -625,17 +625,17 @@ window.stories = [
       14197201,
       14197403,
       14198051,
-      14196747,
+      14196747
     ],
     score: 87,
     time: 1493139414,
     title:
-      'Show HN: React Timekeeper – Time picker based on the style of Google Keep',
-    type: 'story',
-    url: 'https://catc.github.io/react-timekeeper/',
+      "Show HN: React Timekeeper – Time picker based on the style of Google Keep",
+    type: "story",
+    url: "https://catc.github.io/react-timekeeper/"
   },
   {
-    by: 'Integer',
+    by: "Integer",
     descendants: 152,
     id: 14192353,
     kids: [
@@ -655,17 +655,17 @@ window.stories = [
       14199835,
       14197482,
       14198924,
-      14198943,
+      14198943
     ],
     score: 273,
     time: 1493117771,
-    title: 'Windows Is Bloated, Thanks to Adobe’s Extensible Metadata Platform',
-    type: 'story',
+    title: "Windows Is Bloated, Thanks to Adobe’s Extensible Metadata Platform",
+    type: "story",
     url:
-      'https://www.thurrott.com/windows/109962/windows-bloated-thanks-adobes-extensible-metadata-platform',
+      "https://www.thurrott.com/windows/109962/windows-bloated-thanks-adobes-extensible-metadata-platform"
   },
   {
-    by: 'craigcannon',
+    by: "craigcannon",
     descendants: 23,
     id: 14197852,
     kids: [
@@ -676,16 +676,16 @@ window.stories = [
       14199228,
       14202138,
       14198917,
-      14198607,
+      14198607
     ],
     score: 58,
     time: 1493153342,
-    title: 'New England Lost Ski Areas Project',
-    type: 'story',
-    url: 'http://www.nelsap.org/',
+    title: "New England Lost Ski Areas Project",
+    type: "story",
+    url: "http://www.nelsap.org/"
   },
   {
-    by: 'golfer',
+    by: "golfer",
     descendants: 105,
     id: 14198229,
     kids: [
@@ -701,18 +701,18 @@ window.stories = [
       14199267,
       14199124,
       14198833,
-      14199059,
+      14199059
     ],
     score: 282,
     time: 1493155745,
     title:
-      'Uber must turn over information about its acquisition of Otto to Waymo',
-    type: 'story',
+      "Uber must turn over information about its acquisition of Otto to Waymo",
+    type: "story",
     url:
-      'https://techcrunch.com/2017/04/25/uber-must-turn-over-information-about-its-acquisition-of-otto-to-waymo-court-rules/',
+      "https://techcrunch.com/2017/04/25/uber-must-turn-over-information-about-its-acquisition-of-otto-to-waymo-court-rules/"
   },
   {
-    by: 'JoshTriplett',
+    by: "JoshTriplett",
     descendants: 116,
     id: 14198403,
     kids: [
@@ -724,16 +724,16 @@ window.stories = [
       14200307,
       14199294,
       14198860,
-      14198817,
+      14198817
     ],
     score: 139,
     time: 1493156882,
-    title: 'Shutting down public FTP services',
-    type: 'story',
-    url: 'https://lists.debian.org/debian-announce/2017/msg00001.html',
+    title: "Shutting down public FTP services",
+    type: "story",
+    url: "https://lists.debian.org/debian-announce/2017/msg00001.html"
   },
   {
-    by: 'mabynogy',
+    by: "mabynogy",
     descendants: 50,
     id: 14191577,
     kids: [
@@ -751,16 +751,16 @@ window.stories = [
       14197100,
       14198984,
       14193925,
-      14194170,
+      14194170
     ],
     score: 365,
     time: 1493107104,
-    title: 'A Primer on Bézier Curves',
-    type: 'story',
-    url: 'https://pomax.github.io/bezierinfo#preface',
+    title: "A Primer on Bézier Curves",
+    type: "story",
+    url: "https://pomax.github.io/bezierinfo#preface"
   },
   {
-    by: 'robertothais',
+    by: "robertothais",
     descendants: 29,
     id: 14192946,
     kids: [
@@ -773,29 +773,29 @@ window.stories = [
       14201850,
       14199858,
       14198223,
-      14198610,
+      14198610
     ],
     score: 61,
     time: 1493124627,
-    title: 'Consciousness as a State of Matter (2014)',
-    type: 'story',
-    url: 'https://arxiv.org/abs/1401.1219',
+    title: "Consciousness as a State of Matter (2014)",
+    type: "story",
+    url: "https://arxiv.org/abs/1401.1219"
   },
   {
-    by: 'leephillips',
+    by: "leephillips",
     descendants: 2,
     id: 14202078,
     kids: [14202122],
     score: 5,
     time: 1493205152,
     title:
-      'The Republican Lawmaker Who Secretly Created Reddit’s Women-Hating ‘Red Pill’',
-    type: 'story',
+      "The Republican Lawmaker Who Secretly Created Reddit’s Women-Hating ‘Red Pill’",
+    type: "story",
     url:
-      'http://www.thedailybeast.com/articles/2017/04/25/the-republican-lawmaker-who-secretly-created-reddit-s-women-hating-red-pill.html',
+      "http://www.thedailybeast.com/articles/2017/04/25/the-republican-lawmaker-who-secretly-created-reddit-s-women-hating-red-pill.html"
   },
   {
-    by: 'anguswithgusto',
+    by: "anguswithgusto",
     descendants: 55,
     id: 14196325,
     kids: [
@@ -809,29 +809,29 @@ window.stories = [
       14197511,
       14196888,
       14200109,
-      14197101,
+      14197101
     ],
     score: 80,
     time: 1493143475,
     title:
-      'Gett in advanced talks to buy Juno for $250M as Uber rivals consolidate',
-    type: 'story',
+      "Gett in advanced talks to buy Juno for $250M as Uber rivals consolidate",
+    type: "story",
     url:
-      'https://techcrunch.com/2017/04/25/gett-in-advanced-talks-to-buy-juno-for-250m-as-uber-rivals-consolidate/',
+      "https://techcrunch.com/2017/04/25/gett-in-advanced-talks-to-buy-juno-for-250m-as-uber-rivals-consolidate/"
   },
   {
-    by: 'fabuzaid',
+    by: "fabuzaid",
     descendants: 2,
     id: 14196339,
     kids: [14201557, 14201170],
     score: 46,
     time: 1493143560,
-    title: 'Implementing a Fast Research Compiler in Rust',
-    type: 'story',
-    url: 'http://dawn.cs.stanford.edu/blog/weld.html',
+    title: "Implementing a Fast Research Compiler in Rust",
+    type: "story",
+    url: "http://dawn.cs.stanford.edu/blog/weld.html"
   },
   {
-    by: 'bluesilver07',
+    by: "bluesilver07",
     descendants: 61,
     id: 14196154,
     kids: [
@@ -842,16 +842,16 @@ window.stories = [
       14200090,
       14197731,
       14196352,
-      14197442,
+      14197442
     ],
     score: 72,
     time: 1493142448,
-    title: 'Xenko Game Engine 2.0 released',
-    type: 'story',
-    url: 'http://xenko.com/blog/release-xenko-2-0-0/',
+    title: "Xenko Game Engine 2.0 released",
+    type: "story",
+    url: "http://xenko.com/blog/release-xenko-2-0-0/"
   },
   {
-    by: 'molecule',
+    by: "molecule",
     descendants: 254,
     id: 14189392,
     kids: [
@@ -912,17 +912,17 @@ window.stories = [
       14193352,
       14190324,
       14190846,
-      14189803,
+      14189803
     ],
     score: 630,
     time: 1493076480,
-    title: 'Robert M. Pirsig has died',
-    type: 'story',
+    title: "Robert M. Pirsig has died",
+    type: "story",
     url:
-      'http://www.npr.org/sections/thetwo-way/2017/04/24/525443040/-zen-and-the-art-of-motorcycle-maintenance-author-robert-m-pirsig-dies-at-88',
+      "http://www.npr.org/sections/thetwo-way/2017/04/24/525443040/-zen-and-the-art-of-motorcycle-maintenance-author-robert-m-pirsig-dies-at-88"
   },
   {
-    by: 'artsandsci',
+    by: "artsandsci",
     descendants: 67,
     id: 14194422,
     kids: [
@@ -935,40 +935,40 @@ window.stories = [
       14196265,
       14195599,
       14199054,
-      14196057,
+      14196057
     ],
     score: 127,
     time: 1493134376,
     title:
-      'An extra-uterine system to physiologically support the extreme premature lamb',
-    type: 'story',
-    url: 'https://www.nature.com/articles/ncomms15112',
+      "An extra-uterine system to physiologically support the extreme premature lamb",
+    type: "story",
+    url: "https://www.nature.com/articles/ncomms15112"
   },
   {
-    by: 'miobrien',
+    by: "miobrien",
     descendants: 9,
     id: 14198261,
     kids: [14199610, 14199447, 14199862, 14201753, 14199068],
     score: 30,
     time: 1493155969,
-    title: 'Prior Indigenous Technological Species',
-    type: 'story',
-    url: 'https://arxiv.org/abs/1704.07263',
+    title: "Prior Indigenous Technological Species",
+    type: "story",
+    url: "https://arxiv.org/abs/1704.07263"
   },
   {
-    by: 'zdw',
+    by: "zdw",
     descendants: 2,
     id: 14199197,
     kids: [14200610],
     score: 12,
     time: 1493163087,
-    title: 'Should Curve25519 keys be validated?',
-    type: 'story',
+    title: "Should Curve25519 keys be validated?",
+    type: "story",
     url:
-      'https://research.kudelskisecurity.com/2017/04/25/should-ecdh-keys-be-validated/',
+      "https://research.kudelskisecurity.com/2017/04/25/should-ecdh-keys-be-validated/"
   },
   {
-    by: 'spearo77',
+    by: "spearo77",
     descendants: 213,
     id: 14189688,
     kids: [
@@ -1012,16 +1012,16 @@ window.stories = [
       14190884,
       14192565,
       14190480,
-      14190442,
+      14190442
     ],
     score: 447,
     time: 1493079289,
-    title: 'WikiTribune – Evidence-based journalism',
-    type: 'story',
-    url: 'https://www.wikitribune.com',
+    title: "WikiTribune – Evidence-based journalism",
+    type: "story",
+    url: "https://www.wikitribune.com"
   },
   {
-    by: 'adbrebs',
+    by: "adbrebs",
     descendants: 294,
     id: 14182262,
     kids: [
@@ -1102,49 +1102,49 @@ window.stories = [
       14184962,
       14187249,
       14182545,
-      14192314,
+      14192314
     ],
     score: 1356,
     time: 1493014335,
-    title: 'Lyrebird – An API to copy the voice of anyone',
-    type: 'story',
-    url: 'https://lyrebird.ai/demo',
+    title: "Lyrebird – An API to copy the voice of anyone",
+    type: "story",
+    url: "https://lyrebird.ai/demo"
   },
   {
-    by: 'mathgenius',
+    by: "mathgenius",
     descendants: 6,
     id: 14192442,
     kids: [14197265, 14195645],
     score: 43,
     time: 1493118936,
-    title: 'Quantum – Open journal for quantum science',
-    type: 'story',
-    url: 'http://quantum-journal.org/papers/',
+    title: "Quantum – Open journal for quantum science",
+    type: "story",
+    url: "http://quantum-journal.org/papers/"
   },
   {
-    by: 'tjalfi',
+    by: "tjalfi",
     descendants: 5,
     id: 14190937,
     kids: [14199744, 14197114, 14190946],
     score: 107,
     time: 1493097061,
-    title: 'A Seven Dimensional Analysis of Hashing Methods [pdf]',
-    type: 'story',
-    url: 'http://www.vldb.org/pvldb/vol9/p96-richter.pdf',
+    title: "A Seven Dimensional Analysis of Hashing Methods [pdf]",
+    type: "story",
+    url: "http://www.vldb.org/pvldb/vol9/p96-richter.pdf"
   },
   {
-    by: 'mxstbr',
+    by: "mxstbr",
     descendants: 0,
     id: 14196935,
     score: 24,
     time: 1493147015,
-    title: 'One GraphQL Client for JavaScript, iOS, and Android',
-    type: 'story',
+    title: "One GraphQL Client for JavaScript, iOS, and Android",
+    type: "story",
     url:
-      'https://dev-blog.apollodata.com/one-graphql-client-for-javascript-ios-and-android-64993c1b7991',
+      "https://dev-blog.apollodata.com/one-graphql-client-for-javascript-ios-and-android-64993c1b7991"
   },
   {
-    by: 'uptown',
+    by: "uptown",
     descendants: 166,
     id: 14192817,
     kids: [
@@ -1178,17 +1178,17 @@ window.stories = [
       14194948,
       14199024,
       14195060,
-      14199498,
+      14199498
     ],
     score: 226,
     time: 1493123621,
-    title: 'How Yahoo Killed Flickr (2012)',
-    type: 'story',
+    title: "How Yahoo Killed Flickr (2012)",
+    type: "story",
     url:
-      'https://gizmodo.com/5910223/how-yahoo-killed-flickr-and-lost-the-internet',
+      "https://gizmodo.com/5910223/how-yahoo-killed-flickr-and-lost-the-internet"
   },
   {
-    by: 'mattklein123',
+    by: "mattklein123",
     descendants: 42,
     id: 14194026,
     kids: [
@@ -1201,29 +1201,29 @@ window.stories = [
       14200054,
       14194456,
       14198329,
-      14199198,
+      14199198
     ],
     score: 167,
     time: 1493131921,
-    title: 'Envoy: 7 months later',
-    type: 'story',
-    url: 'https://eng.lyft.com/envoy-7-months-later-41986c2fd443',
+    title: "Envoy: 7 months later",
+    type: "story",
+    url: "https://eng.lyft.com/envoy-7-months-later-41986c2fd443"
   },
   {
-    by: 'misnamed',
+    by: "misnamed",
     descendants: 2,
     id: 14191333,
     kids: [14197296],
     score: 29,
     time: 1493103250,
     title:
-      'Modern Hieroglyphs: Binary Logic Behind the Universal “Power Symbol”',
-    type: 'story',
+      "Modern Hieroglyphs: Binary Logic Behind the Universal “Power Symbol”",
+    type: "story",
     url:
-      'http://99percentinvisible.org/article/modern-hieroglyphics-binary-logic-behind-universal-power-symbol/',
+      "http://99percentinvisible.org/article/modern-hieroglyphics-binary-logic-behind-universal-power-symbol/"
   },
   {
-    by: 'LaFolle',
+    by: "LaFolle",
     descendants: 92,
     id: 14191681,
     kids: [
@@ -1244,16 +1244,16 @@ window.stories = [
       14195151,
       14195094,
       14192110,
-      14192155,
+      14192155
     ],
     score: 138,
     time: 1493108371,
-    title: 'Feynman Algorithm (2014)',
-    type: 'story',
-    url: 'http://wiki.c2.com/?FeynmanAlgorithm',
+    title: "Feynman Algorithm (2014)",
+    type: "story",
+    url: "http://wiki.c2.com/?FeynmanAlgorithm"
   },
   {
-    by: 'Thevet',
+    by: "Thevet",
     descendants: 18,
     id: 14190736,
     kids: [
@@ -1263,17 +1263,17 @@ window.stories = [
       14197735,
       14195874,
       14197023,
-      14196660,
+      14196660
     ],
     score: 81,
     time: 1493093860,
-    title: 'The legend of the Legion',
-    type: 'story',
+    title: "The legend of the Legion",
+    type: "story",
     url:
-      'https://aeon.co/essays/why-young-men-queue-up-to-die-in-the-french-foreign-legion',
+      "https://aeon.co/essays/why-young-men-queue-up-to-die-in-the-french-foreign-legion"
   },
   {
-    by: 'bufordsharkley',
+    by: "bufordsharkley",
     descendants: 92,
     id: 14197013,
     kids: [
@@ -1289,17 +1289,17 @@ window.stories = [
       14197080,
       14198905,
       14198068,
-      14198579,
+      14198579
     ],
     score: 69,
     time: 1493147532,
     title: "Cracking the Mystery of Labor's Falling Share of GDP",
-    type: 'story',
+    type: "story",
     url:
-      'https://www.bloomberg.com/view/articles/2017-04-24/cracking-the-mystery-of-labor-s-falling-share-of-gdp',
+      "https://www.bloomberg.com/view/articles/2017-04-24/cracking-the-mystery-of-labor-s-falling-share-of-gdp"
   },
   {
-    by: 'rbanffy',
+    by: "rbanffy",
     descendants: 27,
     id: 14198470,
     kids: [
@@ -1309,13 +1309,13 @@ window.stories = [
       14199729,
       14201519,
       14198762,
-      14199524,
+      14199524
     ],
     score: 52,
     time: 1493157378,
-    title: 'How the Internet Gave Mail-Order Brides the Power',
-    type: 'story',
+    title: "How the Internet Gave Mail-Order Brides the Power",
+    type: "story",
     url:
-      'https://backchannel.com/how-the-internet-gave-mail-order-brides-the-power-1af8c8a40562',
-  },
+      "https://backchannel.com/how-the-internet-gave-mail-order-brides-the-power-1af8c8a40562"
+  }
 ];

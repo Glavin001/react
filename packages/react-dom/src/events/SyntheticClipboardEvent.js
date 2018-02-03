@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import SyntheticEvent from 'events/SyntheticEvent';
+import SyntheticEvent from "events/SyntheticEvent";
 
 /**
  * @interface Event
@@ -13,10 +13,10 @@ import SyntheticEvent from 'events/SyntheticEvent';
  */
 const SyntheticClipboardEvent = SyntheticEvent.extend({
   clipboardData: function(event) {
-    return 'clipboardData' in event
+    return "clipboardData" in event
       ? event.clipboardData
       : window.clipboardData;
-  },
+  }
 });
 
 export default SyntheticClipboardEvent;

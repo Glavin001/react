@@ -5,24 +5,24 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import ReactVersion from 'shared/ReactVersion';
-import invariant from 'fbjs/lib/invariant';
+import ReactVersion from "shared/ReactVersion";
+import invariant from "fbjs/lib/invariant";
 
-import {renderToString, renderToStaticMarkup} from './ReactDOMStringRenderer';
+import { renderToString, renderToStaticMarkup } from "./ReactDOMStringRenderer";
 
 function renderToNodeStream() {
   invariant(
     false,
-    'ReactDOMServer.renderToNodeStream(): The streaming API is not available ' +
-      'in the browser. Use ReactDOMServer.renderToString() instead.',
+    "ReactDOMServer.renderToNodeStream(): The streaming API is not available " +
+      "in the browser. Use ReactDOMServer.renderToString() instead."
   );
 }
 
 function renderToStaticNodeStream() {
   invariant(
     false,
-    'ReactDOMServer.renderToStaticNodeStream(): The streaming API is not available ' +
-      'in the browser. Use ReactDOMServer.renderToStaticMarkup() instead.',
+    "ReactDOMServer.renderToStaticNodeStream(): The streaming API is not available " +
+      "in the browser. Use ReactDOMServer.renderToStaticMarkup() instead."
   );
 }
 
@@ -32,5 +32,5 @@ export default {
   renderToStaticMarkup,
   renderToNodeStream,
   renderToStaticNodeStream,
-  version: ReactVersion,
+  version: ReactVersion
 };

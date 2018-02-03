@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
 // Mock of the Native Hooks
 
@@ -14,13 +14,13 @@ const RCTRTManager = {
   beginUpdates: jest.fn(function beginUpdates() {}),
   appendChildToContext: jest.fn(function appendChildToContext(
     contextTag,
-    childTag,
+    childTag
   ) {}),
   appendChild: jest.fn(function appendChild(parentTag, childTag) {}),
   prependChild: jest.fn(function prependChild(childTag, beforeTag) {}),
   deleteChild: jest.fn(function deleteChild(childTag) {}),
   updateNode: jest.fn(function updateNode(tag, props) {}),
-  completeUpdates: jest.fn(function completeUpdates() {}),
+  completeUpdates: jest.fn(function completeUpdates() {})
 };
 
 module.exports = RCTRTManager;

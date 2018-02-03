@@ -1,5 +1,5 @@
 body {
-  font-family: Verdana, Geneva, sans-serif
+  font-family: Verdana, Geneva, sans-serif;
 }
 
 .pagetop {
@@ -13,7 +13,8 @@ body {
   color: #fff;
 }
 
-.pagetop a, .pagetop a:visited {
+.pagetop a,
+.pagetop a:visited {
   color: #00d8ff;
   text-decoration: none;
 }
@@ -30,7 +31,9 @@ body {
   color: #828282;
 }
 
-.comhead a:link, .subtext a, .subtext a:visited {
+.comhead a:link,
+.subtext a,
+.subtext a:visited {
   color: #828282;
   text-decoration: none;
 }
@@ -43,14 +46,16 @@ body {
   background: url(grayarrow.gif) no-repeat;
 }
 
-.title, .title a {
+.title,
+.title a {
   font-family: Verdana, Geneva, sans-serif;
   font-size: 10pt;
   color: #000;
   text-decoration: none;
 }
 
-.comhead, .comhead a {
+.comhead,
+.comhead a {
   font-family: Verdana, Geneva, sans-serif;
   font-size: 8pt;
   color: #828282;

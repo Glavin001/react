@@ -5,11 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import containsNode from 'fbjs/lib/containsNode';
-import getActiveElement from 'fbjs/lib/getActiveElement';
+import containsNode from "fbjs/lib/containsNode";
+import getActiveElement from "fbjs/lib/getActiveElement";
 
-import * as ReactDOMSelection from './ReactDOMSelection';
-import {ELEMENT_NODE} from '../shared/HTMLNodeType';
+import * as ReactDOMSelection from "./ReactDOMSelection";
+import { ELEMENT_NODE } from "../shared/HTMLNodeType";
 
 function isInDocument(node) {
   return containsNode(document.documentElement, node);
@@ -26,9 +26,9 @@ export function hasSelectionCapabilities(elem) {
   const nodeName = elem && elem.nodeName && elem.nodeName.toLowerCase();
   return (
     nodeName &&
-    ((nodeName === 'input' && elem.type === 'text') ||
-      nodeName === 'textarea' ||
-      elem.contentEditable === 'true')
+    ((nodeName === "input" && elem.type === "text") ||
+      nodeName === "textarea" ||
+      elem.contentEditable === "true")
   );
 }
 
@@ -38,7 +38,7 @@ export function getSelectionInformation() {
     focusedElem: focusedElem,
     selectionRange: hasSelectionCapabilities(focusedElem)
       ? getSelection(focusedElem)
-      : null,
+      : null
   };
 }
 
@@ -64,7 +64,7 @@ export function restoreSelection(priorSelectionInformation) {
         ancestors.push({
           element: ancestor,
           left: ancestor.scrollLeft,
-          top: ancestor.scrollTop,
+          top: ancestor.scrollTop
         });
       }
     }
@@ -88,18 +88,18 @@ export function restoreSelection(priorSelectionInformation) {
 export function getSelection(input) {
   let selection;
 
-  if ('selectionStart' in input) {
+  if ("selectionStart" in input) {
     // Modern browser with input or textarea.
     selection = {
       start: input.selectionStart,
-      end: input.selectionEnd,
+      end: input.selectionEnd
     };
   } else {
     // Content editable or old IE textarea.
     selection = ReactDOMSelection.getOffsets(input);
   }
 
-  return selection || {start: 0, end: 0};
+  return selection || { start: 0, end: 0 };
 }
 
 /**
@@ -109,12 +109,12 @@ export function getSelection(input) {
  * -@offsets   Object of same form that is returned from get*
  */
 export function setSelection(input, offsets) {
-  let {start, end} = offsets;
+  let { start, end } = offsets;
   if (end === undefined) {
     end = start;
   }
 
-  if ('selectionStart' in input) {
+  if ("selectionStart" in input) {
     input.selectionStart = start;
     input.selectionEnd = Math.min(end, input.value.length);
   } else {

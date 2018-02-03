@@ -9,18 +9,10 @@
           'react-dom': '../../../build/dist/react-dom.production.min.js'
         }
       });
-
-      Promise.all([
-        System.import("react"),
-        System.import("react-dom")
-      ]).then(function (deps) {
+      Promise.all([System.import ("react"), System.import ("react-dom")]).then(function (deps) {
         var React = deps[0];
         var ReactDOM = deps[1];
-
-        ReactDOM.render(
-          React.createElement('h1', null, 'Hello World!'),
-          document.getElementById('container')
-        );
+        ReactDOM.render(React.createElement('h1', null, 'Hello World!'), document.getElementById('container'));
       });
     </script>
   </body>

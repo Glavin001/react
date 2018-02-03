@@ -5,12 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
 // Mock of the Native Hooks
 
-const ReactNativeTagHandles = require('../ReactNativeTagHandles').default;
-const invariant = require('fbjs/lib/invariant');
+const ReactNativeTagHandles = require("../ReactNativeTagHandles").default;
+const invariant = require("fbjs/lib/invariant");
 
 // Map of viewTag -> {children: [childTag], parent: ?parentTag}
 const roots = [];
@@ -24,7 +24,7 @@ function autoCreateRoot(tag) {
       children: [],
       parent: null,
       props: {},
-      viewName: '<native root>',
+      viewName: "<native root>"
     });
   }
 }
@@ -34,15 +34,15 @@ function insertSubviewAtIndex(parent, child, index) {
   const childInfo = views.get(child);
   invariant(
     childInfo.parent === null,
-    'Inserting view %s %s which already has parent',
+    "Inserting view %s %s which already has parent",
     child,
-    JSON.stringify(childInfo.props),
+    JSON.stringify(childInfo.props)
   );
   invariant(
     0 <= index && index <= parentInfo.children.length,
-    'Invalid index %s for children %s',
+    "Invalid index %s for children %s",
     index,
-    parentInfo.children,
+    parentInfo.children
   );
   parentInfo.children.splice(index, 0, child);
   childInfo.parent = parent;
@@ -52,22 +52,22 @@ function removeChild(parent, child) {
   const parentInfo = views.get(parent);
   const childInfo = views.get(child);
   const index = parentInfo.children.indexOf(child);
-  invariant(index >= 0, 'Missing view %s during removal', child);
+  invariant(index >= 0, "Missing view %s during removal", child);
   parentInfo.children.splice(index, 1);
   childInfo.parent = null;
 }
 
 const RCTUIManager = {
   __dumpHierarchyForJestTestsOnly: function() {
-    return roots.map(tag => dumpSubtree(tag, 0)).join('\n');
+    return roots.map(tag => dumpSubtree(tag, 0)).join("\n");
 
     function dumpSubtree(tag, indent) {
       const info = views.get(tag);
-      let out = '';
+      let out = "";
       out +=
-        ' '.repeat(indent) + info.viewName + ' ' + JSON.stringify(info.props);
+        " ".repeat(indent) + info.viewName + " " + JSON.stringify(info.props);
       for (const child of info.children) {
-        out += '\n' + dumpSubtree(child, indent + 2);
+        out += "\n" + dumpSubtree(child, indent + 2);
       }
       return out;
     }
@@ -76,14 +76,14 @@ const RCTUIManager = {
   createView: jest.fn(function createView(reactTag, viewName, rootTag, props) {
     invariant(
       !views.has(reactTag),
-      'Created two native views with tag %s',
-      reactTag,
+      "Created two native views with tag %s",
+      reactTag
     );
     views.set(reactTag, {
       children: [],
       parent: null,
       props: props,
-      viewName: viewName,
+      viewName: viewName
     });
   }),
   setJSResponder: jest.fn(),
@@ -92,8 +92,8 @@ const RCTUIManager = {
     // Native doesn't actually check this but it seems like a good idea
     invariant(
       views.get(parentTag).children.length === 0,
-      'Calling .setChildren on nonempty view %s',
-      parentTag,
+      "Calling .setChildren on nonempty view %s",
+      parentTag
     );
     // This logic ported from iOS (RCTUIManager.m)
     reactTags.forEach((tag, i) => {
@@ -106,28 +106,28 @@ const RCTUIManager = {
     moveToIndices = [],
     addChildReactTags = [],
     addAtIndices = [],
-    removeAtIndices = [],
+    removeAtIndices = []
   ) {
     autoCreateRoot(parentTag);
     // This logic ported from iOS (RCTUIManager.m)
     invariant(
       moveFromIndices.length === moveToIndices.length,
-      'Mismatched move indices %s and %s',
+      "Mismatched move indices %s and %s",
       moveFromIndices,
-      moveToIndices,
+      moveToIndices
     );
     invariant(
       addChildReactTags.length === addAtIndices.length,
-      'Mismatched add indices %s and %s',
+      "Mismatched add indices %s and %s",
       addChildReactTags,
-      addAtIndices,
+      addAtIndices
     );
     const parentInfo = views.get(parentTag);
     const permanentlyRemovedChildren = removeAtIndices.map(
-      index => parentInfo.children[index],
+      index => parentInfo.children[index]
     );
     const temporarilyRemovedChildren = moveFromIndices.map(
-      index => parentInfo.children[index],
+      index => parentInfo.children[index]
     );
     permanentlyRemovedChildren.forEach(tag => removeChild(parentTag, tag));
     temporarilyRemovedChildren.forEach(tag => removeChild(parentTag, tag));
@@ -152,7 +152,7 @@ const RCTUIManager = {
     views.get(parentTag).children.forEach(tag => removeChild(parentTag, tag));
   }),
   replaceExistingNonRootView: jest.fn(),
-  __takeSnapshot: jest.fn(),
+  __takeSnapshot: jest.fn()
 };
 
 module.exports = RCTUIManager;

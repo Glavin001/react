@@ -5,4 +5,4 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export default require('lowPriorityWarning');
+export default require("lowPriorityWarning");

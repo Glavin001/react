@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
-const eslintrc = require('../../.eslintrc');
+const eslintrc = require("../../.eslintrc");
 
 const ERROR = 2;
 
@@ -16,6 +16,6 @@ const ERROR = 2;
 
 module.exports = Object.assign({}, eslintrc, {
   rules: Object.assign({}, eslintrc.rules, {
-    'no-var': ERROR,
-  }),
+    "no-var": ERROR
+  })
 });

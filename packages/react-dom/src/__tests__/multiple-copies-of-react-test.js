@@ -7,27 +7,27 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-let React = require('react');
-const ReactTestUtils = require('react-dom/test-utils');
+let React = require("react");
+const ReactTestUtils = require("react-dom/test-utils");
 
 class TextWithStringRef extends React.Component {
   render() {
     jest.resetModules();
-    React = require('react');
+    React = require("react");
     return <span ref="foo">Hello world!</span>;
   }
 }
 
-describe('when different React version is used with string ref', () => {
+describe("when different React version is used with string ref", () => {
   it('throws the "Refs must have owner" warning', () => {
     expect(() => {
       ReactTestUtils.renderIntoDocument(<TextWithStringRef />);
     }).toThrow(
-      'Element ref was specified as a string (foo) but no owner was set.' +
-        ' You may have multiple copies of React loaded. (details: ' +
-        'https://fb.me/react-refs-must-have-owner).',
+      "Element ref was specified as a string (foo) but no owner was set." +
+        " You may have multiple copies of React loaded. (details: " +
+        "https://fb.me/react-refs-must-have-owner)."
     );
   });
 });

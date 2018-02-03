@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
 const RCTEventEmitter = {
-  register: jest.fn(),
+  register: jest.fn()
 };
 
 module.exports = RCTEventEmitter;

@@ -1,14 +1,14 @@
-import Fixture from '../../Fixture';
+import Fixture from "../../Fixture";
 
 const React = window.React;
 
 class NumberTestCase extends React.Component {
-  state = {value: ''};
+  state = { value: "" };
   onChange = event => {
     const parsed = parseFloat(event.target.value, 10);
-    const value = isNaN(parsed) ? '' : parsed;
+    const value = isNaN(parsed) ? "" : parsed;
 
-    this.setState({value});
+    this.setState({ value });
   };
   render() {
     return (
@@ -24,7 +24,7 @@ class NumberTestCase extends React.Component {
               onChange={this.onChange}
             />
             <span className="hint">
-              {' '}
+              {" "}
               Value: {JSON.stringify(this.state.value)}
             </span>
           </fieldset>

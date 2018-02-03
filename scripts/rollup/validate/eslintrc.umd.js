@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 module.exports = {
   env: {
-    browser: true,
+    browser: true
   },
   globals: {
     // ES6
@@ -20,14 +20,14 @@ module.exports = {
     module: true,
     define: true,
     require: true,
-    global: true,
+    global: true
   },
   parserOptions: {
     ecmaVersion: 5,
-    sourceType: 'script',
+    sourceType: "script"
   },
   rules: {
-    'no-undef': 'error',
-    'no-shadow-restricted-names': 'error',
-  },
+    "no-undef": "error",
+    "no-shadow-restricted-names": "error"
+  }
 };

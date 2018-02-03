@@ -7,8 +7,8 @@
  * @providesModule renderSubtreeIntoContainer
  */
 
-'use strict';
+"use strict";
 
-const ReactDOM = require('ReactDOM-fb');
+const ReactDOM = require("ReactDOM-fb");
 
 module.exports = ReactDOM.unstable_renderSubtreeIntoContainer;

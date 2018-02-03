@@ -7,15 +7,15 @@
  * @flow
  */
 
-const EventListenerWWW = require('EventListener');
+const EventListenerWWW = require("EventListener");
 
-import typeof * as EventListenerType from '../EventListener';
-import typeof * as EventListenerShimType from './EventListener-www';
+import typeof * as EventListenerType from "../EventListener";
+import typeof * as EventListenerShimType from "./EventListener-www";
 
 export function addEventBubbleListener(
   element: Element,
   eventType: string,
-  listener: Function,
+  listener: Function
 ): void {
   EventListenerWWW.listen(element, eventType, listener);
 }
@@ -23,7 +23,7 @@ export function addEventBubbleListener(
 export function addEventCaptureListener(
   element: Element,
   eventType: string,
-  listener: Function,
+  listener: Function
 ): void {
   EventListenerWWW.capture(element, eventType, listener);
 }

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {TEXT_NODE} from '../shared/HTMLNodeType';
+import { TEXT_NODE } from "../shared/HTMLNodeType";
 
 /**
  * Set the textContent property of a node, ensuring that whitespace is preserved

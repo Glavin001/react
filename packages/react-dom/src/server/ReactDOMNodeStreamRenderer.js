@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {Readable} from 'stream';
+import { Readable } from "stream";
 
-import ReactPartialRenderer from './ReactPartialRenderer';
+import ReactPartialRenderer from "./ReactPartialRenderer";
 
 // This is a Readable Node.js stream which wraps the ReactDOMPartialRenderer.
 class ReactMarkupReadableStream extends Readable {
@@ -22,7 +22,7 @@ class ReactMarkupReadableStream extends Readable {
     try {
       this.push(this.partialRenderer.read(size));
     } catch (err) {
-      this.emit('error', err);
+      this.emit("error", err);
     }
   }
 }

@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import invariant from 'fbjs/lib/invariant';
+import invariant from "fbjs/lib/invariant";
 
-const invokeGuardedCallback = require('ReactFbErrorUtils')
+const invokeGuardedCallback = require("ReactFbErrorUtils")
   .invokeGuardedCallback;
 invariant(
-  typeof invokeGuardedCallback === 'function',
-  'Expected ReactFbErrorUtils.invokeGuardedCallback to be a function.',
+  typeof invokeGuardedCallback === "function",
+  "Expected ReactFbErrorUtils.invokeGuardedCallback to be a function."
 );
 
 export default invokeGuardedCallback;

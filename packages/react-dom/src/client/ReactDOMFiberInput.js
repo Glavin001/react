@@ -8,26 +8,26 @@
  */
 
 // TODO: direct imports like some-package/src/* are bad. Fix me.
-import ReactDebugCurrentFiber from 'react-reconciler/src/ReactDebugCurrentFiber';
-import invariant from 'fbjs/lib/invariant';
-import warning from 'fbjs/lib/warning';
+import ReactDebugCurrentFiber from "react-reconciler/src/ReactDebugCurrentFiber";
+import invariant from "fbjs/lib/invariant";
+import warning from "fbjs/lib/warning";
 
-import * as DOMPropertyOperations from './DOMPropertyOperations';
-import {getFiberCurrentPropsFromNode} from './ReactDOMComponentTree';
-import ReactControlledValuePropTypes from '../shared/ReactControlledValuePropTypes';
-import * as inputValueTracking from './inputValueTracking';
+import * as DOMPropertyOperations from "./DOMPropertyOperations";
+import { getFiberCurrentPropsFromNode } from "./ReactDOMComponentTree";
+import ReactControlledValuePropTypes from "../shared/ReactControlledValuePropTypes";
+import * as inputValueTracking from "./inputValueTracking";
 
 type InputWithWrapperState = HTMLInputElement & {
   _wrapperState: {
     initialValue: string,
     initialChecked: ?boolean,
-    controlled?: boolean,
-  },
+    controlled?: boolean
+  }
 };
 
 const {
   getCurrentFiberOwnerName,
-  getCurrentFiberStackAddendum,
+  getCurrentFiberStackAddendum
 } = ReactDebugCurrentFiber;
 let didWarnValueDefaultValue = false;
 let didWarnCheckedDefaultChecked = false;
@@ -35,7 +35,7 @@ let didWarnControlledToUncontrolled = false;
 let didWarnUncontrolledToControlled = false;
 
 function isControlled(props) {
-  const usesChecked = props.type === 'checkbox' || props.type === 'radio';
+  const usesChecked = props.type === "checkbox" || props.type === "radio";
   return usesChecked ? props.checked != null : props.value != null;
 }
 
@@ -64,7 +64,7 @@ export function getHostProps(element: Element, props: Object) {
     defaultChecked: undefined,
     defaultValue: undefined,
     value: undefined,
-    checked: checked != null ? checked : node._wrapperState.initialChecked,
+    checked: checked != null ? checked : node._wrapperState.initialChecked
   });
 
   return hostProps;
@@ -73,9 +73,9 @@ export function getHostProps(element: Element, props: Object) {
 export function initWrapperState(element: Element, props: Object) {
   if (__DEV__) {
     ReactControlledValuePropTypes.checkPropTypes(
-      'input',
+      "input",
       props,
-      getCurrentFiberStackAddendum,
+      getCurrentFiberStackAddendum
     );
 
     if (
@@ -85,14 +85,14 @@ export function initWrapperState(element: Element, props: Object) {
     ) {
       warning(
         false,
-        '%s contains an input of type %s with both checked and defaultChecked props. ' +
-          'Input elements must be either controlled or uncontrolled ' +
-          '(specify either the checked prop, or the defaultChecked prop, but not ' +
-          'both). Decide between using a controlled or uncontrolled input ' +
-          'element and remove one of these props. More info: ' +
-          'https://fb.me/react-controlled-components',
-        getCurrentFiberOwnerName() || 'A component',
-        props.type,
+        "%s contains an input of type %s with both checked and defaultChecked props. " +
+          "Input elements must be either controlled or uncontrolled " +
+          "(specify either the checked prop, or the defaultChecked prop, but not " +
+          "both). Decide between using a controlled or uncontrolled input " +
+          "element and remove one of these props. More info: " +
+          "https://fb.me/react-controlled-components",
+        getCurrentFiberOwnerName() || "A component",
+        props.type
       );
       didWarnCheckedDefaultChecked = true;
     }
@@ -103,29 +103,29 @@ export function initWrapperState(element: Element, props: Object) {
     ) {
       warning(
         false,
-        '%s contains an input of type %s with both value and defaultValue props. ' +
-          'Input elements must be either controlled or uncontrolled ' +
-          '(specify either the value prop, or the defaultValue prop, but not ' +
-          'both). Decide between using a controlled or uncontrolled input ' +
-          'element and remove one of these props. More info: ' +
-          'https://fb.me/react-controlled-components',
-        getCurrentFiberOwnerName() || 'A component',
-        props.type,
+        "%s contains an input of type %s with both value and defaultValue props. " +
+          "Input elements must be either controlled or uncontrolled " +
+          "(specify either the value prop, or the defaultValue prop, but not " +
+          "both). Decide between using a controlled or uncontrolled input " +
+          "element and remove one of these props. More info: " +
+          "https://fb.me/react-controlled-components",
+        getCurrentFiberOwnerName() || "A component",
+        props.type
       );
       didWarnValueDefaultValue = true;
     }
   }
 
   const node = ((element: any): InputWithWrapperState);
-  const defaultValue = props.defaultValue == null ? '' : props.defaultValue;
+  const defaultValue = props.defaultValue == null ? "" : props.defaultValue;
 
   node._wrapperState = {
     initialChecked:
       props.checked != null ? props.checked : props.defaultChecked,
     initialValue: getSafeValue(
-      props.value != null ? props.value : defaultValue,
+      props.value != null ? props.value : defaultValue
     ),
-    controlled: isControlled(props),
+    controlled: isControlled(props)
   };
 }
 
@@ -133,7 +133,7 @@ export function updateChecked(element: Element, props: Object) {
   const node = ((element: any): InputWithWrapperState);
   const checked = props.checked;
   if (checked != null) {
-    DOMPropertyOperations.setValueForProperty(node, 'checked', checked, false);
+    DOMPropertyOperations.setValueForProperty(node, "checked", checked, false);
   }
 }
 
@@ -149,12 +149,12 @@ export function updateWrapper(element: Element, props: Object) {
     ) {
       warning(
         false,
-        'A component is changing an uncontrolled input of type %s to be controlled. ' +
-          'Input elements should not switch from uncontrolled to controlled (or vice versa). ' +
-          'Decide between using a controlled or uncontrolled input ' +
-          'element for the lifetime of the component. More info: https://fb.me/react-controlled-components%s',
+        "A component is changing an uncontrolled input of type %s to be controlled. " +
+          "Input elements should not switch from uncontrolled to controlled (or vice versa). " +
+          "Decide between using a controlled or uncontrolled input " +
+          "element for the lifetime of the component. More info: https://fb.me/react-controlled-components%s",
         props.type,
-        getCurrentFiberStackAddendum(),
+        getCurrentFiberStackAddendum()
       );
       didWarnUncontrolledToControlled = true;
     }
@@ -165,12 +165,12 @@ export function updateWrapper(element: Element, props: Object) {
     ) {
       warning(
         false,
-        'A component is changing a controlled input of type %s to be uncontrolled. ' +
-          'Input elements should not switch from controlled to uncontrolled (or vice versa). ' +
-          'Decide between using a controlled or uncontrolled input ' +
-          'element for the lifetime of the component. More info: https://fb.me/react-controlled-components%s',
+        "A component is changing a controlled input of type %s to be uncontrolled. " +
+          "Input elements should not switch from controlled to uncontrolled (or vice versa). " +
+          "Decide between using a controlled or uncontrolled input " +
+          "element for the lifetime of the component. More info: https://fb.me/react-controlled-components%s",
         props.type,
-        getCurrentFiberStackAddendum(),
+        getCurrentFiberStackAddendum()
       );
       didWarnControlledToUncontrolled = true;
     }
@@ -181,22 +181,22 @@ export function updateWrapper(element: Element, props: Object) {
   const value = getSafeValue(props.value);
 
   if (value != null) {
-    if (props.type === 'number') {
+    if (props.type === "number") {
       if (
-        (value === 0 && node.value === '') ||
+        (value === 0 && node.value === "") ||
         // eslint-disable-next-line
         node.value != value
       ) {
-        node.value = '' + value;
+        node.value = "" + value;
       }
-    } else if (node.value !== '' + value) {
-      node.value = '' + value;
+    } else if (node.value !== "" + value) {
+      node.value = "" + value;
     }
   }
 
-  if (props.hasOwnProperty('value')) {
+  if (props.hasOwnProperty("value")) {
     setDefaultValue(node, props.type, value);
-  } else if (props.hasOwnProperty('defaultValue')) {
+  } else if (props.hasOwnProperty("defaultValue")) {
     setDefaultValue(node, props.type, getSafeValue(props.defaultValue));
   }
 
@@ -208,17 +208,17 @@ export function updateWrapper(element: Element, props: Object) {
 export function postMountWrapper(element: Element, props: Object) {
   const node = ((element: any): InputWithWrapperState);
 
-  if (props.hasOwnProperty('value') || props.hasOwnProperty('defaultValue')) {
+  if (props.hasOwnProperty("value") || props.hasOwnProperty("defaultValue")) {
     // Do not assign value if it is already set. This prevents user text input
     // from being lost during SSR hydration.
-    if (node.value === '') {
-      node.value = '' + node._wrapperState.initialValue;
+    if (node.value === "") {
+      node.value = "" + node._wrapperState.initialValue;
     }
 
     // value must be assigned before defaultValue. This fixes an issue where the
     // visually displayed value of date inputs disappears on mobile Safari and Chrome:
     // https://github.com/facebook/react/issues/7233
-    node.defaultValue = '' + node._wrapperState.initialValue;
+    node.defaultValue = "" + node._wrapperState.initialValue;
   }
 
   // Normally, we'd just do `node.checked = node.checked` upon initial mount, less this bug
@@ -227,12 +227,12 @@ export function postMountWrapper(element: Element, props: Object) {
   // Reference: https://bugs.chromium.org/p/chromium/issues/detail?id=608416
   // We need to temporarily unset name to avoid disrupting radio button groups.
   const name = node.name;
-  if (name !== '') {
-    node.name = '';
+  if (name !== "") {
+    node.name = "";
   }
   node.defaultChecked = !node.defaultChecked;
   node.defaultChecked = !node.defaultChecked;
-  if (name !== '') {
+  if (name !== "") {
     node.name = name;
   }
 }
@@ -245,7 +245,7 @@ export function restoreControlledState(element: Element, props: Object) {
 
 function updateNamedCousins(rootNode, props) {
   const name = props.name;
-  if (props.type === 'radio' && name != null) {
+  if (props.type === "radio" && name != null) {
     let queryRoot: Element = rootNode;
 
     while (queryRoot.parentNode) {
@@ -260,7 +260,7 @@ function updateNamedCousins(rootNode, props) {
     // document. Let's just use the local `querySelectorAll` to ensure we don't
     // miss anything.
     const group = queryRoot.querySelectorAll(
-      'input[name=' + JSON.stringify('' + name) + '][type="radio"]',
+      "input[name=" + JSON.stringify("" + name) + '][type="radio"]'
     );
 
     for (let i = 0; i < group.length; i++) {
@@ -275,8 +275,8 @@ function updateNamedCousins(rootNode, props) {
       const otherProps = getFiberCurrentPropsFromNode(otherNode);
       invariant(
         otherProps,
-        'ReactDOMInput: Mixing React and non-React radio inputs with the ' +
-          'same `name` is not supported.',
+        "ReactDOMInput: Mixing React and non-React radio inputs with the " +
+          "same `name` is not supported."
       );
 
       // We need update the tracked value on the named cousin since the value
@@ -302,31 +302,31 @@ function updateNamedCousins(rootNode, props) {
 export function setDefaultValue(
   node: InputWithWrapperState,
   type: ?string,
-  value: *,
+  value: *
 ) {
   if (
     // Focused number inputs synchronize on blur. See ChangeEventPlugin.js
-    type !== 'number' ||
+    type !== "number" ||
     node.ownerDocument.activeElement !== node
   ) {
     if (value == null) {
-      node.defaultValue = '' + node._wrapperState.initialValue;
-    } else if (node.defaultValue !== '' + value) {
-      node.defaultValue = '' + value;
+      node.defaultValue = "" + node._wrapperState.initialValue;
+    } else if (node.defaultValue !== "" + value) {
+      node.defaultValue = "" + value;
     }
   }
 }
 
 function getSafeValue(value: *): * {
   switch (typeof value) {
-    case 'boolean':
-    case 'number':
-    case 'object':
-    case 'string':
-    case 'undefined':
+    case "boolean":
+    case "number":
+    case "object":
+    case "string":
+    case "undefined":
       return value;
     default:
       // function, symbol are assigned as empty strings
-      return '';
+      return "";
   }
 }

@@ -5,23 +5,23 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {accumulateEnterLeaveDispatches} from 'events/EventPropagators';
+import { accumulateEnterLeaveDispatches } from "events/EventPropagators";
 
-import SyntheticMouseEvent from './SyntheticMouseEvent';
+import SyntheticMouseEvent from "./SyntheticMouseEvent";
 import {
   getClosestInstanceFromNode,
-  getNodeFromInstance,
-} from '../client/ReactDOMComponentTree';
+  getNodeFromInstance
+} from "../client/ReactDOMComponentTree";
 
 const eventTypes = {
   mouseEnter: {
-    registrationName: 'onMouseEnter',
-    dependencies: ['topMouseOut', 'topMouseOver'],
+    registrationName: "onMouseEnter",
+    dependencies: ["topMouseOut", "topMouseOver"]
   },
   mouseLeave: {
-    registrationName: 'onMouseLeave',
-    dependencies: ['topMouseOut', 'topMouseOver'],
-  },
+    registrationName: "onMouseLeave",
+    dependencies: ["topMouseOut", "topMouseOver"]
+  }
 };
 
 const EnterLeaveEventPlugin = {
@@ -38,15 +38,15 @@ const EnterLeaveEventPlugin = {
     topLevelType,
     targetInst,
     nativeEvent,
-    nativeEventTarget,
+    nativeEventTarget
   ) {
     if (
-      topLevelType === 'topMouseOver' &&
+      topLevelType === "topMouseOver" &&
       (nativeEvent.relatedTarget || nativeEvent.fromElement)
     ) {
       return null;
     }
-    if (topLevelType !== 'topMouseOut' && topLevelType !== 'topMouseOver') {
+    if (topLevelType !== "topMouseOut" && topLevelType !== "topMouseOver") {
       // Must not be a mouse in or mouse out - ignoring.
       return null;
     }
@@ -67,7 +67,7 @@ const EnterLeaveEventPlugin = {
 
     let from;
     let to;
-    if (topLevelType === 'topMouseOut') {
+    if (topLevelType === "topMouseOut") {
       from = targetInst;
       const related = nativeEvent.relatedTarget || nativeEvent.toElement;
       to = related ? getClosestInstanceFromNode(related) : null;
@@ -89,9 +89,9 @@ const EnterLeaveEventPlugin = {
       eventTypes.mouseLeave,
       from,
       nativeEvent,
-      nativeEventTarget,
+      nativeEventTarget
     );
-    leave.type = 'mouseleave';
+    leave.type = "mouseleave";
     leave.target = fromNode;
     leave.relatedTarget = toNode;
 
@@ -99,16 +99,16 @@ const EnterLeaveEventPlugin = {
       eventTypes.mouseEnter,
       to,
       nativeEvent,
-      nativeEventTarget,
+      nativeEventTarget
     );
-    enter.type = 'mouseenter';
+    enter.type = "mouseenter";
     enter.target = toNode;
     enter.relatedTarget = fromNode;
 
     accumulateEnterLeaveDispatches(leave, enter, from, to);
 
     return [leave, enter];
-  },
+  }
 };
 
 export default EnterLeaveEventPlugin;

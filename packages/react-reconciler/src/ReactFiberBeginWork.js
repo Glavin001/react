@@ -7,12 +7,12 @@
  * @flow
  */
 
-import type {HostConfig} from 'react-reconciler';
-import type {Fiber} from 'react-reconciler/src/ReactFiber';
-import type {HostContext} from './ReactFiberHostContext';
-import type {HydrationContext} from './ReactFiberHydrationContext';
-import type {FiberRoot} from './ReactFiberRoot';
-import type {ExpirationTime} from './ReactFiberExpirationTime';
+import type { HostConfig } from "react-reconciler";
+import type { Fiber } from "react-reconciler/src/ReactFiber";
+import type { HostContext } from "./ReactFiberHostContext";
+import type { HydrationContext } from "./ReactFiberHydrationContext";
+import type { FiberRoot } from "./ReactFiberRoot";
+import type { ExpirationTime } from "./ReactFiberExpirationTime";
 
 import {
   IndeterminateComponent,
@@ -25,39 +25,39 @@ import {
   CallComponent,
   CallHandlerPhase,
   ReturnComponent,
-  Fragment,
-} from 'shared/ReactTypeOfWork';
+  Fragment
+} from "shared/ReactTypeOfWork";
 import {
   PerformedWork,
   Placement,
   ContentReset,
   Err,
-  Ref,
-} from 'shared/ReactTypeOfSideEffect';
-import {ReactCurrentOwner} from 'shared/ReactGlobalSharedState';
-import {debugRenderPhaseSideEffects} from 'shared/ReactFeatureFlags';
-import invariant from 'fbjs/lib/invariant';
-import getComponentName from 'shared/getComponentName';
-import warning from 'fbjs/lib/warning';
-import ReactDebugCurrentFiber from './ReactDebugCurrentFiber';
-import {cancelWorkTimer} from './ReactDebugFiberPerf';
+  Ref
+} from "shared/ReactTypeOfSideEffect";
+import { ReactCurrentOwner } from "shared/ReactGlobalSharedState";
+import { debugRenderPhaseSideEffects } from "shared/ReactFeatureFlags";
+import invariant from "fbjs/lib/invariant";
+import getComponentName from "shared/getComponentName";
+import warning from "fbjs/lib/warning";
+import ReactDebugCurrentFiber from "./ReactDebugCurrentFiber";
+import { cancelWorkTimer } from "./ReactDebugFiberPerf";
 
-import ReactFiberClassComponent from './ReactFiberClassComponent';
+import ReactFiberClassComponent from "./ReactFiberClassComponent";
 import {
   mountChildFibers,
   reconcileChildFibers,
-  cloneChildFibers,
-} from './ReactChildFiber';
-import {processUpdateQueue} from './ReactFiberUpdateQueue';
+  cloneChildFibers
+} from "./ReactChildFiber";
+import { processUpdateQueue } from "./ReactFiberUpdateQueue";
 import {
   getMaskedContext,
   getUnmaskedContext,
   hasContextChanged,
   pushContextProvider,
   pushTopLevelContextObject,
-  invalidateContextProvider,
-} from './ReactFiberContext';
-import {NoWork, Never} from './ReactFiberExpirationTime';
+  invalidateContextProvider
+} from "./ReactFiberContext";
+import { NoWork, Never } from "./ReactFiberExpirationTime";
 
 let warnedAboutStatelessRefs;
 
@@ -70,20 +70,20 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   hostContext: HostContext<C, CX>,
   hydrationContext: HydrationContext<C, CX>,
   scheduleWork: (fiber: Fiber, expirationTime: ExpirationTime) => void,
-  computeExpirationForFiber: (fiber: Fiber) => ExpirationTime,
+  computeExpirationForFiber: (fiber: Fiber) => ExpirationTime
 ) {
   const {
     shouldSetTextContent,
     useSyncScheduling,
-    shouldDeprioritizeSubtree,
+    shouldDeprioritizeSubtree
   } = config;
 
-  const {pushHostContext, pushHostContainer} = hostContext;
+  const { pushHostContext, pushHostContainer } = hostContext;
 
   const {
     enterHydrationState,
     resetHydrationState,
-    tryToClaimNextHydratableInstance,
+    tryToClaimNextHydratableInstance
   } = hydrationContext;
 
   const {
@@ -91,12 +91,12 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     constructClassInstance,
     mountClassInstance,
     // resumeMountClassInstance,
-    updateClassInstance,
+    updateClassInstance
   } = ReactFiberClassComponent(
     scheduleWork,
     computeExpirationForFiber,
     memoizeProps,
-    memoizeState,
+    memoizeState
   );
 
   // TODO: Remove this and use reconcileChildrenAtExpirationTime directly.
@@ -105,7 +105,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       current,
       workInProgress,
       nextChildren,
-      workInProgress.expirationTime,
+      workInProgress.expirationTime
     );
   }
 
@@ -113,7 +113,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     current,
     workInProgress,
     nextChildren,
-    renderExpirationTime,
+    renderExpirationTime
   ) {
     if (current === null) {
       // If this is a fresh new component that hasn't been rendered yet, we
@@ -124,7 +124,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         workInProgress,
         null,
         nextChildren,
-        renderExpirationTime,
+        renderExpirationTime
       );
     } else {
       // If the current child is the same as the work in progress, it means that
@@ -137,7 +137,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         workInProgress,
         current.child,
         nextChildren,
-        renderExpirationTime,
+        renderExpirationTime
       );
     }
   }
@@ -188,7 +188,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
 
     if (__DEV__) {
       ReactCurrentOwner.current = workInProgress;
-      ReactDebugCurrentFiber.setCurrentPhase('render');
+      ReactDebugCurrentFiber.setCurrentPhase("render");
       nextChildren = fn(nextProps, context);
       ReactDebugCurrentFiber.setCurrentPhase(null);
     } else {
@@ -204,7 +204,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function updateClassComponent(
     current: Fiber | null,
     workInProgress: Fiber,
-    renderExpirationTime: ExpirationTime,
+    renderExpirationTime: ExpirationTime
   ) {
     // Push context providers early to prevent context stack mismatches.
     // During mounting we don't know the child context yet as the instance doesn't exist.
@@ -229,7 +229,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
 
         shouldUpdate = true;
       } else {
-        invariant(false, 'Resuming work not yet implemented.');
+        invariant(false, "Resuming work not yet implemented.");
         // In a resume, we'll already have an instance we can reuse.
         // shouldUpdate = resumeMountClassInstance(workInProgress, renderExpirationTime);
       }
@@ -237,14 +237,14 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       shouldUpdate = updateClassInstance(
         current,
         workInProgress,
-        renderExpirationTime,
+        renderExpirationTime
       );
     }
     return finishClassComponent(
       current,
       workInProgress,
       shouldUpdate,
-      hasContext,
+      hasContext
     );
   }
 
@@ -252,7 +252,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     current: Fiber | null,
     workInProgress: Fiber,
     shouldUpdate: boolean,
-    hasContext: boolean,
+    hasContext: boolean
   ) {
     // Refs should update even if shouldComponentUpdate returns false
     markRef(current, workInProgress);
@@ -272,7 +272,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     ReactCurrentOwner.current = workInProgress;
     let nextChildren;
     if (__DEV__) {
-      ReactDebugCurrentFiber.setCurrentPhase('render');
+      ReactDebugCurrentFiber.setCurrentPhase("render");
       nextChildren = instance.render();
       if (debugRenderPhaseSideEffects) {
         instance.render();
@@ -306,7 +306,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       pushTopLevelContextObject(
         workInProgress,
         root.pendingContext,
-        root.pendingContext !== root.context,
+        root.pendingContext !== root.context
       );
     } else if (root.context) {
       // Should always be set
@@ -326,7 +326,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         updateQueue,
         null,
         null,
-        renderExpirationTime,
+        renderExpirationTime
       );
       if (prevState === state) {
         // If the state is the same as before, that's a bailout because we had
@@ -359,7 +359,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
           workInProgress,
           null,
           element,
-          renderExpirationTime,
+          renderExpirationTime
         );
       } else {
         // Otherwise reset hydration state in case we aborted and resumed another
@@ -442,12 +442,12 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function mountIndeterminateComponent(
     current,
     workInProgress,
-    renderExpirationTime,
+    renderExpirationTime
   ) {
     invariant(
       current === null,
-      'An indeterminate component should never have mounted. This error is ' +
-        'likely caused by a bug in React. Please file an issue.',
+      "An indeterminate component should never have mounted. This error is " +
+        "likely caused by a bug in React. Please file an issue."
     );
     const fn = workInProgress.type;
     const props = workInProgress.pendingProps;
@@ -457,14 +457,14 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     let value;
 
     if (__DEV__) {
-      if (fn.prototype && typeof fn.prototype.render === 'function') {
+      if (fn.prototype && typeof fn.prototype.render === "function") {
         const componentName = getComponentName(workInProgress);
         warning(
           false,
           "The <%s /> component appears to have a render method, but doesn't extend React.Component. " +
-            'This is likely to cause errors. Change %s to extend React.Component instead.',
+            "This is likely to cause errors. Change %s to extend React.Component instead.",
           componentName,
-          componentName,
+          componentName
         );
       }
       ReactCurrentOwner.current = workInProgress;
@@ -476,9 +476,9 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     workInProgress.effectTag |= PerformedWork;
 
     if (
-      typeof value === 'object' &&
+      typeof value === "object" &&
       value !== null &&
-      typeof value.render === 'function'
+      typeof value.render === "function"
     ) {
       // Proceed under the assumption that this is a class instance
       workInProgress.tag = ClassComponent;
@@ -499,30 +499,30 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         if (Component) {
           warning(
             !Component.childContextTypes,
-            '%s(...): childContextTypes cannot be defined on a functional component.',
-            Component.displayName || Component.name || 'Component',
+            "%s(...): childContextTypes cannot be defined on a functional component.",
+            Component.displayName || Component.name || "Component"
           );
         }
         if (workInProgress.ref !== null) {
-          let info = '';
+          let info = "";
           const ownerName = ReactDebugCurrentFiber.getCurrentFiberOwnerName();
           if (ownerName) {
-            info += '\n\nCheck the render method of `' + ownerName + '`.';
+            info += "\n\nCheck the render method of `" + ownerName + "`.";
           }
 
-          let warningKey = ownerName || workInProgress._debugID || '';
+          let warningKey = ownerName || workInProgress._debugID || "";
           const debugSource = workInProgress._debugSource;
           if (debugSource) {
-            warningKey = debugSource.fileName + ':' + debugSource.lineNumber;
+            warningKey = debugSource.fileName + ":" + debugSource.lineNumber;
           }
           if (!warnedAboutStatelessRefs[warningKey]) {
             warnedAboutStatelessRefs[warningKey] = true;
             warning(
               false,
-              'Stateless function components cannot be given refs. ' +
-                'Attempts to access this ref will fail.%s%s',
+              "Stateless function components cannot be given refs. " +
+                "Attempts to access this ref will fail.%s%s",
               info,
-              ReactDebugCurrentFiber.getCurrentFiberStackAddendum(),
+              ReactDebugCurrentFiber.getCurrentFiberStackAddendum()
             );
           }
         }
@@ -554,14 +554,14 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         workInProgress,
         workInProgress.stateNode,
         nextChildren,
-        renderExpirationTime,
+        renderExpirationTime
       );
     } else {
       workInProgress.stateNode = reconcileChildFibers(
         workInProgress,
         workInProgress.stateNode,
         nextChildren,
-        renderExpirationTime,
+        renderExpirationTime
       );
     }
 
@@ -574,7 +574,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function updatePortalComponent(
     current,
     workInProgress,
-    renderExpirationTime,
+    renderExpirationTime
   ) {
     pushHostContainer(workInProgress, workInProgress.stateNode.containerInfo);
     const nextChildren = workInProgress.pendingProps;
@@ -595,7 +595,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         workInProgress,
         null,
         nextChildren,
-        renderExpirationTime,
+        renderExpirationTime
       );
       memoizeProps(workInProgress, nextChildren);
     } else {
@@ -626,7 +626,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
 
   function bailoutOnAlreadyFinishedWork(
     current,
-    workInProgress: Fiber,
+    workInProgress: Fiber
   ): Fiber | null {
     cancelWorkTimer(workInProgress);
 
@@ -663,7 +663,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       case HostPortal:
         pushHostContainer(
           workInProgress,
-          workInProgress.stateNode.containerInfo,
+          workInProgress.stateNode.containerInfo
         );
         break;
     }
@@ -686,7 +686,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function beginWork(
     current: Fiber | null,
     workInProgress: Fiber,
-    renderExpirationTime: ExpirationTime,
+    renderExpirationTime: ExpirationTime
   ): Fiber | null {
     if (
       workInProgress.expirationTime === NoWork ||
@@ -700,7 +700,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         return mountIndeterminateComponent(
           current,
           workInProgress,
-          renderExpirationTime,
+          renderExpirationTime
         );
       case FunctionalComponent:
         return updateFunctionalComponent(current, workInProgress);
@@ -708,7 +708,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         return updateClassComponent(
           current,
           workInProgress,
-          renderExpirationTime,
+          renderExpirationTime
         );
       case HostRoot:
         return updateHostRoot(current, workInProgress, renderExpirationTime);
@@ -716,7 +716,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         return updateHostComponent(
           current,
           workInProgress,
-          renderExpirationTime,
+          renderExpirationTime
         );
       case HostText:
         return updateHostText(current, workInProgress);
@@ -728,7 +728,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         return updateCallComponent(
           current,
           workInProgress,
-          renderExpirationTime,
+          renderExpirationTime
         );
       case ReturnComponent:
         // A return component is just a placeholder, we can just run through the
@@ -738,15 +738,15 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         return updatePortalComponent(
           current,
           workInProgress,
-          renderExpirationTime,
+          renderExpirationTime
         );
       case Fragment:
         return updateFragment(current, workInProgress);
       default:
         invariant(
           false,
-          'Unknown unit of work tag. This error is likely caused by a bug in ' +
-            'React. Please file an issue.',
+          "Unknown unit of work tag. This error is likely caused by a bug in " +
+            "React. Please file an issue."
         );
     }
   }
@@ -754,7 +754,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function beginFailedWork(
     current: Fiber | null,
     workInProgress: Fiber,
-    renderExpirationTime: ExpirationTime,
+    renderExpirationTime: ExpirationTime
   ) {
     // Push context providers here to avoid a push/pop context mismatch.
     switch (workInProgress.tag) {
@@ -767,8 +767,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       default:
         invariant(
           false,
-          'Invalid type of work. This error is likely caused by a bug in React. ' +
-            'Please file an issue.',
+          "Invalid type of work. This error is likely caused by a bug in React. " +
+            "Please file an issue."
         );
     }
 
@@ -804,7 +804,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       current,
       workInProgress,
       nextChildren,
-      renderExpirationTime,
+      renderExpirationTime
     );
 
     if (workInProgress.tag === ClassComponent) {
@@ -818,6 +818,6 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
 
   return {
     beginWork,
-    beginFailedWork,
+    beginFailedWork
   };
 }

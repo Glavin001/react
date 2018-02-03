@@ -22,14 +22,14 @@
  *
  */
 
-'use strict';
+"use strict";
 
-var assign = require('object-assign');
-var PropTypes = require('prop-types');
-var React = require('react');
-var ReactART = require('react-art');
+var assign = require("object-assign");
+var PropTypes = require("prop-types");
+var React = require("react");
+var ReactART = require("react-art");
 
-var createReactClass = require('create-react-class');
+var createReactClass = require("create-react-class");
 
 var Shape = ReactART.Shape;
 var Path = ReactART.Path;
@@ -39,7 +39,7 @@ var Path = ReactART.Path;
  * components, it must be used in a <Surface>.
  */
 var Rectangle = createReactClass({
-  displayName: 'Rectangle',
+  displayName: "Rectangle",
 
   propTypes: {
     width: PropTypes.number.isRequired,
@@ -48,7 +48,7 @@ var Rectangle = createReactClass({
     radiusTopLeft: PropTypes.number,
     radiusTopRight: PropTypes.number,
     radiusBottomRight: PropTypes.number,
-    radiusBottomLeft: PropTypes.number,
+    radiusBottomLeft: PropTypes.number
   },
 
   render: function render() {
@@ -131,8 +131,8 @@ var Rectangle = createReactClass({
     }
     path.line(0, -height + (bl + tl));
 
-    return React.createElement(Shape, assign({}, this.props, {d: path}));
-  },
+    return React.createElement(Shape, assign({}, this.props, { d: path }));
+  }
 });
 
 module.exports = Rectangle;

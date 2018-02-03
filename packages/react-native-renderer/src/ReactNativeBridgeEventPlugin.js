@@ -7,14 +7,14 @@
  * @flow
  */
 
-import type {ReactNativeBaseComponentViewConfig} from './ReactNativeTypes';
-import type {AnyNativeEvent} from 'events/PluginModuleType';
+import type { ReactNativeBaseComponentViewConfig } from "./ReactNativeTypes";
+import type { AnyNativeEvent } from "events/PluginModuleType";
 import {
   accumulateTwoPhaseDispatches,
-  accumulateDirectDispatches,
-} from 'events/EventPropagators';
-import SyntheticEvent from 'events/SyntheticEvent';
-import invariant from 'fbjs/lib/invariant';
+  accumulateDirectDispatches
+} from "events/EventPropagators";
+import SyntheticEvent from "events/SyntheticEvent";
+import invariant from "fbjs/lib/invariant";
 
 const customBubblingEventTypes = {};
 const customDirectEventTypes = {};
@@ -29,20 +29,20 @@ const ReactNativeBridgeEventPlugin = {
     topLevelType: string,
     targetInst: Object,
     nativeEvent: AnyNativeEvent,
-    nativeEventTarget: Object,
+    nativeEventTarget: Object
   ): ?Object {
     const bubbleDispatchConfig = customBubblingEventTypes[topLevelType];
     const directDispatchConfig = customDirectEventTypes[topLevelType];
     invariant(
       bubbleDispatchConfig || directDispatchConfig,
       'Unsupported top level event type "%s" dispatched',
-      topLevelType,
+      topLevelType
     );
     const event = SyntheticEvent.getPooled(
       bubbleDispatchConfig || directDispatchConfig,
       targetInst,
       nativeEvent,
-      nativeEventTarget,
+      nativeEventTarget
     );
     if (bubbleDispatchConfig) {
       accumulateTwoPhaseDispatches(event);
@@ -55,17 +55,17 @@ const ReactNativeBridgeEventPlugin = {
   },
 
   processEventTypes: function(
-    viewConfig: ReactNativeBaseComponentViewConfig,
+    viewConfig: ReactNativeBaseComponentViewConfig
   ): void {
-    const {bubblingEventTypes, directEventTypes} = viewConfig;
+    const { bubblingEventTypes, directEventTypes } = viewConfig;
 
     if (__DEV__) {
       if (bubblingEventTypes != null && directEventTypes != null) {
         for (const topLevelType in directEventTypes) {
           invariant(
             bubblingEventTypes[topLevelType] == null,
-            'Event cannot be both direct and bubbling: %s',
-            topLevelType,
+            "Event cannot be both direct and bubbling: %s",
+            topLevelType
           );
         }
       }
@@ -92,7 +92,7 @@ const ReactNativeBridgeEventPlugin = {
         }
       }
     }
-  },
+  }
 };
 
 export default ReactNativeBridgeEventPlugin;

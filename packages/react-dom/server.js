@@ -7,6 +7,6 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-module.exports = require('./server.node');
+module.exports = require("./server.node");

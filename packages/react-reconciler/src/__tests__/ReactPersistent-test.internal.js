@@ -7,46 +7,46 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactNoop;
 let ReactPortal;
 
-describe('ReactPersistent', () => {
+describe("ReactPersistent", () => {
   beforeEach(() => {
     jest.resetModules();
 
-    const ReactFeatureFlags = require('shared/ReactFeatureFlags');
+    const ReactFeatureFlags = require("shared/ReactFeatureFlags");
     ReactFeatureFlags.enableMutableReconciler = false;
     ReactFeatureFlags.enablePersistentReconciler = true;
     ReactFeatureFlags.enableNoopReconciler = false;
 
-    React = require('react');
-    ReactNoop = require('react-noop-renderer');
-    ReactPortal = require('shared/ReactPortal');
+    React = require("react");
+    ReactNoop = require("react-noop-renderer");
+    ReactPortal = require("shared/ReactPortal");
   });
 
-  const DEFAULT_ROOT_ID = 'persistent-test';
+  const DEFAULT_ROOT_ID = "persistent-test";
 
   function render(element) {
     ReactNoop.renderToPersistentRootWithID(element, DEFAULT_ROOT_ID);
   }
 
   function div(...children) {
-    children = children.map(c => (typeof c === 'string' ? {text: c} : c));
-    return {type: 'div', children, prop: undefined};
+    children = children.map(c => (typeof c === "string" ? { text: c } : c));
+    return { type: "div", children, prop: undefined };
   }
 
   function span(prop) {
-    return {type: 'span', children: [], prop};
+    return { type: "span", children: [], prop };
   }
 
   function getChildren() {
     return ReactNoop.getChildren(DEFAULT_ROOT_ID);
   }
 
-  it('can update child nodes of a host instance', () => {
+  it("can update child nodes of a host instance", () => {
     function Bar(props) {
       return <span>{props.text}</span>;
     }
@@ -55,7 +55,7 @@ describe('ReactPersistent', () => {
       return (
         <div>
           <Bar text={props.text} />
-          {props.text === 'World' ? <Bar text={props.text} /> : null}
+          {props.text === "World" ? <Bar text={props.text} /> : null}
         </div>
       );
     }
@@ -73,7 +73,7 @@ describe('ReactPersistent', () => {
     expect(originalChildren).toEqual([div(span())]);
   });
 
-  it('can reuse child nodes between updates', () => {
+  it("can reuse child nodes between updates", () => {
     function Baz(props) {
       return <span prop={props.text} />;
     }
@@ -89,7 +89,7 @@ describe('ReactPersistent', () => {
       return (
         <div>
           <Bar text={props.text} />
-          {props.text === 'World' ? <Bar text={props.text} /> : null}
+          {props.text === "World" ? <Bar text={props.text} /> : null}
         </div>
       );
     }
@@ -97,20 +97,20 @@ describe('ReactPersistent', () => {
     render(<Foo text="Hello" />);
     ReactNoop.flush();
     const originalChildren = getChildren();
-    expect(originalChildren).toEqual([div(span('Hello'))]);
+    expect(originalChildren).toEqual([div(span("Hello"))]);
 
     render(<Foo text="World" />);
     ReactNoop.flush();
     const newChildren = getChildren();
-    expect(newChildren).toEqual([div(span('Hello'), span('World'))]);
+    expect(newChildren).toEqual([div(span("Hello"), span("World"))]);
 
-    expect(originalChildren).toEqual([div(span('Hello'))]);
+    expect(originalChildren).toEqual([div(span("Hello"))]);
 
     // Reused node should have reference equality
     expect(newChildren[0].children[0]).toBe(originalChildren[0].children[0]);
   });
 
-  it('can update child text nodes', () => {
+  it("can update child text nodes", () => {
     function Foo(props) {
       return (
         <div>
@@ -123,17 +123,17 @@ describe('ReactPersistent', () => {
     render(<Foo text="Hello" />);
     ReactNoop.flush();
     const originalChildren = getChildren();
-    expect(originalChildren).toEqual([div('Hello', span())]);
+    expect(originalChildren).toEqual([div("Hello", span())]);
 
     render(<Foo text="World" />);
     ReactNoop.flush();
     const newChildren = getChildren();
-    expect(newChildren).toEqual([div('World', span())]);
+    expect(newChildren).toEqual([div("World", span())]);
 
-    expect(originalChildren).toEqual([div('Hello', span())]);
+    expect(originalChildren).toEqual([div("Hello", span())]);
   });
 
-  it('supports portals', () => {
+  it("supports portals", () => {
     function Parent(props) {
       return <div>{props.children}</div>;
     }
@@ -159,12 +159,12 @@ describe('ReactPersistent', () => {
         </div>
       );
     }
-    const portalContainer = {rootID: 'persistent-portal-test', children: []};
+    const portalContainer = { rootID: "persistent-portal-test", children: [] };
     const emptyPortalChildSet = portalContainer.children;
     render(
       <Parent>
         {ReactPortal.createPortal(<Child />, portalContainer, null)}
-      </Parent>,
+      </Parent>
     );
     ReactNoop.flush();
 
@@ -178,25 +178,25 @@ describe('ReactPersistent', () => {
     render(
       <Parent>
         {ReactPortal.createPortal(
-          <Child>Hello {'World'}</Child>,
+          <Child>Hello {"World"}</Child>,
           portalContainer,
-          null,
+          null
         )}
-      </Parent>,
+      </Parent>
     );
     ReactNoop.flush();
 
     const newChildren = getChildren();
     expect(newChildren).toEqual([div()]);
     const newPortalChildren = portalContainer.children;
-    expect(newPortalChildren).toEqual([div(span(), 'Hello ', 'World')]);
+    expect(newPortalChildren).toEqual([div(span(), "Hello ", "World")]);
 
     expect(originalChildren).toEqual([div()]);
     expect(originalPortalChildren).toEqual([div(span())]);
 
     // Reused portal children should have reference equality
     expect(newPortalChildren[0].children[0]).toBe(
-      originalPortalChildren[0].children[0],
+      originalPortalChildren[0].children[0]
     );
 
     // Deleting the Portal, should clear its children
@@ -207,6 +207,6 @@ describe('ReactPersistent', () => {
     expect(clearedPortalChildren).toEqual([]);
 
     // The original is unchanged.
-    expect(newPortalChildren).toEqual([div(span(), 'Hello ', 'World')]);
+    expect(newPortalChildren).toEqual([div(span(), "Hello ", "World")]);
   });
 });

@@ -7,18 +7,18 @@
  * @flow
  */
 
-import type {HostConfig} from 'react-reconciler';
-import type {Fiber} from './ReactFiber';
-import type {ExpirationTime} from './ReactFiberExpirationTime';
-import type {HostContext} from './ReactFiberHostContext';
-import type {HydrationContext} from './ReactFiberHydrationContext';
-import type {FiberRoot} from './ReactFiberRoot';
+import type { HostConfig } from "react-reconciler";
+import type { Fiber } from "./ReactFiber";
+import type { ExpirationTime } from "./ReactFiberExpirationTime";
+import type { HostContext } from "./ReactFiberHostContext";
+import type { HydrationContext } from "./ReactFiberHydrationContext";
+import type { FiberRoot } from "./ReactFiberRoot";
 
 import {
   enableMutatingReconciler,
   enablePersistentReconciler,
-  enableNoopReconciler,
-} from 'shared/ReactFeatureFlags';
+  enableNoopReconciler
+} from "shared/ReactFeatureFlags";
 import {
   IndeterminateComponent,
   FunctionalComponent,
@@ -30,21 +30,21 @@ import {
   CallComponent,
   CallHandlerPhase,
   ReturnComponent,
-  Fragment,
-} from 'shared/ReactTypeOfWork';
-import {Placement, Ref, Update} from 'shared/ReactTypeOfSideEffect';
-import invariant from 'fbjs/lib/invariant';
+  Fragment
+} from "shared/ReactTypeOfWork";
+import { Placement, Ref, Update } from "shared/ReactTypeOfSideEffect";
+import invariant from "fbjs/lib/invariant";
 
-import {reconcileChildFibers} from './ReactChildFiber';
+import { reconcileChildFibers } from "./ReactChildFiber";
 import {
   popContextProvider,
-  popTopLevelContextObject,
-} from './ReactFiberContext';
+  popTopLevelContextObject
+} from "./ReactFiberContext";
 
 export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   config: HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL>,
   hostContext: HostContext<C, CX>,
-  hydrationContext: HydrationContext<C, CX>,
+  hydrationContext: HydrationContext<C, CX>
 ) {
   const {
     createInstance,
@@ -53,20 +53,20 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     finalizeInitialChildren,
     prepareUpdate,
     mutation,
-    persistence,
+    persistence
   } = config;
 
   const {
     getRootHostContainer,
     popHostContext,
     getHostContext,
-    popHostContainer,
+    popHostContainer
   } = hostContext;
 
   const {
     prepareToHydrateHostInstance,
     prepareToHydrateHostTextInstance,
-    popHydrationState,
+    popHydrationState
   } = hydrationContext;
 
   function markUpdate(workInProgress: Fiber) {
@@ -90,7 +90,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         node.tag === HostText ||
         node.tag === HostPortal
       ) {
-        invariant(false, 'A call cannot have host component children.');
+        invariant(false, "A call cannot have host component children.");
       } else if (node.tag === ReturnComponent) {
         returns.push(node.pendingProps.value);
       } else if (node.child !== null) {
@@ -112,13 +112,13 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function moveCallToHandlerPhase(
     current: Fiber | null,
     workInProgress: Fiber,
-    renderExpirationTime: ExpirationTime,
+    renderExpirationTime: ExpirationTime
   ) {
     const props = workInProgress.memoizedProps;
     invariant(
       props,
-      'Should be resolved by now. This error is likely caused by a bug in ' +
-        'React. Please file an issue.',
+      "Should be resolved by now. This error is likely caused by a bug in " +
+        "React. Please file an issue."
     );
 
     // First step of the call has completed. Now we need to do the second.
@@ -143,7 +143,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       workInProgress,
       currentFirstChild,
       nextChildren,
-      renderExpirationTime,
+      renderExpirationTime
     );
     return workInProgress.child;
   }
@@ -194,7 +194,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         type: T,
         oldProps: P,
         newProps: P,
-        rootContainerInstance: C,
+        rootContainerInstance: C
       ) {
         // TODO: Type this specific to this type of component.
         workInProgress.updateQueue = (updatePayload: any);
@@ -208,7 +208,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         current: Fiber,
         workInProgress: Fiber,
         oldText: string,
-        newText: string,
+        newText: string
       ) {
         // If the text differs, mark it as an update. All the work in done in commitWork.
         if (oldText !== newText) {
@@ -216,7 +216,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         }
       };
     } else {
-      invariant(false, 'Mutating reconciler is disabled.');
+      invariant(false, "Mutating reconciler is disabled.");
     }
   } else if (persistence) {
     if (enablePersistentReconciler) {
@@ -225,13 +225,13 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         cloneInstance,
         createContainerChildSet,
         appendChildToContainerChildSet,
-        finalizeContainerChildren,
+        finalizeContainerChildren
       } = persistence;
 
       // An unfortunate fork of appendAllChildren because we have two different parent types.
       const appendAllChildrenToContainer = function(
         containerChildSet: CC,
-        workInProgress: Fiber,
+        workInProgress: Fiber
       ) {
         // We only have the top Fiber that was created but we need recurse down its
         // children to find all the terminal nodes.
@@ -262,7 +262,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         }
       };
       updateHostContainer = function(workInProgress: Fiber) {
-        const portalOrRoot: {containerInfo: C, pendingChildren: CC} =
+        const portalOrRoot: { containerInfo: C, pendingChildren: CC } =
           workInProgress.stateNode;
         const childrenUnchanged = workInProgress.firstEffect === null;
         if (childrenUnchanged) {
@@ -287,7 +287,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         type: T,
         oldProps: P,
         newProps: P,
-        rootContainerInstance: C,
+        rootContainerInstance: C
       ) {
         // If there are no effects associated with this node, then none of our children had any updates.
         // This guarantees that we can reuse all of them.
@@ -307,14 +307,14 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
             newProps,
             workInProgress,
             childrenUnchanged,
-            recyclableInstance,
+            recyclableInstance
           );
           if (
             finalizeInitialChildren(
               newInstance,
               type,
               newProps,
-              rootContainerInstance,
+              rootContainerInstance
             )
           ) {
             markUpdate(workInProgress);
@@ -335,7 +335,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         current: Fiber,
         workInProgress: Fiber,
         oldText: string,
-        newText: string,
+        newText: string
       ) {
         if (oldText !== newText) {
           // If the text content differs, we'll create a new text instance for it.
@@ -345,7 +345,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
             newText,
             rootContainerInstance,
             currentHostContext,
-            workInProgress,
+            workInProgress
           );
           // We'll have to mark it as having an effect, even though we won't use the effect for anything.
           // This lets the parents know that at least one of their children has changed.
@@ -353,7 +353,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         }
       };
     } else {
-      invariant(false, 'Persistent reconciler is disabled.');
+      invariant(false, "Persistent reconciler is disabled.");
     }
   } else {
     if (enableNoopReconciler) {
@@ -368,7 +368,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         type: T,
         oldProps: P,
         newProps: P,
-        rootContainerInstance: C,
+        rootContainerInstance: C
       ) {
         // Noop
       };
@@ -376,19 +376,19 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         current: Fiber,
         workInProgress: Fiber,
         oldText: string,
-        newText: string,
+        newText: string
       ) {
         // Noop
       };
     } else {
-      invariant(false, 'Noop reconciler is disabled.');
+      invariant(false, "Noop reconciler is disabled.");
     }
   }
 
   function completeWork(
     current: Fiber | null,
     workInProgress: Fiber,
-    renderExpirationTime: ExpirationTime,
+    renderExpirationTime: ExpirationTime
   ): Fiber | null {
     const newProps = workInProgress.pendingProps;
     switch (workInProgress.tag) {
@@ -439,7 +439,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
             oldProps,
             newProps,
             rootContainerInstance,
-            currentHostContext,
+            currentHostContext
           );
 
           updateHostComponent(
@@ -449,7 +449,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
             type,
             oldProps,
             newProps,
-            rootContainerInstance,
+            rootContainerInstance
           );
 
           if (current.ref !== workInProgress.ref) {
@@ -459,8 +459,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
           if (!newProps) {
             invariant(
               workInProgress.stateNode !== null,
-              'We must have new props for new mounts. This error is likely ' +
-                'caused by a bug in React. Please file an issue.',
+              "We must have new props for new mounts. This error is likely " +
+                "caused by a bug in React. Please file an issue."
             );
             // This can happen when we abort work.
             return null;
@@ -479,7 +479,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
               prepareToHydrateHostInstance(
                 workInProgress,
                 rootContainerInstance,
-                currentHostContext,
+                currentHostContext
               )
             ) {
               // If changes to the hydrated node needs to be applied at the
@@ -492,7 +492,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
               newProps,
               rootContainerInstance,
               currentHostContext,
-              workInProgress,
+              workInProgress
             );
 
             appendAllChildren(instance, workInProgress);
@@ -505,7 +505,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
                 instance,
                 type,
                 newProps,
-                rootContainerInstance,
+                rootContainerInstance
               )
             ) {
               markUpdate(workInProgress);
@@ -528,11 +528,11 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
           // to schedule a side-effect to do the updates.
           updateHostText(current, workInProgress, oldText, newText);
         } else {
-          if (typeof newText !== 'string') {
+          if (typeof newText !== "string") {
             invariant(
               workInProgress.stateNode !== null,
-              'We must have new props for new mounts. This error is likely ' +
-                'caused by a bug in React. Please file an issue.',
+              "We must have new props for new mounts. This error is likely " +
+                "caused by a bug in React. Please file an issue."
             );
             // This can happen when we abort work.
             return null;
@@ -549,7 +549,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
               newText,
               rootContainerInstance,
               currentHostContext,
-              workInProgress,
+              workInProgress
             );
           }
         }
@@ -559,7 +559,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         return moveCallToHandlerPhase(
           current,
           workInProgress,
-          renderExpirationTime,
+          renderExpirationTime
         );
       case CallHandlerPhase:
         // Reset the tag to now be a first phase call.
@@ -578,21 +578,21 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       case IndeterminateComponent:
         invariant(
           false,
-          'An indeterminate component should have become determinate before ' +
-            'completing. This error is likely caused by a bug in React. Please ' +
-            'file an issue.',
+          "An indeterminate component should have become determinate before " +
+            "completing. This error is likely caused by a bug in React. Please " +
+            "file an issue."
         );
       // eslint-disable-next-line no-fallthrough
       default:
         invariant(
           false,
-          'Unknown unit of work tag. This error is likely caused by a bug in ' +
-            'React. Please file an issue.',
+          "Unknown unit of work tag. This error is likely caused by a bug in " +
+            "React. Please file an issue."
         );
     }
   }
 
   return {
-    completeWork,
+    completeWork
   };
 }

@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
-const chalk = require('chalk');
-const {existsSync} = require('fs');
-const {readJson} = require('fs-extra');
-const {join} = require('path');
+const chalk = require("chalk");
+const { existsSync } = require("fs");
+const { readJson } = require("fs-extra");
+const { join } = require("path");
 
-module.exports = async ({cwd, version}) => {
-  const packagePath = join(cwd, 'build', 'packages', 'react', 'package.json');
+module.exports = async ({ cwd, version }) => {
+  const packagePath = join(cwd, "build", "packages", "react", "package.json");
 
   if (!existsSync(packagePath)) {
-    throw Error('No build found');
+    throw Error("No build found");
   }
 
   const packageJson = await readJson(packagePath);

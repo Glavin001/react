@@ -7,9 +7,9 @@
  * @flow
  */
 
-import type {ViewConfigGetter} from './ReactNativeTypes';
+import type { ViewConfigGetter } from "./ReactNativeTypes";
 
-import {register} from './ReactNativeViewConfigRegistry';
+import { register } from "./ReactNativeViewConfigRegistry";
 
 /**
  * Creates a renderable ReactNative host component.
@@ -21,7 +21,7 @@ import {register} from './ReactNativeViewConfigRegistry';
  */
 const createReactNativeComponentClass = function(
   name: string,
-  callback: ViewConfigGetter,
+  callback: ViewConfigGetter
 ): string {
   return register(name, callback);
 };

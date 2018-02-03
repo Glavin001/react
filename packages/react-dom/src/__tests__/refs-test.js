@@ -7,24 +7,24 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-let React = require('react');
-let ReactTestUtils = require('react-dom/test-utils');
+let React = require("react");
+let ReactTestUtils = require("react-dom/test-utils");
 
 /**
  * Counts clicks and has a renders an item for each click. Each item rendered
  * has a ref of the form "clickLogN".
  */
 class ClickCounter extends React.Component {
-  state = {count: this.props.initialCount};
+  state = { count: this.props.initialCount };
 
   triggerReset = () => {
-    this.setState({count: this.props.initialCount});
+    this.setState({ count: this.props.initialCount });
   };
 
   handleClick = () => {
-    this.setState({count: this.state.count + 1});
+    this.setState({ count: this.state.count + 1 });
   };
 
   render() {
@@ -34,9 +34,9 @@ class ClickCounter extends React.Component {
       children.push(
         <div
           className="clickLogDiv"
-          key={'clickLog' + i}
-          ref={'clickLog' + i}
-        />,
+          key={"clickLog" + i}
+          ref={"clickLog" + i}
+        />
       );
     }
     return (
@@ -86,7 +86,7 @@ class TestRefsComponent extends React.Component {
  */
 const renderTestRefsComponent = function() {
   const testRefsComponent = ReactTestUtils.renderIntoDocument(
-    <TestRefsComponent />,
+    <TestRefsComponent />
   );
   expect(testRefsComponent instanceof TestRefsComponent).toBe(true);
 
@@ -102,28 +102,28 @@ const renderTestRefsComponent = function() {
 const expectClickLogsLengthToBe = function(instance, length) {
   const clickLogs = ReactTestUtils.scryRenderedDOMComponentsWithClass(
     instance,
-    'clickLogDiv',
+    "clickLogDiv"
   );
   expect(clickLogs.length).toBe(length);
   expect(Object.keys(instance.refs.myCounter.refs).length).toBe(length);
 };
 
-describe('reactiverefs', () => {
+describe("reactiverefs", () => {
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
-    ReactTestUtils = require('react-dom/test-utils');
+    React = require("react");
+    ReactTestUtils = require("react-dom/test-utils");
   });
 
   /**
    * Ensure that for every click log there is a corresponding ref (from the
    * perspective of the injected ClickCounter component.
    */
-  it('Should increase refs with an increase in divs', () => {
+  it("Should increase refs with an increase in divs", () => {
     const testRefsComponent = renderTestRefsComponent();
     const clickIncrementer = ReactTestUtils.findRenderedDOMComponentWithClass(
       testRefsComponent,
-      'clickIncrementer',
+      "clickIncrementer"
     );
 
     expectClickLogsLengthToBe(testRefsComponent, 1);
@@ -145,36 +145,36 @@ describe('reactiverefs', () => {
   });
 });
 
-describe('factory components', () => {
-  it('Should correctly get the ref', () => {
+describe("factory components", () => {
+  it("Should correctly get the ref", () => {
     function Comp() {
       return {
         render() {
           return <div ref="elemRef" />;
-        },
+        }
       };
     }
 
     const inst = ReactTestUtils.renderIntoDocument(<Comp />);
-    expect(inst.refs.elemRef.tagName).toBe('DIV');
+    expect(inst.refs.elemRef.tagName).toBe("DIV");
   });
 });
 
 /**
  * Tests that when a ref hops around children, we can track that correctly.
  */
-describe('ref swapping', () => {
+describe("ref swapping", () => {
   let RefHopsAround;
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
-    ReactTestUtils = require('react-dom/test-utils');
+    React = require("react");
+    ReactTestUtils = require("react-dom/test-utils");
 
     RefHopsAround = class extends React.Component {
-      state = {count: 0};
+      state = { count: 0 };
 
       moveRef = () => {
-        this.setState({count: this.state.count + 1});
+        this.setState({ count: this.state.count + 1 });
       };
 
       render() {
@@ -189,15 +189,15 @@ describe('ref swapping', () => {
           <div>
             <div
               className="first"
-              ref={count % 3 === 0 ? 'hopRef' : 'divOneRef'}
+              ref={count % 3 === 0 ? "hopRef" : "divOneRef"}
             />
             <div
               className="second"
-              ref={count % 3 === 1 ? 'hopRef' : 'divTwoRef'}
+              ref={count % 3 === 1 ? "hopRef" : "divTwoRef"}
             />
             <div
               className="third"
-              ref={count % 3 === 2 ? 'hopRef' : 'divThreeRef'}
+              ref={count % 3 === 2 ? "hopRef" : "divThreeRef"}
             />
           </div>
         );
@@ -205,20 +205,20 @@ describe('ref swapping', () => {
     };
   });
 
-  it('Allow refs to hop around children correctly', () => {
+  it("Allow refs to hop around children correctly", () => {
     const refHopsAround = ReactTestUtils.renderIntoDocument(<RefHopsAround />);
 
     const firstDiv = ReactTestUtils.findRenderedDOMComponentWithClass(
       refHopsAround,
-      'first',
+      "first"
     );
     const secondDiv = ReactTestUtils.findRenderedDOMComponentWithClass(
       refHopsAround,
-      'second',
+      "second"
     );
     const thirdDiv = ReactTestUtils.findRenderedDOMComponentWithClass(
       refHopsAround,
-      'third',
+      "third"
     );
 
     expect(refHopsAround.refs.hopRef).toEqual(firstDiv);
@@ -245,7 +245,7 @@ describe('ref swapping', () => {
     expect(refHopsAround.refs.divThreeRef).toEqual(thirdDiv);
   });
 
-  it('always has a value for this.refs', () => {
+  it("always has a value for this.refs", () => {
     class Component extends React.Component {
       render() {
         return <div />;
@@ -256,7 +256,7 @@ describe('ref swapping', () => {
     expect(!!instance.refs).toBe(true);
   });
 
-  it('ref called correctly for stateless component', () => {
+  it("ref called correctly for stateless component", () => {
     let refCalled = 0;
     function Inner(props) {
       return <a ref={props.saveA} />;
@@ -280,25 +280,25 @@ describe('ref swapping', () => {
     expect(refCalled).toBe(1);
   });
 
-  it('coerces numbers to strings', () => {
+  it("coerces numbers to strings", () => {
     class A extends React.Component {
       render() {
         return <div ref={1} />;
       }
     }
     const a = ReactTestUtils.renderIntoDocument(<A />);
-    expect(a.refs[1].nodeName).toBe('DIV');
+    expect(a.refs[1].nodeName).toBe("DIV");
   });
 });
 
-describe('root level refs', () => {
-  it('attaches and detaches root refs', () => {
-    const ReactDOM = require('react-dom');
+describe("root level refs", () => {
+  it("attaches and detaches root refs", () => {
+    const ReactDOM = require("react-dom");
     let inst = null;
 
     // host node
     let ref = jest.fn(value => (inst = value));
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     let result = ReactDOM.render(<div ref={ref} />, container);
     expect(ref).toHaveBeenCalledTimes(1);
     expect(ref.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
@@ -344,9 +344,9 @@ describe('root level refs', () => {
         5,
         <div ref={ref2} key="b">
           Hello
-        </div>,
+        </div>
       ],
-      container,
+      container
     );
 
     // first call should be `Comp`
@@ -374,7 +374,7 @@ describe('root level refs', () => {
   });
 });
 
-describe('creating element with ref in constructor', () => {
+describe("creating element with ref in constructor", () => {
   class RefTest extends React.Component {
     constructor(props) {
       super(props);
@@ -386,15 +386,15 @@ describe('creating element with ref in constructor', () => {
     }
   }
 
-  it('throws an error', () => {
-    ReactTestUtils = require('react-dom/test-utils');
+  it("throws an error", () => {
+    ReactTestUtils = require("react-dom/test-utils");
 
     expect(function() {
       ReactTestUtils.renderIntoDocument(<RefTest />);
     }).toThrowError(
-      'Element ref was specified as a string (p) but no owner was ' +
-        'set. You may have multiple copies of React loaded. ' +
-        '(details: https://fb.me/react-refs-must-have-owner).',
+      "Element ref was specified as a string (p) but no owner was " +
+        "set. You may have multiple copies of React loaded. " +
+        "(details: https://fb.me/react-refs-must-have-owner)."
     );
   });
 });

@@ -1,31 +1,31 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
-const {exec} = require('child_process');
+const { exec } = require("child_process");
 
 // Follows the steps outlined in github.com/facebook/react/issues/10620
 const run = async () => {
-  const chalk = require('chalk');
-  const logUpdate = require('log-update');
-  const {getPublicPackages} = require('./utils');
+  const chalk = require("chalk");
+  const logUpdate = require("log-update");
+  const { getPublicPackages } = require("./utils");
 
-  const addGitTag = require('./build-commands/add-git-tag');
-  const buildArtifacts = require('./build-commands/build-artifacts');
-  const checkCircleCiStatus = require('./build-commands/check-circle-ci-status');
-  const checkEnvironmentVariables = require('./build-commands/check-environment-variables');
-  const checkNpmPermissions = require('./build-commands/check-npm-permissions');
-  const checkPackageDependencies = require('./build-commands/check-package-dependencies');
-  const checkUncommittedChanges = require('./build-commands/check-uncommitted-changes');
-  const installYarnDependencies = require('./build-commands/install-yarn-dependencies');
-  const parseBuildParameters = require('./build-commands/parse-build-parameters');
-  const printPostBuildSummary = require('./build-commands/print-post-build-summary');
-  const runAutomatedTests = require('./build-commands/run-automated-tests');
-  const runAutomatedBundleTests = require('./build-commands/run-automated-bundle-tests');
-  const updateGit = require('./build-commands/update-git');
-  const updatePackageVersions = require('./build-commands/update-package-versions');
-  const updateYarnDependencies = require('./build-commands/update-yarn-dependencies');
-  const validateVersion = require('./build-commands/validate-version');
+  const addGitTag = require("./build-commands/add-git-tag");
+  const buildArtifacts = require("./build-commands/build-artifacts");
+  const checkCircleCiStatus = require("./build-commands/check-circle-ci-status");
+  const checkEnvironmentVariables = require("./build-commands/check-environment-variables");
+  const checkNpmPermissions = require("./build-commands/check-npm-permissions");
+  const checkPackageDependencies = require("./build-commands/check-package-dependencies");
+  const checkUncommittedChanges = require("./build-commands/check-uncommitted-changes");
+  const installYarnDependencies = require("./build-commands/install-yarn-dependencies");
+  const parseBuildParameters = require("./build-commands/parse-build-parameters");
+  const printPostBuildSummary = require("./build-commands/print-post-build-summary");
+  const runAutomatedTests = require("./build-commands/run-automated-tests");
+  const runAutomatedBundleTests = require("./build-commands/run-automated-bundle-tests");
+  const updateGit = require("./build-commands/update-git");
+  const updatePackageVersions = require("./build-commands/update-package-versions");
+  const updateYarnDependencies = require("./build-commands/update-yarn-dependencies");
+  const validateVersion = require("./build-commands/validate-version");
 
   try {
     const params = parseBuildParameters();
@@ -49,11 +49,11 @@ const run = async () => {
   } catch (error) {
     logUpdate.clear();
 
-    const message = error.message.trim().replace(/\n +/g, '\n');
-    const stack = error.stack.replace(error.message, '');
+    const message = error.message.trim().replace(/\n +/g, "\n");
+    const stack = error.stack.replace(error.message, "");
 
     console.log(
-      `${chalk.bgRed.white(' ERROR ')} ${chalk.red(message)}\n\n${chalk.gray(
+      `${chalk.bgRed.white(" ERROR ")} ${chalk.red(message)}\n\n${chalk.gray(
         stack
       )}`
     );
@@ -64,7 +64,7 @@ const run = async () => {
 
 // Install (or update) release script dependencies before proceeding.
 // This needs to be done before we require() the first NPM module.
-exec('yarn install', {cwd: __dirname}, (error, stdout, stderr) => {
+exec("yarn install", { cwd: __dirname }, (error, stdout, stderr) => {
   if (error) {
     console.error(error);
     process.exit(1);

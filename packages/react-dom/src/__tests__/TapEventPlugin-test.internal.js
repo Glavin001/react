@@ -7,7 +7,7 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let EventPluginHub;
 let React;
@@ -21,7 +21,7 @@ const recordID = function(id) {
   idCallOrder.push(id);
 };
 const LISTENER = jest.fn();
-const ON_TOUCH_TAP_KEY = 'onTouchTap';
+const ON_TOUCH_TAP_KEY = "onTouchTap";
 
 let GRANDPARENT;
 let PARENT;
@@ -29,18 +29,18 @@ let CHILD;
 
 let putListener;
 
-describe('TapEventPlugin', () => {
+describe("TapEventPlugin", () => {
   beforeEach(() => {
     jest.resetModules();
     LISTENER.mockClear();
 
-    EventPluginHub = require('events/EventPluginHub');
-    React = require('react');
-    ReactDOM = require('react-dom');
-    ReactTestUtils = require('react-dom/test-utils');
-    TapEventPlugin = require('react-dom/src/events/TapEventPlugin').default;
+    EventPluginHub = require("events/EventPluginHub");
+    React = require("react");
+    ReactDOM = require("react-dom");
+    ReactTestUtils = require("react-dom/test-utils");
+    TapEventPlugin = require("react-dom/src/events/TapEventPlugin").default;
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
 
     const GRANDPARENT_PROPS = {};
     const PARENT_PROPS = {};
@@ -63,7 +63,7 @@ describe('TapEventPlugin', () => {
             <ChildWrapper {...CHILD_PROPS} />
           </div>
         </div>,
-        container,
+        container
       );
     }
 
@@ -86,9 +86,9 @@ describe('TapEventPlugin', () => {
 
     idCallOrder = [];
     tapMoveThreshold = TapEventPlugin.tapMoveThreshold;
-    spyOnDev(console, 'warn');
+    spyOnDev(console, "warn");
     EventPluginHub.injection.injectEventPluginsByName({
-      TapEventPlugin: TapEventPlugin,
+      TapEventPlugin: TapEventPlugin
     });
   });
 
@@ -96,7 +96,7 @@ describe('TapEventPlugin', () => {
     if (__DEV__) {
       expect(console.warn.calls.count()).toBe(1);
       expect(console.warn.calls.argsFor(0)[0]).toContain(
-        'Injecting custom event plugins (TapEventPlugin) is deprecated',
+        "Injecting custom event plugins (TapEventPlugin) is deprecated"
       );
     }
   });
@@ -107,62 +107,62 @@ describe('TapEventPlugin', () => {
    * See https://github.com/facebook/react/issues/11689
    */
 
-  it('should infer onTouchTap from a touchStart/End', () => {
+  it("should infer onTouchTap from a touchStart/End", () => {
     putListener(CHILD, ON_TOUCH_TAP_KEY, recordID.bind(null, CHILD));
     ReactTestUtils.SimulateNative.touchStart(
       CHILD,
-      ReactTestUtils.nativeTouchData(0, 0),
+      ReactTestUtils.nativeTouchData(0, 0)
     );
     ReactTestUtils.SimulateNative.touchEnd(
       CHILD,
-      ReactTestUtils.nativeTouchData(0, 0),
+      ReactTestUtils.nativeTouchData(0, 0)
     );
     expect(idCallOrder.length).toBe(1);
     expect(idCallOrder[0]).toBe(CHILD);
   });
 
-  it('should infer onTouchTap from when dragging below threshold', () => {
+  it("should infer onTouchTap from when dragging below threshold", () => {
     putListener(CHILD, ON_TOUCH_TAP_KEY, recordID.bind(null, CHILD));
     ReactTestUtils.SimulateNative.touchStart(
       CHILD,
-      ReactTestUtils.nativeTouchData(0, 0),
+      ReactTestUtils.nativeTouchData(0, 0)
     );
     ReactTestUtils.SimulateNative.touchEnd(
       CHILD,
-      ReactTestUtils.nativeTouchData(0, tapMoveThreshold - 1),
+      ReactTestUtils.nativeTouchData(0, tapMoveThreshold - 1)
     );
     expect(idCallOrder.length).toBe(1);
     expect(idCallOrder[0]).toBe(CHILD);
   });
 
-  it('should not onTouchTap from when dragging beyond threshold', () => {
+  it("should not onTouchTap from when dragging beyond threshold", () => {
     putListener(CHILD, ON_TOUCH_TAP_KEY, recordID.bind(null, CHILD));
     ReactTestUtils.SimulateNative.touchStart(
       CHILD,
-      ReactTestUtils.nativeTouchData(0, 0),
+      ReactTestUtils.nativeTouchData(0, 0)
     );
     ReactTestUtils.SimulateNative.touchEnd(
       CHILD,
-      ReactTestUtils.nativeTouchData(0, tapMoveThreshold + 1),
+      ReactTestUtils.nativeTouchData(0, tapMoveThreshold + 1)
     );
     expect(idCallOrder.length).toBe(0);
   });
 
-  it('should bubble onTouchTap', () => {
+  it("should bubble onTouchTap", () => {
     putListener(CHILD, ON_TOUCH_TAP_KEY, recordID.bind(null, CHILD));
     putListener(PARENT, ON_TOUCH_TAP_KEY, recordID.bind(null, PARENT));
     putListener(
       GRANDPARENT,
       ON_TOUCH_TAP_KEY,
-      recordID.bind(null, GRANDPARENT),
+      recordID.bind(null, GRANDPARENT)
     );
     ReactTestUtils.SimulateNative.touchStart(
       CHILD,
-      ReactTestUtils.nativeTouchData(0, 0),
+      ReactTestUtils.nativeTouchData(0, 0)
     );
     ReactTestUtils.SimulateNative.touchEnd(
       CHILD,
-      ReactTestUtils.nativeTouchData(0, 0),
+      ReactTestUtils.nativeTouchData(0, 0)
     );
     expect(idCallOrder.length).toBe(3);
     expect(idCallOrder[0] === CHILD).toBe(true);

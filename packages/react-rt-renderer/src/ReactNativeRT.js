@@ -7,8 +7,8 @@
  * @flow
  */
 
-import type {ReactNativeRTType} from './ReactNativeRTTypes';
-import type {ReactNodeList} from 'shared/ReactTypes';
+import type { ReactNativeRTType } from "./ReactNativeRTTypes";
+import type { ReactNodeList } from "shared/ReactTypes";
 
 /**
  * Make sure essential globals are available and are patched correctly. Please don't remove this
@@ -16,19 +16,19 @@ import type {ReactNodeList} from 'shared/ReactTypes';
  * ensures it exists in the dependency graph and can be `require`d.
  * TODO: require this in packager, not in React #10932517
  */
-import 'InitializeCore';
-import './ReactNativeRTEventEmitter';
+import "InitializeCore";
+import "./ReactNativeRTEventEmitter";
 
-import * as ReactPortal from 'shared/ReactPortal';
-import * as ReactGenericBatching from 'events/ReactGenericBatching';
-import ReactVersion from 'shared/ReactVersion';
+import * as ReactPortal from "shared/ReactPortal";
+import * as ReactGenericBatching from "events/ReactGenericBatching";
+import ReactVersion from "shared/ReactVersion";
 
-import {getFiberFromTag} from './ReactNativeRTComponentTree';
-import ReactNativeRTFiberRenderer from './ReactNativeRTFiberRenderer';
-import ReactNativeRTFiberInspector from './ReactNativeRTFiberInspector';
+import { getFiberFromTag } from "./ReactNativeRTComponentTree";
+import ReactNativeRTFiberRenderer from "./ReactNativeRTFiberRenderer";
+import ReactNativeRTFiberInspector from "./ReactNativeRTFiberInspector";
 
 ReactGenericBatching.injection.injectFiberBatchedUpdates(
-  ReactNativeRTFiberRenderer.batchedUpdates,
+  ReactNativeRTFiberRenderer.batchedUpdates
 );
 
 const roots = new Map();
@@ -43,7 +43,7 @@ const ReactNativeRTFiber: ReactNativeRTType = {
       root = ReactNativeRTFiberRenderer.createContainer(
         containerTag,
         false,
-        false,
+        false
       );
       roots.set(containerTag, root);
     }
@@ -65,14 +65,14 @@ const ReactNativeRTFiber: ReactNativeRTType = {
   createPortal(
     children: ReactNodeList,
     containerTag: number,
-    key: ?string = null,
+    key: ?string = null
   ) {
     return ReactPortal.createPortal(children, containerTag, null, key);
   },
 
   unstable_batchedUpdates: ReactGenericBatching.batchedUpdates,
 
-  flushSync: ReactNativeRTFiberRenderer.flushSync,
+  flushSync: ReactNativeRTFiberRenderer.flushSync
 };
 
 ReactNativeRTFiberRenderer.injectIntoDevTools({
@@ -81,7 +81,7 @@ ReactNativeRTFiberRenderer.injectIntoDevTools({
     ReactNativeRTFiberInspector.getInspectorDataForViewTag,
   bundleType: __DEV__ ? 1 : 0,
   version: ReactVersion,
-  rendererPackageName: 'react-rt-renderer',
+  rendererPackageName: "react-rt-renderer"
 });
 
 export default ReactNativeRTFiber;

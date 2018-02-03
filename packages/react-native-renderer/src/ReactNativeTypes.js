@@ -14,40 +14,40 @@ export type MeasureOnSuccessCallback = (
   width: number,
   height: number,
   pageX: number,
-  pageY: number,
+  pageY: number
 ) => void;
 
 export type MeasureInWindowOnSuccessCallback = (
   x: number,
   y: number,
   width: number,
-  height: number,
+  height: number
 ) => void;
 
 export type MeasureLayoutOnSuccessCallback = (
   left: number,
   top: number,
   width: number,
-  height: number,
+  height: number
 ) => void;
 
 type BubblingEventType = {
   phasedRegistrationNames: {
     captured: string,
-    bubbled: string,
-  },
+    bubbled: string
+  }
 };
 
 type DirectEventType = {
-  registrationName: string,
+  registrationName: string
 };
 
 export type ReactNativeBaseComponentViewConfig = {
   validAttributes: Object,
   uiViewClassName: string,
-  bubblingEventTypes?: {[topLevelType: string]: BubblingEventType},
-  directEventTypes?: {[topLevelType: string]: DirectEventType},
-  propTypes?: Object,
+  bubblingEventTypes?: { [topLevelType: string]: BubblingEventType },
+  directEventTypes?: { [topLevelType: string]: DirectEventType },
+  propTypes?: Object
 };
 
 export type ViewConfigGetter = () => ReactNativeBaseComponentViewConfig;
@@ -64,24 +64,24 @@ export type NativeMethodsMixinType = {
   measureLayout(
     relativeToNativeNode: number,
     onSuccess: MeasureLayoutOnSuccessCallback,
-    onFail: () => void,
+    onFail: () => void
   ): void,
-  setNativeProps(nativeProps: Object): void,
+  setNativeProps(nativeProps: Object): void
 };
 
 type ReactNativeBridgeEventPlugin = {
-  processEventTypes(viewConfig: ReactNativeBaseComponentViewConfig): void,
+  processEventTypes(viewConfig: ReactNativeBaseComponentViewConfig): void
 };
 
 type SecretInternalsType = {
   NativeMethodsMixin: NativeMethodsMixinType,
   createReactNativeComponentClass(
     name: string,
-    callback: ViewConfigGetter,
+    callback: ViewConfigGetter
   ): any,
   ReactNativeBridgeEventPlugin: ReactNativeBridgeEventPlugin,
   ReactNativeComponentTree: any,
-  ReactNativePropRegistry: any,
+  ReactNativePropRegistry: any
   // TODO (bvaughn) Decide which additional types to expose here?
   // And how much information to fill in for the above types.
 };
@@ -96,11 +96,11 @@ export type ReactNativeType = {
   render(
     element: React$Element<any>,
     containerTag: any,
-    callback: ?Function,
+    callback: ?Function
   ): any,
   unmountComponentAtNode(containerTag: number): any,
   unmountComponentAtNodeAndRemoveContainer(containerTag: number): any,
   unstable_batchedUpdates: any, // TODO (bvaughn) Add types
 
-  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: SecretInternalsType,
+  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: SecretInternalsType
 };

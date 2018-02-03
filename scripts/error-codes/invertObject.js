@@ -6,7 +6,7 @@
  *
  * @flow
  */
-'use strict';
+"use strict";
 
 /*:: import type { ErrorMap } from './Types' */
 

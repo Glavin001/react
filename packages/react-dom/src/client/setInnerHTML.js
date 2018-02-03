@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {Namespaces} from '../shared/DOMNamespaces';
-import createMicrosoftUnsafeLocalFunction from '../shared/createMicrosoftUnsafeLocalFunction';
+import { Namespaces } from "../shared/DOMNamespaces";
+import createMicrosoftUnsafeLocalFunction from "../shared/createMicrosoftUnsafeLocalFunction";
 
 // SVG temp container for IE lacking innerHTML
 let reusableSVGContainer;
@@ -23,10 +23,10 @@ const setInnerHTML = createMicrosoftUnsafeLocalFunction(function(node, html) {
   // new markup in a temp node and then move the child nodes across into
   // the target node
 
-  if (node.namespaceURI === Namespaces.svg && !('innerHTML' in node)) {
+  if (node.namespaceURI === Namespaces.svg && !("innerHTML" in node)) {
     reusableSVGContainer =
-      reusableSVGContainer || document.createElement('div');
-    reusableSVGContainer.innerHTML = '<svg>' + html + '</svg>';
+      reusableSVGContainer || document.createElement("div");
+    reusableSVGContainer.innerHTML = "<svg>" + html + "</svg>";
     const svgNode = reusableSVGContainer.firstChild;
     while (node.firstChild) {
       node.removeChild(node.firstChild);

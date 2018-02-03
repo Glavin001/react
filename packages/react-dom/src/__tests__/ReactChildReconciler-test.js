@@ -10,43 +10,43 @@
 // NOTE: We're explicitly not using JSX here. This is intended to test
 // the current stack addendum without having source location added by babel.
 
-'use strict';
+"use strict";
 
 let React;
 let ReactTestUtils;
 
-describe('ReactChildReconciler', () => {
+describe("ReactChildReconciler", () => {
   function normalizeCodeLocInfo(str) {
-    return str && str.replace(/\(at .+?:\d+\)/g, '(at **)');
+    return str && str.replace(/\(at .+?:\d+\)/g, "(at **)");
   }
 
   beforeEach(() => {
     jest.resetModules();
 
-    React = require('react');
-    ReactTestUtils = require('react-dom/test-utils');
+    React = require("react");
+    ReactTestUtils = require("react-dom/test-utils");
   });
 
   function createIterable(array) {
     return {
-      '@@iterator': function() {
+      "@@iterator": function() {
         let i = 0;
         return {
           next() {
             const next = {
               value: i < array.length ? array[i] : undefined,
-              done: i === array.length,
+              done: i === array.length
             };
             i++;
             return next;
-          },
+          }
         };
-      },
+      }
     };
   }
 
-  it('warns for duplicated array keys', () => {
-    spyOnDev(console, 'error');
+  it("warns for duplicated array keys", () => {
+    spyOnDev(console, "error");
 
     class Component extends React.Component {
       render() {
@@ -59,16 +59,16 @@ describe('ReactChildReconciler', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Keys should be unique so that components maintain their identity ' +
-          'across updates. Non-unique keys may cause children to be ' +
-          'duplicated and/or omitted — the behavior is unsupported and ' +
-          'could change in a future version.',
+        "Keys should be unique so that components maintain their identity " +
+          "across updates. Non-unique keys may cause children to be " +
+          "duplicated and/or omitted — the behavior is unsupported and " +
+          "could change in a future version."
       );
     }
   });
 
-  it('warns for duplicated array keys with component stack info', () => {
-    spyOnDev(console, 'error');
+  it("warns for duplicated array keys with component stack info", () => {
+    spyOnDev(console, "error");
 
     class Component extends React.Component {
       render() {
@@ -93,21 +93,21 @@ describe('ReactChildReconciler', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(normalizeCodeLocInfo(console.error.calls.argsFor(0)[0])).toContain(
-        'Encountered two children with the same key, `1`. ' +
-          'Keys should be unique so that components maintain their identity ' +
-          'across updates. Non-unique keys may cause children to be ' +
-          'duplicated and/or omitted — the behavior is unsupported and ' +
-          'could change in a future version.',
-        '    in div (at **)\n' +
-          '    in Component (at **)\n' +
-          '    in Parent (at **)\n' +
-          '    in GrandParent (at **)',
+        "Encountered two children with the same key, `1`. " +
+          "Keys should be unique so that components maintain their identity " +
+          "across updates. Non-unique keys may cause children to be " +
+          "duplicated and/or omitted — the behavior is unsupported and " +
+          "could change in a future version.",
+        "    in div (at **)\n" +
+          "    in Component (at **)\n" +
+          "    in Parent (at **)\n" +
+          "    in GrandParent (at **)"
       );
     }
   });
 
-  it('warns for duplicated iterable keys', () => {
-    spyOnDev(console, 'error');
+  it("warns for duplicated iterable keys", () => {
+    spyOnDev(console, "error");
 
     class Component extends React.Component {
       render() {
@@ -120,16 +120,16 @@ describe('ReactChildReconciler', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Keys should be unique so that components maintain their identity ' +
-          'across updates. Non-unique keys may cause children to be ' +
-          'duplicated and/or omitted — the behavior is unsupported and ' +
-          'could change in a future version.',
+        "Keys should be unique so that components maintain their identity " +
+          "across updates. Non-unique keys may cause children to be " +
+          "duplicated and/or omitted — the behavior is unsupported and " +
+          "could change in a future version."
       );
     }
   });
 
-  it('warns for duplicated iterable keys with component stack info', () => {
-    spyOnDev(console, 'error');
+  it("warns for duplicated iterable keys with component stack info", () => {
+    spyOnDev(console, "error");
 
     class Component extends React.Component {
       render() {
@@ -154,15 +154,15 @@ describe('ReactChildReconciler', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(normalizeCodeLocInfo(console.error.calls.argsFor(0)[0])).toContain(
-        'Encountered two children with the same key, `1`. ' +
-          'Keys should be unique so that components maintain their identity ' +
-          'across updates. Non-unique keys may cause children to be ' +
-          'duplicated and/or omitted — the behavior is unsupported and ' +
-          'could change in a future version.',
-        '    in div (at **)\n' +
-          '    in Component (at **)\n' +
-          '    in Parent (at **)\n' +
-          '    in GrandParent (at **)',
+        "Encountered two children with the same key, `1`. " +
+          "Keys should be unique so that components maintain their identity " +
+          "across updates. Non-unique keys may cause children to be " +
+          "duplicated and/or omitted — the behavior is unsupported and " +
+          "could change in a future version.",
+        "    in div (at **)\n" +
+          "    in Component (at **)\n" +
+          "    in Parent (at **)\n" +
+          "    in GrandParent (at **)"
       );
     }
   });

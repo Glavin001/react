@@ -7,6 +7,6 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-export * from './src/ReactFiberTreeReflection';
+export * from "./src/ReactFiberTreeReflection";

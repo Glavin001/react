@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
-const chalk = require('chalk');
-const {execUnlessDry, logPromise} = require('../utils');
+const chalk = require("chalk");
+const { execUnlessDry, logPromise } = require("../utils");
 
-const run = async ({cwd, dry, version}) => {
+const run = async ({ cwd, dry, version }) => {
   await execUnlessDry(
     `git tag -a v${version} -m "Tagging ${version} release"`,
     {
       cwd,
-      dry,
+      dry
     }
   );
 };
 
-module.exports = async ({cwd, dry, version}) => {
+module.exports = async ({ cwd, dry, version }) => {
   return logPromise(
-    run({cwd, dry, version}),
+    run({ cwd, dry, version }),
     `Creating git tag ${chalk.yellow.bold(`v${version}`)}`
   );
 };

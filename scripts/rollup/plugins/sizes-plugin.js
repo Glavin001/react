@@ -4,9 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
+"use strict";
 
-const gzip = require('gzip-size');
+const gzip = require("gzip-size");
 
 module.exports = function sizes(options) {
   return {
@@ -15,6 +15,6 @@ module.exports = function sizes(options) {
       const gzipSize = gzip.sync(obj.code);
 
       options.getSize(size, gzipSize);
-    },
+    }
   };
 };

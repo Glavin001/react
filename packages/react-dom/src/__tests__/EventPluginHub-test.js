@@ -7,39 +7,39 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-jest.mock('../events/isEventSupported');
+jest.mock("../events/isEventSupported");
 
-describe('EventPluginHub', () => {
+describe("EventPluginHub", () => {
   let React;
   let ReactTestUtils;
 
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
-    ReactTestUtils = require('react-dom/test-utils');
+    React = require("react");
+    ReactTestUtils = require("react-dom/test-utils");
   });
 
-  it('should prevent non-function listeners, at dispatch', () => {
-    spyOnDev(console, 'error');
+  it("should prevent non-function listeners, at dispatch", () => {
+    spyOnDev(console, "error");
     const node = ReactTestUtils.renderIntoDocument(
-      <div onClick="not a function" />,
+      <div onClick="not a function" />
     );
     expect(function() {
       ReactTestUtils.SimulateNative.click(node);
     }).toThrowError(
-      'Expected `onClick` listener to be a function, instead got a value of `string` type.',
+      "Expected `onClick` listener to be a function, instead got a value of `string` type."
     );
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Expected `onClick` listener to be a function, instead got a value of `string` type.',
+        "Expected `onClick` listener to be a function, instead got a value of `string` type."
       );
     }
   });
 
-  it('should not prevent null listeners, at dispatch', () => {
+  it("should not prevent null listeners, at dispatch", () => {
     const node = ReactTestUtils.renderIntoDocument(<div onClick={null} />);
     expect(function() {
       ReactTestUtils.SimulateNative.click(node);

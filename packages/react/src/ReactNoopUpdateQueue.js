@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import warning from 'fbjs/lib/warning';
+import warning from "fbjs/lib/warning";
 
 const didWarnStateUpdateForUnmountedComponent = {};
 
@@ -14,19 +14,19 @@ function warnNoop(publicInstance, callerName) {
     const constructor = publicInstance.constructor;
     const componentName =
       (constructor && (constructor.displayName || constructor.name)) ||
-      'ReactClass';
+      "ReactClass";
     const warningKey = `${componentName}.${callerName}`;
     if (didWarnStateUpdateForUnmountedComponent[warningKey]) {
       return;
     }
     warning(
       false,
-      '%s(...): Can only update a mounted or mounting component. ' +
-        'This usually means you called %s() on an unmounted component. ' +
-        'This is a no-op.\n\nPlease check the code for the %s component.',
+      "%s(...): Can only update a mounted or mounting component. " +
+        "This usually means you called %s() on an unmounted component. " +
+        "This is a no-op.\n\nPlease check the code for the %s component.",
       callerName,
       callerName,
-      componentName,
+      componentName
     );
     didWarnStateUpdateForUnmountedComponent[warningKey] = true;
   }
@@ -63,7 +63,7 @@ const ReactNoopUpdateQueue = {
    * @internal
    */
   enqueueForceUpdate: function(publicInstance, callback, callerName) {
-    warnNoop(publicInstance, 'forceUpdate');
+    warnNoop(publicInstance, "forceUpdate");
   },
 
   /**
@@ -83,9 +83,9 @@ const ReactNoopUpdateQueue = {
     publicInstance,
     completeState,
     callback,
-    callerName,
+    callerName
   ) {
-    warnNoop(publicInstance, 'replaceState');
+    warnNoop(publicInstance, "replaceState");
   },
 
   /**
@@ -104,10 +104,10 @@ const ReactNoopUpdateQueue = {
     publicInstance,
     partialState,
     callback,
-    callerName,
+    callerName
   ) {
-    warnNoop(publicInstance, 'setState');
-  },
+    warnNoop(publicInstance, "setState");
+  }
 };
 
 export default ReactNoopUpdateQueue;

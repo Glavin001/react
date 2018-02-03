@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
 const expect = global.expect;
 
@@ -25,9 +25,9 @@ const spyOn = global.spyOn;
 // Spying on both dev and prod will require using both spyOnDev() and spyOnProd().
 global.spyOn = function() {
   throw new Error(
-    'Do not use spyOn(). ' +
-      'It can accidentally hide unexpected errors in production builds. ' +
-      'Use spyOnDev(), spyOnProd(), or spyOnDevAndProd() instead.'
+    "Do not use spyOn(). " +
+      "It can accidentally hide unexpected errors in production builds. " +
+      "Use spyOnDev(), spyOnProd(), or spyOnDevAndProd() instead."
   );
 };
 
@@ -54,5 +54,5 @@ jasmine.currentEnv_.addReporter({
         `status: ${spec.status}, ` +
         `numExpectations: ${numExpectations}`
     );
-  },
+  }
 });

@@ -7,28 +7,28 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactNative;
 let createReactNativeComponentClass;
 let UIManager;
 
-describe('ReactNative', () => {
+describe("ReactNative", () => {
   beforeEach(() => {
     jest.resetModules();
 
-    React = require('react');
-    ReactNative = require('react-native-renderer');
-    UIManager = require('UIManager');
-    createReactNativeComponentClass = require('../createReactNativeComponentClass')
+    React = require("react");
+    ReactNative = require("react-native-renderer");
+    UIManager = require("UIManager");
+    createReactNativeComponentClass = require("../createReactNativeComponentClass")
       .default;
   });
 
-  it('should be able to create and render a native component', () => {
-    const View = createReactNativeComponentClass('View', () => ({
-      validAttributes: {foo: true},
-      uiViewClassName: 'View',
+  it("should be able to create and render a native component", () => {
+    const View = createReactNativeComponentClass("View", () => ({
+      validAttributes: { foo: true },
+      uiViewClassName: "View"
     }));
 
     ReactNative.render(<View foo="test" />, 1);
@@ -38,10 +38,10 @@ describe('ReactNative', () => {
     expect(UIManager.updateView).not.toBeCalled();
   });
 
-  it('should be able to create and update a native component', () => {
-    const View = createReactNativeComponentClass('View', () => ({
-      validAttributes: {foo: true},
-      uiViewClassName: 'View',
+  it("should be able to create and update a native component", () => {
+    const View = createReactNativeComponentClass("View", () => ({
+      validAttributes: { foo: true },
+      uiViewClassName: "View"
     }));
 
     ReactNative.render(<View foo="foo" />, 11);
@@ -56,13 +56,13 @@ describe('ReactNative', () => {
     expect(UIManager.createView.mock.calls.length).toBe(1);
     expect(UIManager.setChildren.mock.calls.length).toBe(1);
     expect(UIManager.manageChildren).not.toBeCalled();
-    expect(UIManager.updateView).toBeCalledWith(2, 'View', {foo: 'bar'});
+    expect(UIManager.updateView).toBeCalledWith(2, "View", { foo: "bar" });
   });
 
-  it('should not call UIManager.updateView after render for properties that have not changed', () => {
-    const Text = createReactNativeComponentClass('Text', () => ({
-      validAttributes: {foo: true},
-      uiViewClassName: 'Text',
+  it("should not call UIManager.updateView after render for properties that have not changed", () => {
+    const Text = createReactNativeComponentClass("Text", () => ({
+      validAttributes: { foo: true },
+      uiViewClassName: "Text"
     }));
 
     ReactNative.render(<Text foo="a">1</Text>, 11);
@@ -85,10 +85,10 @@ describe('ReactNative', () => {
     expect(UIManager.updateView.mock.calls.length).toBe(4);
   });
 
-  it('should not call UIManager.updateView from setNativeProps for properties that have not changed', () => {
-    const View = createReactNativeComponentClass('View', () => ({
-      validAttributes: {foo: true},
-      uiViewClassName: 'View',
+  it("should not call UIManager.updateView from setNativeProps for properties that have not changed", () => {
+    const View = createReactNativeComponentClass("View", () => ({
+      validAttributes: { foo: true },
+      uiViewClassName: "View"
     }));
 
     class Subclass extends ReactNative.NativeComponent {
@@ -108,22 +108,22 @@ describe('ReactNative', () => {
             viewRef = ref;
           }}
         />,
-        11,
+        11
       );
       expect(UIManager.updateView).not.toBeCalled();
 
       viewRef.setNativeProps({});
       expect(UIManager.updateView).not.toBeCalled();
 
-      viewRef.setNativeProps({foo: 'baz'});
+      viewRef.setNativeProps({ foo: "baz" });
       expect(UIManager.updateView.mock.calls.length).toBe(1);
     });
   });
 
-  it('returns the correct instance and calls it in the callback', () => {
-    const View = createReactNativeComponentClass('View', () => ({
-      validAttributes: {foo: true},
-      uiViewClassName: 'View',
+  it("returns the correct instance and calls it in the callback", () => {
+    const View = createReactNativeComponentClass("View", () => ({
+      validAttributes: { foo: true },
+      uiViewClassName: "View"
     }));
 
     let a;
@@ -133,7 +133,7 @@ describe('ReactNative', () => {
       11,
       function() {
         b = this;
-      },
+      }
     );
 
     expect(a).toBeTruthy();
@@ -141,15 +141,15 @@ describe('ReactNative', () => {
     expect(a).toBe(c);
   });
 
-  it('renders and reorders children', () => {
-    const View = createReactNativeComponentClass('View', () => ({
-      validAttributes: {title: true},
-      uiViewClassName: 'View',
+  it("renders and reorders children", () => {
+    const View = createReactNativeComponentClass("View", () => ({
+      validAttributes: { title: true },
+      uiViewClassName: "View"
     }));
 
     class Component extends React.Component {
       render() {
-        const chars = this.props.chars.split('');
+        const chars = this.props.chars.split("");
         return (
           <View>{chars.map(text => <View key={text} title={text} />)}</View>
         );
@@ -157,8 +157,8 @@ describe('ReactNative', () => {
     }
 
     // Mini multi-child stress test: lots of reorders, some adds, some removes.
-    const before = 'abcdefghijklmnopqrst';
-    const after = 'mxhpgwfralkeoivcstzy';
+    const before = "abcdefghijklmnopqrst";
+    const after = "mxhpgwfralkeoivcstzy";
 
     ReactNative.render(<Component chars={before} />, 11);
     expect(UIManager.__dumpHierarchyForJestTestsOnly()).toMatchSnapshot();
@@ -167,7 +167,7 @@ describe('ReactNative', () => {
     expect(UIManager.__dumpHierarchyForJestTestsOnly()).toMatchSnapshot();
   });
 
-  it('calls setState with no arguments', () => {
+  it("calls setState with no arguments", () => {
     let mockArgs;
     class Component extends React.Component {
       componentDidMount() {

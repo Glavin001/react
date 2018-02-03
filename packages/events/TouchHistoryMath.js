@@ -26,7 +26,7 @@ const TouchHistoryMath = {
     touchHistory,
     touchesChangedAfter,
     isXAxis,
-    ofCurrent,
+    ofCurrent
   ) {
     const touchBank = touchHistory.touchBank;
     let total = 0;
@@ -81,49 +81,49 @@ const TouchHistoryMath = {
 
   currentCentroidXOfTouchesChangedAfter: function(
     touchHistory,
-    touchesChangedAfter,
+    touchesChangedAfter
   ) {
     return TouchHistoryMath.centroidDimension(
       touchHistory,
       touchesChangedAfter,
       true, // isXAxis
-      true, // ofCurrent
+      true // ofCurrent
     );
   },
 
   currentCentroidYOfTouchesChangedAfter: function(
     touchHistory,
-    touchesChangedAfter,
+    touchesChangedAfter
   ) {
     return TouchHistoryMath.centroidDimension(
       touchHistory,
       touchesChangedAfter,
       false, // isXAxis
-      true, // ofCurrent
+      true // ofCurrent
     );
   },
 
   previousCentroidXOfTouchesChangedAfter: function(
     touchHistory,
-    touchesChangedAfter,
+    touchesChangedAfter
   ) {
     return TouchHistoryMath.centroidDimension(
       touchHistory,
       touchesChangedAfter,
       true, // isXAxis
-      false, // ofCurrent
+      false // ofCurrent
     );
   },
 
   previousCentroidYOfTouchesChangedAfter: function(
     touchHistory,
-    touchesChangedAfter,
+    touchesChangedAfter
   ) {
     return TouchHistoryMath.centroidDimension(
       touchHistory,
       touchesChangedAfter,
       false, // isXAxis
-      false, // ofCurrent
+      false // ofCurrent
     );
   },
 
@@ -132,7 +132,7 @@ const TouchHistoryMath = {
       touchHistory,
       0, // touchesChangedAfter
       true, // isXAxis
-      true, // ofCurrent
+      true // ofCurrent
     );
   },
 
@@ -141,11 +141,11 @@ const TouchHistoryMath = {
       touchHistory,
       0, // touchesChangedAfter
       false, // isXAxis
-      true, // ofCurrent
+      true // ofCurrent
     );
   },
 
-  noCentroid: -1,
+  noCentroid: -1
 };
 
 export default TouchHistoryMath;

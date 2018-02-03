@@ -8,52 +8,52 @@
  */
 
 // TODO: direct imports like some-package/src/* are bad. Fix me.
-import ReactDebugCurrentFiber from 'react-reconciler/src/ReactDebugCurrentFiber';
-import {registrationNameModules} from 'events/EventPluginRegistry';
-import emptyFunction from 'fbjs/lib/emptyFunction';
-import warning from 'fbjs/lib/warning';
+import ReactDebugCurrentFiber from "react-reconciler/src/ReactDebugCurrentFiber";
+import { registrationNameModules } from "events/EventPluginRegistry";
+import emptyFunction from "fbjs/lib/emptyFunction";
+import warning from "fbjs/lib/warning";
 
-import * as DOMPropertyOperations from './DOMPropertyOperations';
-import * as ReactDOMFiberInput from './ReactDOMFiberInput';
-import * as ReactDOMFiberOption from './ReactDOMFiberOption';
-import * as ReactDOMFiberSelect from './ReactDOMFiberSelect';
-import * as ReactDOMFiberTextarea from './ReactDOMFiberTextarea';
-import * as inputValueTracking from './inputValueTracking';
-import setInnerHTML from './setInnerHTML';
-import setTextContent from './setTextContent';
-import {listenTo, trapBubbledEvent} from '../events/ReactBrowserEventEmitter';
-import * as CSSPropertyOperations from '../shared/CSSPropertyOperations';
-import {Namespaces, getIntrinsicNamespace} from '../shared/DOMNamespaces';
+import * as DOMPropertyOperations from "./DOMPropertyOperations";
+import * as ReactDOMFiberInput from "./ReactDOMFiberInput";
+import * as ReactDOMFiberOption from "./ReactDOMFiberOption";
+import * as ReactDOMFiberSelect from "./ReactDOMFiberSelect";
+import * as ReactDOMFiberTextarea from "./ReactDOMFiberTextarea";
+import * as inputValueTracking from "./inputValueTracking";
+import setInnerHTML from "./setInnerHTML";
+import setTextContent from "./setTextContent";
+import { listenTo, trapBubbledEvent } from "../events/ReactBrowserEventEmitter";
+import * as CSSPropertyOperations from "../shared/CSSPropertyOperations";
+import { Namespaces, getIntrinsicNamespace } from "../shared/DOMNamespaces";
 import {
   getPropertyInfo,
   shouldIgnoreAttribute,
-  shouldRemoveAttribute,
-} from '../shared/DOMProperty';
-import assertValidProps from '../shared/assertValidProps';
-import {DOCUMENT_NODE, DOCUMENT_FRAGMENT_NODE} from '../shared/HTMLNodeType';
-import isCustomComponent from '../shared/isCustomComponent';
-import {validateProperties as validateARIAProperties} from '../shared/ReactDOMInvalidARIAHook';
-import {validateProperties as validateInputProperties} from '../shared/ReactDOMNullInputValuePropHook';
-import {validateProperties as validateUnknownProperties} from '../shared/ReactDOMUnknownPropertyHook';
+  shouldRemoveAttribute
+} from "../shared/DOMProperty";
+import assertValidProps from "../shared/assertValidProps";
+import { DOCUMENT_NODE, DOCUMENT_FRAGMENT_NODE } from "../shared/HTMLNodeType";
+import isCustomComponent from "../shared/isCustomComponent";
+import { validateProperties as validateARIAProperties } from "../shared/ReactDOMInvalidARIAHook";
+import { validateProperties as validateInputProperties } from "../shared/ReactDOMNullInputValuePropHook";
+import { validateProperties as validateUnknownProperties } from "../shared/ReactDOMUnknownPropertyHook";
 
 const {
   getCurrentFiberOwnerName,
-  getCurrentFiberStackAddendum,
+  getCurrentFiberStackAddendum
 } = ReactDebugCurrentFiber;
 let didWarnInvalidHydration = false;
 let didWarnShadyDOM = false;
 
-const DANGEROUSLY_SET_INNER_HTML = 'dangerouslySetInnerHTML';
-const SUPPRESS_CONTENT_EDITABLE_WARNING = 'suppressContentEditableWarning';
-const SUPPRESS_HYDRATION_WARNING = 'suppressHydrationWarning';
-const AUTOFOCUS = 'autoFocus';
-const CHILDREN = 'children';
-const STYLE = 'style';
-const HTML = '__html';
+const DANGEROUSLY_SET_INNER_HTML = "dangerouslySetInnerHTML";
+const SUPPRESS_CONTENT_EDITABLE_WARNING = "suppressContentEditableWarning";
+const SUPPRESS_HYDRATION_WARNING = "suppressHydrationWarning";
+const AUTOFOCUS = "autoFocus";
+const CHILDREN = "children";
+const STYLE = "style";
+const HTML = "__html";
 
-const {html: HTML_NAMESPACE} = Namespaces;
+const { html: HTML_NAMESPACE } = Namespaces;
 
-let getStack = emptyFunction.thatReturns('');
+let getStack = emptyFunction.thatReturns("");
 
 let warnedUnknownTags;
 let suppressHydrationWarning;
@@ -77,7 +77,7 @@ if (__DEV__) {
     // it soon will be, and many apps have been using it anyway.
     time: true,
     // There are working polyfills for <dialog>. Let people use it.
-    dialog: true,
+    dialog: true
   };
 
   validatePropertiesInDevelopment = function(type, props) {
@@ -96,15 +96,15 @@ if (__DEV__) {
 
   normalizeMarkupForTextOrAttribute = function(markup: mixed): string {
     const markupString =
-      typeof markup === 'string' ? markup : '' + (markup: any);
+      typeof markup === "string" ? markup : "" + (markup: any);
     return markupString
-      .replace(NORMALIZE_NEWLINES_REGEX, '\n')
-      .replace(NORMALIZE_NULL_AND_REPLACEMENT_REGEX, '');
+      .replace(NORMALIZE_NEWLINES_REGEX, "\n")
+      .replace(NORMALIZE_NULL_AND_REPLACEMENT_REGEX, "");
   };
 
   warnForTextDifference = function(
     serverText: string,
-    clientText: string | number,
+    clientText: string | number
   ) {
     if (didWarnInvalidHydration) {
       return;
@@ -119,23 +119,23 @@ if (__DEV__) {
       false,
       'Text content did not match. Server: "%s" Client: "%s"',
       normalizedServerText,
-      normalizedClientText,
+      normalizedClientText
     );
   };
 
   warnForPropDifference = function(
     propName: string,
     serverValue: mixed,
-    clientValue: mixed,
+    clientValue: mixed
   ) {
     if (didWarnInvalidHydration) {
       return;
     }
     const normalizedClientValue = normalizeMarkupForTextOrAttribute(
-      clientValue,
+      clientValue
     );
     const normalizedServerValue = normalizeMarkupForTextOrAttribute(
-      serverValue,
+      serverValue
     );
     if (normalizedServerValue === normalizedClientValue) {
       return;
@@ -143,10 +143,10 @@ if (__DEV__) {
     didWarnInvalidHydration = true;
     warning(
       false,
-      'Prop `%s` did not match. Server: %s Client: %s',
+      "Prop `%s` did not match. Server: %s Client: %s",
       propName,
       JSON.stringify(normalizedServerValue),
-      JSON.stringify(normalizedClientValue),
+      JSON.stringify(normalizedClientValue)
     );
   };
 
@@ -159,28 +159,28 @@ if (__DEV__) {
     attributeNames.forEach(function(name) {
       names.push(name);
     });
-    warning(false, 'Extra attributes from the server: %s', names);
+    warning(false, "Extra attributes from the server: %s", names);
   };
 
   warnForInvalidEventListener = function(registrationName, listener) {
     if (listener === false) {
       warning(
         false,
-        'Expected `%s` listener to be a function, instead got `false`.\n\n' +
-          'If you used to conditionally omit it with %s={condition && value}, ' +
-          'pass %s={condition ? value : undefined} instead.%s',
+        "Expected `%s` listener to be a function, instead got `false`.\n\n" +
+          "If you used to conditionally omit it with %s={condition && value}, " +
+          "pass %s={condition ? value : undefined} instead.%s",
         registrationName,
         registrationName,
         registrationName,
-        getCurrentFiberStackAddendum(),
+        getCurrentFiberStackAddendum()
       );
     } else {
       warning(
         false,
-        'Expected `%s` listener to be a function, instead got a value of `%s` type.%s',
+        "Expected `%s` listener to be a function, instead got a value of `%s` type.%s",
         registrationName,
         typeof listener,
-        getCurrentFiberStackAddendum(),
+        getCurrentFiberStackAddendum()
       );
     }
   };
@@ -197,7 +197,7 @@ if (__DEV__) {
         ? parent.ownerDocument.createElement(parent.tagName)
         : parent.ownerDocument.createElementNS(
             (parent.namespaceURI: any),
-            parent.tagName,
+            parent.tagName
           );
     testElement.innerHTML = html;
     return testElement.innerHTML;
@@ -215,7 +215,7 @@ function ensureListeningTo(rootContainerElement, registrationName) {
 }
 
 function getOwnerDocumentFromRootContainer(
-  rootContainerElement: Element | Document,
+  rootContainerElement: Element | Document
 ): Document {
   return rootContainerElement.nodeType === DOCUMENT_NODE
     ? (rootContainerElement: any)
@@ -225,29 +225,29 @@ function getOwnerDocumentFromRootContainer(
 // There are so many media events, it makes sense to just
 // maintain a list rather than create a `trapBubbledEvent` for each
 const mediaEvents = {
-  topAbort: 'abort',
-  topCanPlay: 'canplay',
-  topCanPlayThrough: 'canplaythrough',
-  topDurationChange: 'durationchange',
-  topEmptied: 'emptied',
-  topEncrypted: 'encrypted',
-  topEnded: 'ended',
-  topError: 'error',
-  topLoadedData: 'loadeddata',
-  topLoadedMetadata: 'loadedmetadata',
-  topLoadStart: 'loadstart',
-  topPause: 'pause',
-  topPlay: 'play',
-  topPlaying: 'playing',
-  topProgress: 'progress',
-  topRateChange: 'ratechange',
-  topSeeked: 'seeked',
-  topSeeking: 'seeking',
-  topStalled: 'stalled',
-  topSuspend: 'suspend',
-  topTimeUpdate: 'timeupdate',
-  topVolumeChange: 'volumechange',
-  topWaiting: 'waiting',
+  topAbort: "abort",
+  topCanPlay: "canplay",
+  topCanPlayThrough: "canplaythrough",
+  topDurationChange: "durationchange",
+  topEmptied: "emptied",
+  topEncrypted: "encrypted",
+  topEnded: "ended",
+  topError: "error",
+  topLoadedData: "loadeddata",
+  topLoadedMetadata: "loadedmetadata",
+  topLoadStart: "loadstart",
+  topPause: "pause",
+  topPlay: "play",
+  topPlaying: "playing",
+  topProgress: "progress",
+  topRateChange: "ratechange",
+  topSeeked: "seeked",
+  topSeeking: "seeking",
+  topStalled: "stalled",
+  topSuspend: "suspend",
+  topTimeUpdate: "timeupdate",
+  topVolumeChange: "volumechange",
+  topWaiting: "waiting"
 };
 
 function trapClickOnNonInteractiveElement(node: HTMLElement) {
@@ -268,7 +268,7 @@ function setInitialDOMProperties(
   domElement: Element,
   rootContainerElement: Element | Document,
   nextProps: Object,
-  isCustomComponentTag: boolean,
+  isCustomComponentTag: boolean
 ): void {
   for (const propKey in nextProps) {
     if (!nextProps.hasOwnProperty(propKey)) {
@@ -291,17 +291,17 @@ function setInitialDOMProperties(
         setInnerHTML(domElement, nextHtml);
       }
     } else if (propKey === CHILDREN) {
-      if (typeof nextProp === 'string') {
+      if (typeof nextProp === "string") {
         // Avoid setting initial textContent when the text is empty. In IE11 setting
         // textContent on a <textarea> will cause the placeholder to not
         // show within the <textarea> until it has been focused and blurred again.
         // https://github.com/facebook/react/issues/6731#issuecomment-254874553
-        const canSetTextContent = tag !== 'textarea' || nextProp !== '';
+        const canSetTextContent = tag !== "textarea" || nextProp !== "";
         if (canSetTextContent) {
           setTextContent(domElement, nextProp);
         }
-      } else if (typeof nextProp === 'number') {
-        setTextContent(domElement, '' + nextProp);
+      } else if (typeof nextProp === "number") {
+        setTextContent(domElement, "" + nextProp);
       }
     } else if (
       propKey === SUPPRESS_CONTENT_EDITABLE_WARNING ||
@@ -313,7 +313,7 @@ function setInitialDOMProperties(
       // We blacklist it here rather than in the property list because we emit it in SSR.
     } else if (registrationNameModules.hasOwnProperty(propKey)) {
       if (nextProp != null) {
-        if (__DEV__ && typeof nextProp !== 'function') {
+        if (__DEV__ && typeof nextProp !== "function") {
           warnForInvalidEventListener(propKey, nextProp);
         }
         ensureListeningTo(rootContainerElement, propKey);
@@ -323,7 +323,7 @@ function setInitialDOMProperties(
         domElement,
         propKey,
         nextProp,
-        isCustomComponentTag,
+        isCustomComponentTag
       );
     }
   }
@@ -333,7 +333,7 @@ function updateDOMProperties(
   domElement: Element,
   updatePayload: Array<any>,
   wasCustomComponentTag: boolean,
-  isCustomComponentTag: boolean,
+  isCustomComponentTag: boolean
 ): void {
   // TODO: Handle wasCustomComponentTag
   for (let i = 0; i < updatePayload.length; i += 2) {
@@ -350,7 +350,7 @@ function updateDOMProperties(
         domElement,
         propKey,
         propValue,
-        isCustomComponentTag,
+        isCustomComponentTag
       );
     }
   }
@@ -360,14 +360,14 @@ export function createElement(
   type: string,
   props: Object,
   rootContainerElement: Element | Document,
-  parentNamespace: string,
+  parentNamespace: string
 ): Element {
   let isCustomComponentTag;
 
   // We create tags in the namespace of their parent container, except HTML
   // tags get no namespace.
   const ownerDocument: Document = getOwnerDocumentFromRootContainer(
-    rootContainerElement,
+    rootContainerElement
   );
   let domElement: Element;
   let namespaceURI = parentNamespace;
@@ -381,23 +381,23 @@ export function createElement(
       // allow <SVG> or <mATH>.
       warning(
         isCustomComponentTag || type === type.toLowerCase(),
-        '<%s /> is using uppercase HTML. Always use lowercase HTML tags ' +
-          'in React.',
-        type,
+        "<%s /> is using uppercase HTML. Always use lowercase HTML tags " +
+          "in React.",
+        type
       );
     }
 
-    if (type === 'script') {
+    if (type === "script") {
       // Create the script via .innerHTML so its "parser-inserted" flag is
       // set to true and it does not execute
-      const div = ownerDocument.createElement('div');
-      div.innerHTML = '<script><' + '/script>'; // eslint-disable-line
+      const div = ownerDocument.createElement("div");
+      div.innerHTML = "<script><" + "/script>"; // eslint-disable-line
       // This is guaranteed to yield a script element.
       const firstChild = ((div.firstChild: any): HTMLScriptElement);
       domElement = div.removeChild(firstChild);
-    } else if (typeof props.is === 'string') {
+    } else if (typeof props.is === "string") {
       // $FlowIssue `createElement` should be updated for Web Components
-      domElement = ownerDocument.createElement(type, {is: props.is});
+      domElement = ownerDocument.createElement(type, { is: props.is });
     } else {
       // Separate else branch instead of using `props.is || undefined` above because of a Firefox bug.
       // See discussion in https://github.com/facebook/react/pull/6896
@@ -413,16 +413,16 @@ export function createElement(
       if (
         !isCustomComponentTag &&
         Object.prototype.toString.call(domElement) ===
-          '[object HTMLUnknownElement]' &&
+          "[object HTMLUnknownElement]" &&
         !Object.prototype.hasOwnProperty.call(warnedUnknownTags, type)
       ) {
         warnedUnknownTags[type] = true;
         warning(
           false,
-          'The tag <%s> is unrecognized in this browser. ' +
-            'If you meant to render a React component, start its name with ' +
-            'an uppercase letter.',
-          type,
+          "The tag <%s> is unrecognized in this browser. " +
+            "If you meant to render a React component, start its name with " +
+            "an uppercase letter.",
+          type
         );
       }
     }
@@ -433,10 +433,10 @@ export function createElement(
 
 export function createTextNode(
   text: string,
-  rootContainerElement: Element | Document,
+  rootContainerElement: Element | Document
 ): Text {
   return getOwnerDocumentFromRootContainer(rootContainerElement).createTextNode(
-    text,
+    text
   );
 }
 
@@ -444,7 +444,7 @@ export function setInitialProperties(
   domElement: Element,
   tag: string,
   rawProps: Object,
-  rootContainerElement: Element | Document,
+  rootContainerElement: Element | Document
 ): void {
   const isCustomComponentTag = isCustomComponent(tag, rawProps);
   if (__DEV__) {
@@ -452,9 +452,9 @@ export function setInitialProperties(
     if (isCustomComponentTag && !didWarnShadyDOM && domElement.shadyRoot) {
       warning(
         false,
-        '%s is using shady DOM. Using shady DOM with React can ' +
-          'cause things to break subtly.',
-        getCurrentFiberOwnerName() || 'A component',
+        "%s is using shady DOM. Using shady DOM with React can " +
+          "cause things to break subtly.",
+        getCurrentFiberOwnerName() || "A component"
       );
       didWarnShadyDOM = true;
     }
@@ -463,13 +463,13 @@ export function setInitialProperties(
   // TODO: Make sure that we check isMounted before firing any of these events.
   let props: Object;
   switch (tag) {
-    case 'iframe':
-    case 'object':
-      trapBubbledEvent('topLoad', 'load', domElement);
+    case "iframe":
+    case "object":
+      trapBubbledEvent("topLoad", "load", domElement);
       props = rawProps;
       break;
-    case 'video':
-    case 'audio':
+    case "video":
+    case "audio":
       // Create listener for each media event
       for (const event in mediaEvents) {
         if (mediaEvents.hasOwnProperty(event)) {
@@ -478,52 +478,52 @@ export function setInitialProperties(
       }
       props = rawProps;
       break;
-    case 'source':
-      trapBubbledEvent('topError', 'error', domElement);
+    case "source":
+      trapBubbledEvent("topError", "error", domElement);
       props = rawProps;
       break;
-    case 'img':
-    case 'image':
-      trapBubbledEvent('topError', 'error', domElement);
-      trapBubbledEvent('topLoad', 'load', domElement);
+    case "img":
+    case "image":
+      trapBubbledEvent("topError", "error", domElement);
+      trapBubbledEvent("topLoad", "load", domElement);
       props = rawProps;
       break;
-    case 'form':
-      trapBubbledEvent('topReset', 'reset', domElement);
-      trapBubbledEvent('topSubmit', 'submit', domElement);
+    case "form":
+      trapBubbledEvent("topReset", "reset", domElement);
+      trapBubbledEvent("topSubmit", "submit", domElement);
       props = rawProps;
       break;
-    case 'details':
-      trapBubbledEvent('topToggle', 'toggle', domElement);
+    case "details":
+      trapBubbledEvent("topToggle", "toggle", domElement);
       props = rawProps;
       break;
-    case 'input':
+    case "input":
       ReactDOMFiberInput.initWrapperState(domElement, rawProps);
       props = ReactDOMFiberInput.getHostProps(domElement, rawProps);
-      trapBubbledEvent('topInvalid', 'invalid', domElement);
+      trapBubbledEvent("topInvalid", "invalid", domElement);
       // For controlled components we always need to ensure we're listening
       // to onChange. Even if there is no listener.
-      ensureListeningTo(rootContainerElement, 'onChange');
+      ensureListeningTo(rootContainerElement, "onChange");
       break;
-    case 'option':
+    case "option":
       ReactDOMFiberOption.validateProps(domElement, rawProps);
       props = ReactDOMFiberOption.getHostProps(domElement, rawProps);
       break;
-    case 'select':
+    case "select":
       ReactDOMFiberSelect.initWrapperState(domElement, rawProps);
       props = ReactDOMFiberSelect.getHostProps(domElement, rawProps);
-      trapBubbledEvent('topInvalid', 'invalid', domElement);
+      trapBubbledEvent("topInvalid", "invalid", domElement);
       // For controlled components we always need to ensure we're listening
       // to onChange. Even if there is no listener.
-      ensureListeningTo(rootContainerElement, 'onChange');
+      ensureListeningTo(rootContainerElement, "onChange");
       break;
-    case 'textarea':
+    case "textarea":
       ReactDOMFiberTextarea.initWrapperState(domElement, rawProps);
       props = ReactDOMFiberTextarea.getHostProps(domElement, rawProps);
-      trapBubbledEvent('topInvalid', 'invalid', domElement);
+      trapBubbledEvent("topInvalid", "invalid", domElement);
       // For controlled components we always need to ensure we're listening
       // to onChange. Even if there is no listener.
-      ensureListeningTo(rootContainerElement, 'onChange');
+      ensureListeningTo(rootContainerElement, "onChange");
       break;
     default:
       props = rawProps;
@@ -536,30 +536,30 @@ export function setInitialProperties(
     domElement,
     rootContainerElement,
     props,
-    isCustomComponentTag,
+    isCustomComponentTag
   );
 
   switch (tag) {
-    case 'input':
+    case "input":
       // TODO: Make sure we check if this is still unmounted or do any clean
       // up necessary since we never stop tracking anymore.
       inputValueTracking.track((domElement: any));
       ReactDOMFiberInput.postMountWrapper(domElement, rawProps);
       break;
-    case 'textarea':
+    case "textarea":
       // TODO: Make sure we check if this is still unmounted or do any clean
       // up necessary since we never stop tracking anymore.
       inputValueTracking.track((domElement: any));
       ReactDOMFiberTextarea.postMountWrapper(domElement, rawProps);
       break;
-    case 'option':
+    case "option":
       ReactDOMFiberOption.postMountWrapper(domElement, rawProps);
       break;
-    case 'select':
+    case "select":
       ReactDOMFiberSelect.postMountWrapper(domElement, rawProps);
       break;
     default:
-      if (typeof props.onClick === 'function') {
+      if (typeof props.onClick === "function") {
         // TODO: This cast may not be sound for SVG, MathML or custom elements.
         trapClickOnNonInteractiveElement(((domElement: any): HTMLElement));
       }
@@ -573,7 +573,7 @@ export function diffProperties(
   tag: string,
   lastRawProps: Object,
   nextRawProps: Object,
-  rootContainerElement: Element | Document,
+  rootContainerElement: Element | Document
 ): null | Array<mixed> {
   if (__DEV__) {
     validatePropertiesInDevelopment(tag, nextRawProps);
@@ -584,22 +584,22 @@ export function diffProperties(
   let lastProps: Object;
   let nextProps: Object;
   switch (tag) {
-    case 'input':
+    case "input":
       lastProps = ReactDOMFiberInput.getHostProps(domElement, lastRawProps);
       nextProps = ReactDOMFiberInput.getHostProps(domElement, nextRawProps);
       updatePayload = [];
       break;
-    case 'option':
+    case "option":
       lastProps = ReactDOMFiberOption.getHostProps(domElement, lastRawProps);
       nextProps = ReactDOMFiberOption.getHostProps(domElement, nextRawProps);
       updatePayload = [];
       break;
-    case 'select':
+    case "select":
       lastProps = ReactDOMFiberSelect.getHostProps(domElement, lastRawProps);
       nextProps = ReactDOMFiberSelect.getHostProps(domElement, nextRawProps);
       updatePayload = [];
       break;
-    case 'textarea':
+    case "textarea":
       lastProps = ReactDOMFiberTextarea.getHostProps(domElement, lastRawProps);
       nextProps = ReactDOMFiberTextarea.getHostProps(domElement, nextRawProps);
       updatePayload = [];
@@ -608,8 +608,8 @@ export function diffProperties(
       lastProps = lastRawProps;
       nextProps = nextRawProps;
       if (
-        typeof lastProps.onClick !== 'function' &&
-        typeof nextProps.onClick === 'function'
+        typeof lastProps.onClick !== "function" &&
+        typeof nextProps.onClick === "function"
       ) {
         // TODO: This cast may not be sound for SVG, MathML or custom elements.
         trapClickOnNonInteractiveElement(((domElement: any): HTMLElement));
@@ -637,7 +637,7 @@ export function diffProperties(
           if (!styleUpdates) {
             styleUpdates = {};
           }
-          styleUpdates[styleName] = '';
+          styleUpdates[styleName] = "";
         }
       }
     } else if (propKey === DANGEROUSLY_SET_INNER_HTML || propKey === CHILDREN) {
@@ -690,7 +690,7 @@ export function diffProperties(
             if (!styleUpdates) {
               styleUpdates = {};
             }
-            styleUpdates[styleName] = '';
+            styleUpdates[styleName] = "";
           }
         }
         // Update styles that changed since `lastProp`.
@@ -720,7 +720,7 @@ export function diffProperties(
       const lastHtml = lastProp ? lastProp[HTML] : undefined;
       if (nextHtml != null) {
         if (lastHtml !== nextHtml) {
-          (updatePayload = updatePayload || []).push(propKey, '' + nextHtml);
+          (updatePayload = updatePayload || []).push(propKey, "" + nextHtml);
         }
       } else {
         // TODO: It might be too late to clear this if we have children
@@ -729,9 +729,9 @@ export function diffProperties(
     } else if (propKey === CHILDREN) {
       if (
         lastProp !== nextProp &&
-        (typeof nextProp === 'string' || typeof nextProp === 'number')
+        (typeof nextProp === "string" || typeof nextProp === "number")
       ) {
-        (updatePayload = updatePayload || []).push(propKey, '' + nextProp);
+        (updatePayload = updatePayload || []).push(propKey, "" + nextProp);
       }
     } else if (
       propKey === SUPPRESS_CONTENT_EDITABLE_WARNING ||
@@ -741,7 +741,7 @@ export function diffProperties(
     } else if (registrationNameModules.hasOwnProperty(propKey)) {
       if (nextProp != null) {
         // We eagerly listen to this even though we haven't committed yet.
-        if (__DEV__ && typeof nextProp !== 'function') {
+        if (__DEV__ && typeof nextProp !== "function") {
           warnForInvalidEventListener(propKey, nextProp);
         }
         ensureListeningTo(rootContainerElement, propKey);
@@ -770,14 +770,14 @@ export function updateProperties(
   updatePayload: Array<any>,
   tag: string,
   lastRawProps: Object,
-  nextRawProps: Object,
+  nextRawProps: Object
 ): void {
   // Update checked *before* name.
   // In the middle of an update, it is possible to have multiple checked.
   // When a checked radio tries to change name, browser makes another radio's checked false.
   if (
-    tag === 'input' &&
-    nextRawProps.type === 'radio' &&
+    tag === "input" &&
+    nextRawProps.type === "radio" &&
     nextRawProps.name != null
   ) {
     ReactDOMFiberInput.updateChecked(domElement, nextRawProps);
@@ -790,22 +790,22 @@ export function updateProperties(
     domElement,
     updatePayload,
     wasCustomComponentTag,
-    isCustomComponentTag,
+    isCustomComponentTag
   );
 
   // TODO: Ensure that an update gets scheduled if any of the special props
   // changed.
   switch (tag) {
-    case 'input':
+    case "input":
       // Update the wrapper around inputs *after* updating props. This has to
       // happen after `updateDOMProperties`. Otherwise HTML5 input validations
       // raise warnings and prevent the new value from being assigned.
       ReactDOMFiberInput.updateWrapper(domElement, nextRawProps);
       break;
-    case 'textarea':
+    case "textarea":
       ReactDOMFiberTextarea.updateWrapper(domElement, nextRawProps);
       break;
-    case 'select':
+    case "select":
       // <select> value update needs to occur after <option> children
       // reconciliation
       ReactDOMFiberSelect.postUpdateWrapper(domElement, nextRawProps);
@@ -818,7 +818,7 @@ export function diffHydratedProperties(
   tag: string,
   rawProps: Object,
   parentNamespace: string,
-  rootContainerElement: Element | Document,
+  rootContainerElement: Element | Document
 ): null | Array<mixed> {
   let isCustomComponentTag;
   let extraAttributeNames: Set<string>;
@@ -830,9 +830,9 @@ export function diffHydratedProperties(
     if (isCustomComponentTag && !didWarnShadyDOM && domElement.shadyRoot) {
       warning(
         false,
-        '%s is using shady DOM. Using shady DOM with React can ' +
-          'cause things to break subtly.',
-        getCurrentFiberOwnerName() || 'A component',
+        "%s is using shady DOM. Using shady DOM with React can " +
+          "cause things to break subtly.",
+        getCurrentFiberOwnerName() || "A component"
       );
       didWarnShadyDOM = true;
     }
@@ -840,12 +840,12 @@ export function diffHydratedProperties(
 
   // TODO: Make sure that we check isMounted before firing any of these events.
   switch (tag) {
-    case 'iframe':
-    case 'object':
-      trapBubbledEvent('topLoad', 'load', domElement);
+    case "iframe":
+    case "object":
+      trapBubbledEvent("topLoad", "load", domElement);
       break;
-    case 'video':
-    case 'audio':
+    case "video":
+    case "audio":
       // Create listener for each media event
       for (const event in mediaEvents) {
         if (mediaEvents.hasOwnProperty(event)) {
@@ -853,44 +853,44 @@ export function diffHydratedProperties(
         }
       }
       break;
-    case 'source':
-      trapBubbledEvent('topError', 'error', domElement);
+    case "source":
+      trapBubbledEvent("topError", "error", domElement);
       break;
-    case 'img':
-    case 'image':
-      trapBubbledEvent('topError', 'error', domElement);
-      trapBubbledEvent('topLoad', 'load', domElement);
+    case "img":
+    case "image":
+      trapBubbledEvent("topError", "error", domElement);
+      trapBubbledEvent("topLoad", "load", domElement);
       break;
-    case 'form':
-      trapBubbledEvent('topReset', 'reset', domElement);
-      trapBubbledEvent('topSubmit', 'submit', domElement);
+    case "form":
+      trapBubbledEvent("topReset", "reset", domElement);
+      trapBubbledEvent("topSubmit", "submit", domElement);
       break;
-    case 'details':
-      trapBubbledEvent('topToggle', 'toggle', domElement);
+    case "details":
+      trapBubbledEvent("topToggle", "toggle", domElement);
       break;
-    case 'input':
+    case "input":
       ReactDOMFiberInput.initWrapperState(domElement, rawProps);
-      trapBubbledEvent('topInvalid', 'invalid', domElement);
+      trapBubbledEvent("topInvalid", "invalid", domElement);
       // For controlled components we always need to ensure we're listening
       // to onChange. Even if there is no listener.
-      ensureListeningTo(rootContainerElement, 'onChange');
+      ensureListeningTo(rootContainerElement, "onChange");
       break;
-    case 'option':
+    case "option":
       ReactDOMFiberOption.validateProps(domElement, rawProps);
       break;
-    case 'select':
+    case "select":
       ReactDOMFiberSelect.initWrapperState(domElement, rawProps);
-      trapBubbledEvent('topInvalid', 'invalid', domElement);
+      trapBubbledEvent("topInvalid", "invalid", domElement);
       // For controlled components we always need to ensure we're listening
       // to onChange. Even if there is no listener.
-      ensureListeningTo(rootContainerElement, 'onChange');
+      ensureListeningTo(rootContainerElement, "onChange");
       break;
-    case 'textarea':
+    case "textarea":
       ReactDOMFiberTextarea.initWrapperState(domElement, rawProps);
-      trapBubbledEvent('topInvalid', 'invalid', domElement);
+      trapBubbledEvent("topInvalid", "invalid", domElement);
       // For controlled components we always need to ensure we're listening
       // to onChange. Even if there is no listener.
-      ensureListeningTo(rootContainerElement, 'onChange');
+      ensureListeningTo(rootContainerElement, "onChange");
       break;
   }
 
@@ -903,15 +903,15 @@ export function diffHydratedProperties(
       const name = attributes[i].name.toLowerCase();
       switch (name) {
         // Built-in SSR attribute is whitelisted
-        case 'data-reactroot':
+        case "data-reactroot":
           break;
         // Controlled attributes are not validated
         // TODO: Only ignore them on controlled tags.
-        case 'value':
+        case "value":
           break;
-        case 'checked':
+        case "checked":
           break;
-        case 'selected':
+        case "selected":
           break;
         default:
           // Intentionally use the original name.
@@ -937,24 +937,24 @@ export function diffHydratedProperties(
       // even listeners these nodes might be wired up to.
       // TODO: Warn if there is more than a single textNode as a child.
       // TODO: Should we use domElement.firstChild.nodeValue to compare?
-      if (typeof nextProp === 'string') {
+      if (typeof nextProp === "string") {
         if (domElement.textContent !== nextProp) {
           if (__DEV__ && !suppressHydrationWarning) {
             warnForTextDifference(domElement.textContent, nextProp);
           }
           updatePayload = [CHILDREN, nextProp];
         }
-      } else if (typeof nextProp === 'number') {
-        if (domElement.textContent !== '' + nextProp) {
+      } else if (typeof nextProp === "number") {
+        if (domElement.textContent !== "" + nextProp) {
           if (__DEV__ && !suppressHydrationWarning) {
             warnForTextDifference(domElement.textContent, nextProp);
           }
-          updatePayload = [CHILDREN, '' + nextProp];
+          updatePayload = [CHILDREN, "" + nextProp];
         }
       }
     } else if (registrationNameModules.hasOwnProperty(propKey)) {
       if (nextProp != null) {
-        if (__DEV__ && typeof nextProp !== 'function') {
+        if (__DEV__ && typeof nextProp !== "function") {
           warnForInvalidEventListener(propKey, nextProp);
         }
         ensureListeningTo(rootContainerElement, propKey);
@@ -962,7 +962,7 @@ export function diffHydratedProperties(
     } else if (
       __DEV__ &&
       // Convince Flow we've calculated it (it's DEV-only in this method.)
-      typeof isCustomComponentTag === 'boolean'
+      typeof isCustomComponentTag === "boolean"
     ) {
       // Validate that the properties correspond to their expected values.
       let serverValue;
@@ -974,13 +974,13 @@ export function diffHydratedProperties(
         propKey === SUPPRESS_HYDRATION_WARNING ||
         // Controlled attributes are not validated
         // TODO: Only ignore them on controlled tags.
-        propKey === 'value' ||
-        propKey === 'checked' ||
-        propKey === 'selected'
+        propKey === "value" ||
+        propKey === "checked" ||
+        propKey === "selected"
       ) {
         // Noop
       } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
-        const rawHtml = nextProp ? nextProp[HTML] || '' : '';
+        const rawHtml = nextProp ? nextProp[HTML] || "" : "";
         const serverHTML = domElement.innerHTML;
         const expectedHTML = normalizeHTML(domElement, rawHtml);
         if (expectedHTML !== serverHTML) {
@@ -990,9 +990,9 @@ export function diffHydratedProperties(
         // $FlowFixMe - Should be inferred as not undefined.
         extraAttributeNames.delete(propKey);
         const expectedStyle = CSSPropertyOperations.createDangerousStringForStyles(
-          nextProp,
+          nextProp
         );
-        serverValue = domElement.getAttribute('style');
+        serverValue = domElement.getAttribute("style");
         if (expectedStyle !== serverValue) {
           warnForPropDifference(propKey, serverValue, expectedStyle);
         }
@@ -1002,7 +1002,7 @@ export function diffHydratedProperties(
         serverValue = DOMPropertyOperations.getValueForAttribute(
           domElement,
           propKey,
-          nextProp,
+          nextProp
         );
 
         if (nextProp !== serverValue) {
@@ -1014,7 +1014,7 @@ export function diffHydratedProperties(
           propKey,
           nextProp,
           propertyInfo,
-          isCustomComponentTag,
+          isCustomComponentTag
         )
       ) {
         if (propertyInfo !== null) {
@@ -1024,7 +1024,7 @@ export function diffHydratedProperties(
             domElement,
             propKey,
             nextProp,
-            propertyInfo,
+            propertyInfo
           );
         } else {
           let ownNamespace = parentNamespace;
@@ -1041,7 +1041,7 @@ export function diffHydratedProperties(
           serverValue = DOMPropertyOperations.getValueForAttribute(
             domElement,
             propKey,
-            nextProp,
+            nextProp
           );
         }
 
@@ -1061,20 +1061,20 @@ export function diffHydratedProperties(
   }
 
   switch (tag) {
-    case 'input':
+    case "input":
       // TODO: Make sure we check if this is still unmounted or do any clean
       // up necessary since we never stop tracking anymore.
       inputValueTracking.track((domElement: any));
       ReactDOMFiberInput.postMountWrapper(domElement, rawProps);
       break;
-    case 'textarea':
+    case "textarea":
       // TODO: Make sure we check if this is still unmounted or do any clean
       // up necessary since we never stop tracking anymore.
       inputValueTracking.track((domElement: any));
       ReactDOMFiberTextarea.postMountWrapper(domElement, rawProps);
       break;
-    case 'select':
-    case 'option':
+    case "select":
+    case "option":
       // For input and textarea we current always set the value property at
       // post mount to force it to diverge from attributes. However, for
       // option and select we don't quite do the same thing and select
@@ -1082,7 +1082,7 @@ export function diffHydratedProperties(
       // TODO: Consider not doing this for input and textarea.
       break;
     default:
-      if (typeof rawProps.onClick === 'function') {
+      if (typeof rawProps.onClick === "function") {
         // TODO: This cast may not be sound for SVG, MathML or custom elements.
         trapClickOnNonInteractiveElement(((domElement: any): HTMLElement));
       }
@@ -1105,7 +1105,7 @@ export function warnForUnmatchedText(textNode: Text, text: string) {
 
 export function warnForDeletedHydratableElement(
   parentNode: Element | Document,
-  child: Element,
+  child: Element
 ) {
   if (__DEV__) {
     if (didWarnInvalidHydration) {
@@ -1114,16 +1114,16 @@ export function warnForDeletedHydratableElement(
     didWarnInvalidHydration = true;
     warning(
       false,
-      'Did not expect server HTML to contain a <%s> in <%s>.',
+      "Did not expect server HTML to contain a <%s> in <%s>.",
       child.nodeName.toLowerCase(),
-      parentNode.nodeName.toLowerCase(),
+      parentNode.nodeName.toLowerCase()
     );
   }
 }
 
 export function warnForDeletedHydratableText(
   parentNode: Element | Document,
-  child: Text,
+  child: Text
 ) {
   if (__DEV__) {
     if (didWarnInvalidHydration) {
@@ -1134,7 +1134,7 @@ export function warnForDeletedHydratableText(
       false,
       'Did not expect server HTML to contain the text node "%s" in <%s>.',
       child.nodeValue,
-      parentNode.nodeName.toLowerCase(),
+      parentNode.nodeName.toLowerCase()
     );
   }
 }
@@ -1142,7 +1142,7 @@ export function warnForDeletedHydratableText(
 export function warnForInsertedHydratedElement(
   parentNode: Element | Document,
   tag: string,
-  props: Object,
+  props: Object
 ) {
   if (__DEV__) {
     if (didWarnInvalidHydration) {
@@ -1151,19 +1151,19 @@ export function warnForInsertedHydratedElement(
     didWarnInvalidHydration = true;
     warning(
       false,
-      'Expected server HTML to contain a matching <%s> in <%s>.',
+      "Expected server HTML to contain a matching <%s> in <%s>.",
       tag,
-      parentNode.nodeName.toLowerCase(),
+      parentNode.nodeName.toLowerCase()
     );
   }
 }
 
 export function warnForInsertedHydratedText(
   parentNode: Element | Document,
-  text: string,
+  text: string
 ) {
   if (__DEV__) {
-    if (text === '') {
+    if (text === "") {
       // We expect to insert empty text nodes since they're not represented in
       // the HTML.
       // TODO: Remove this special case if we can just avoid inserting empty
@@ -1178,7 +1178,7 @@ export function warnForInsertedHydratedText(
       false,
       'Expected server HTML to contain a matching text node for "%s" in <%s>.',
       text,
-      parentNode.nodeName.toLowerCase(),
+      parentNode.nodeName.toLowerCase()
     );
   }
 }
@@ -1186,16 +1186,16 @@ export function warnForInsertedHydratedText(
 export function restoreControlledState(
   domElement: Element,
   tag: string,
-  props: Object,
+  props: Object
 ): void {
   switch (tag) {
-    case 'input':
+    case "input":
       ReactDOMFiberInput.restoreControlledState(domElement, props);
       return;
-    case 'textarea':
+    case "textarea":
       ReactDOMFiberTextarea.restoreControlledState(domElement, props);
       return;
-    case 'select':
+    case "select":
       ReactDOMFiberSelect.restoreControlledState(domElement, props);
       return;
   }

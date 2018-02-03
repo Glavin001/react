@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 
 class Editor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      code: props.code,
+      code: props.code
     };
   }
 
@@ -12,22 +12,24 @@ class Editor extends Component {
     return (
       <div
         style={{
-          height: '100%',
-          width: '100%',
-        }}>
+          height: "100%",
+          width: "100%"
+        }}
+      >
         <textarea
           value={this.state.code}
-          onChange={e => this.setState({code: e.target.value})}
+          onChange={e => this.setState({ code: e.target.value })}
           style={{
-            height: '80%',
-            width: '100%',
-            fontSize: '15px',
+            height: "80%",
+            width: "100%",
+            fontSize: "15px"
           }}
         />
-        <div style={{height: '20%', textAlign: 'center'}}>
+        <div style={{ height: "20%", textAlign: "center" }}>
           <button
             onClick={() => this.props.onClose(this.state.code)}
-            style={{fontSize: 'large'}}>
+            style={{ fontSize: "large" }}
+          >
             Run
           </button>
         </div>

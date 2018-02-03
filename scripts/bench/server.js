@@ -1,33 +1,33 @@
-'use strict';
+"use strict";
 
-const http2Server = require('http2');
-const httpServer = require('http-server');
-const {existsSync, statSync, createReadStream} = require('fs');
-const {join} = require('path');
-const argv = require('minimist')(process.argv.slice(2));
-const mime = require('mime');
+const http2Server = require("http2");
+const httpServer = require("http-server");
+const { existsSync, statSync, createReadStream } = require("fs");
+const { join } = require("path");
+const argv = require("minimist")(process.argv.slice(2));
+const mime = require("mime");
 
 function sendFile(filename, response) {
-  response.setHeader('Content-Type', mime.lookup(filename));
+  response.setHeader("Content-Type", mime.lookup(filename));
   response.writeHead(200);
   const fileStream = createReadStream(filename);
   fileStream.pipe(response);
-  fileStream.on('finish', response.end);
+  fileStream.on("finish", response.end);
 }
 
 function createHTTP2Server(benchmark) {
   const server = http2Server.createServer({}, (request, response) => {
     const filename = join(
       __dirname,
-      'benchmarks',
+      "benchmarks",
       benchmark,
       request.url
-    ).replace(/\?.*/g, '');
+    ).replace(/\?.*/g, "");
 
     if (existsSync(filename) && statSync(filename).isFile()) {
       sendFile(filename, response);
     } else {
-      const indexHtmlPath = join(filename, 'index.html');
+      const indexHtmlPath = join(filename, "index.html");
 
       if (existsSync(indexHtmlPath)) {
         sendFile(indexHtmlPath, response);
@@ -43,13 +43,13 @@ function createHTTP2Server(benchmark) {
 
 function createHTTPServer() {
   const server = httpServer.createServer({
-    root: join(__dirname, 'benchmarks'),
+    root: join(__dirname, "benchmarks"),
     robots: true,
-    cache: 'no-store',
+    cache: "no-store",
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': 'true',
-    },
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true"
+    }
   });
   server.listen(8080);
   return server;
@@ -70,7 +70,7 @@ if (require.main === module) {
   if (benchmarkInput) {
     serveBenchmark(benchmarkInput);
   } else {
-    console.error('Please specify a benchmark directory to serve!');
+    console.error("Please specify a benchmark directory to serve!");
     process.exit(1);
   }
 }

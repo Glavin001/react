@@ -5,22 +5,22 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import warning from 'fbjs/lib/warning';
-import {ReactDebugCurrentFrame} from 'shared/ReactGlobalSharedState';
+import warning from "fbjs/lib/warning";
+import { ReactDebugCurrentFrame } from "shared/ReactGlobalSharedState";
 
-import {ATTRIBUTE_NAME_CHAR} from './DOMProperty';
-import isCustomComponent from './isCustomComponent';
-import validAriaProperties from './validAriaProperties';
+import { ATTRIBUTE_NAME_CHAR } from "./DOMProperty";
+import isCustomComponent from "./isCustomComponent";
+import validAriaProperties from "./validAriaProperties";
 
 const warnedProperties = {};
-const rARIA = new RegExp('^(aria)-[' + ATTRIBUTE_NAME_CHAR + ']*$');
-const rARIACamel = new RegExp('^(aria)[A-Z][' + ATTRIBUTE_NAME_CHAR + ']*$');
+const rARIA = new RegExp("^(aria)-[" + ATTRIBUTE_NAME_CHAR + "]*$");
+const rARIACamel = new RegExp("^(aria)[A-Z][" + ATTRIBUTE_NAME_CHAR + "]*$");
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 function getStackAddendum() {
   const stack = ReactDebugCurrentFrame.getStackAddendum();
-  return stack != null ? stack : '';
+  return stack != null ? stack : "";
 }
 
 function validateProperty(tagName, name) {
@@ -29,7 +29,7 @@ function validateProperty(tagName, name) {
   }
 
   if (rARIACamel.test(name)) {
-    const ariaName = 'aria-' + name.slice(4).toLowerCase();
+    const ariaName = "aria-" + name.slice(4).toLowerCase();
     const correctName = validAriaProperties.hasOwnProperty(ariaName)
       ? ariaName
       : null;
@@ -39,9 +39,9 @@ function validateProperty(tagName, name) {
     if (correctName == null) {
       warning(
         false,
-        'Invalid ARIA attribute `%s`. ARIA attributes follow the pattern aria-* and must be lowercase.%s',
+        "Invalid ARIA attribute `%s`. ARIA attributes follow the pattern aria-* and must be lowercase.%s",
         name,
-        getStackAddendum(),
+        getStackAddendum()
       );
       warnedProperties[name] = true;
       return true;
@@ -50,10 +50,10 @@ function validateProperty(tagName, name) {
     if (name !== correctName) {
       warning(
         false,
-        'Invalid ARIA attribute `%s`. Did you mean `%s`?%s',
+        "Invalid ARIA attribute `%s`. Did you mean `%s`?%s",
         name,
         correctName,
-        getStackAddendum(),
+        getStackAddendum()
       );
       warnedProperties[name] = true;
       return true;
@@ -76,10 +76,10 @@ function validateProperty(tagName, name) {
     if (name !== standardName) {
       warning(
         false,
-        'Unknown ARIA attribute `%s`. Did you mean `%s`?%s',
+        "Unknown ARIA attribute `%s`. Did you mean `%s`?%s",
         name,
         standardName,
-        getStackAddendum(),
+        getStackAddendum()
       );
       warnedProperties[name] = true;
       return true;
@@ -100,26 +100,26 @@ function warnInvalidARIAProps(type, props) {
   }
 
   const unknownPropString = invalidProps
-    .map(prop => '`' + prop + '`')
-    .join(', ');
+    .map(prop => "`" + prop + "`")
+    .join(", ");
 
   if (invalidProps.length === 1) {
     warning(
       false,
-      'Invalid aria prop %s on <%s> tag. ' +
-        'For details, see https://fb.me/invalid-aria-prop%s',
+      "Invalid aria prop %s on <%s> tag. " +
+        "For details, see https://fb.me/invalid-aria-prop%s",
       unknownPropString,
       type,
-      getStackAddendum(),
+      getStackAddendum()
     );
   } else if (invalidProps.length > 1) {
     warning(
       false,
-      'Invalid aria props %s on <%s> tag. ' +
-        'For details, see https://fb.me/invalid-aria-prop%s',
+      "Invalid aria props %s on <%s> tag. " +
+        "For details, see https://fb.me/invalid-aria-prop%s",
       unknownPropString,
       type,
-      getStackAddendum(),
+      getStackAddendum()
     );
   }
 }

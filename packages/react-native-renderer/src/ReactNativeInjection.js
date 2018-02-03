@@ -14,19 +14,19 @@
  * TODO: require this in packager, not in React #10932517
  */
 // Module provided by RN:
-import 'InitializeCore';
+import "InitializeCore";
 
-import * as EventPluginHub from 'events/EventPluginHub';
-import * as EventPluginUtils from 'events/EventPluginUtils';
-import ResponderEventPlugin from 'events/ResponderEventPlugin';
+import * as EventPluginHub from "events/EventPluginHub";
+import * as EventPluginUtils from "events/EventPluginUtils";
+import ResponderEventPlugin from "events/ResponderEventPlugin";
 // Module provided by RN:
-import RCTEventEmitter from 'RCTEventEmitter';
+import RCTEventEmitter from "RCTEventEmitter";
 
-import ReactNativeBridgeEventPlugin from './ReactNativeBridgeEventPlugin';
-import * as ReactNativeComponentTree from './ReactNativeComponentTree';
-import * as ReactNativeEventEmitter from './ReactNativeEventEmitter';
-import ReactNativeEventPluginOrder from './ReactNativeEventPluginOrder';
-import ReactNativeGlobalResponderHandler from './ReactNativeGlobalResponderHandler';
+import ReactNativeBridgeEventPlugin from "./ReactNativeBridgeEventPlugin";
+import * as ReactNativeComponentTree from "./ReactNativeComponentTree";
+import * as ReactNativeEventEmitter from "./ReactNativeEventEmitter";
+import ReactNativeEventPluginOrder from "./ReactNativeEventPluginOrder";
+import ReactNativeGlobalResponderHandler from "./ReactNativeGlobalResponderHandler";
 
 /**
  * Register the event emitter with the native bridge
@@ -40,7 +40,7 @@ EventPluginHub.injection.injectEventPluginOrder(ReactNativeEventPluginOrder);
 EventPluginUtils.injection.injectComponentTree(ReactNativeComponentTree);
 
 ResponderEventPlugin.injection.injectGlobalResponderHandler(
-  ReactNativeGlobalResponderHandler,
+  ReactNativeGlobalResponderHandler
 );
 
 /**
@@ -49,5 +49,5 @@ ResponderEventPlugin.injection.injectGlobalResponderHandler(
  */
 EventPluginHub.injection.injectEventPluginsByName({
   ResponderEventPlugin: ResponderEventPlugin,
-  ReactNativeBridgeEventPlugin: ReactNativeBridgeEventPlugin,
+  ReactNativeBridgeEventPlugin: ReactNativeBridgeEventPlugin
 });

@@ -12,22 +12,22 @@ import type {
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
   NativeMethodsMixinType,
-  ReactNativeBaseComponentViewConfig,
-} from './ReactNativeTypes';
+  ReactNativeBaseComponentViewConfig
+} from "./ReactNativeTypes";
 
-import invariant from 'fbjs/lib/invariant';
+import invariant from "fbjs/lib/invariant";
 // Modules provided by RN:
-import TextInputState from 'TextInputState';
-import UIManager from 'UIManager';
+import TextInputState from "TextInputState";
+import UIManager from "UIManager";
 
-import * as ReactNativeAttributePayload from './ReactNativeAttributePayload';
+import * as ReactNativeAttributePayload from "./ReactNativeAttributePayload";
 import {
   mountSafeCallback,
   throwOnStylesProp,
-  warnForStyleProps,
-} from './NativeMethodsMixinUtils';
-import findNodeHandle from './findNodeHandle';
-import findNumericNodeHandle from './findNumericNodeHandle';
+  warnForStyleProps
+} from "./NativeMethodsMixinUtils";
+import findNodeHandle from "./findNodeHandle";
+import findNumericNodeHandle from "./findNumericNodeHandle";
 
 /**
  * `NativeMethodsMixin` provides methods to access the underlying native
@@ -65,7 +65,7 @@ const NativeMethodsMixin: $Exact<NativeMethodsMixinType> = {
   measure: function(callback: MeasureOnSuccessCallback) {
     UIManager.measure(
       findNumericNodeHandle(this),
-      mountSafeCallback(this, callback),
+      mountSafeCallback(this, callback)
     );
   },
 
@@ -87,7 +87,7 @@ const NativeMethodsMixin: $Exact<NativeMethodsMixinType> = {
   measureInWindow: function(callback: MeasureInWindowOnSuccessCallback) {
     UIManager.measureInWindow(
       findNumericNodeHandle(this),
-      mountSafeCallback(this, callback),
+      mountSafeCallback(this, callback)
     );
   },
 
@@ -102,13 +102,13 @@ const NativeMethodsMixin: $Exact<NativeMethodsMixinType> = {
   measureLayout: function(
     relativeToNativeNode: number,
     onSuccess: MeasureLayoutOnSuccessCallback,
-    onFail: () => void /* currently unused */,
+    onFail: () => void /* currently unused */
   ) {
     UIManager.measureLayout(
       findNumericNodeHandle(this),
       relativeToNativeNode,
       mountSafeCallback(this, onFail),
-      mountSafeCallback(this, onSuccess),
+      mountSafeCallback(this, onSuccess)
     );
   },
 
@@ -149,7 +149,7 @@ const NativeMethodsMixin: $Exact<NativeMethodsMixinType> = {
 
     const updatePayload = ReactNativeAttributePayload.create(
       nativeProps,
-      viewConfig.validAttributes,
+      viewConfig.validAttributes
     );
 
     // Avoid the overhead of bridge calls if there's no update.
@@ -159,7 +159,7 @@ const NativeMethodsMixin: $Exact<NativeMethodsMixinType> = {
       UIManager.updateView(
         maybeInstance._nativeTag,
         viewConfig.uiViewClassName,
-        updatePayload,
+        updatePayload
       );
     }
   },
@@ -177,7 +177,7 @@ const NativeMethodsMixin: $Exact<NativeMethodsMixinType> = {
    */
   blur: function() {
     TextInputState.blurTextInput(findNumericNodeHandle(this));
-  },
+  }
 };
 
 if (__DEV__) {
@@ -188,7 +188,7 @@ if (__DEV__) {
   invariant(
     !NativeMethodsMixin_DEV.componentWillMount &&
       !NativeMethodsMixin_DEV.componentWillReceiveProps,
-    'Do not override existing functions.',
+    "Do not override existing functions."
   );
   NativeMethodsMixin_DEV.componentWillMount = function() {
     throwOnStylesProp(this, this.props);

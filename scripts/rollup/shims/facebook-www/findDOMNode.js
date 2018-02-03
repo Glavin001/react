@@ -7,8 +7,8 @@
  * @providesModule findDOMNode
  */
 
-'use strict';
+"use strict";
 
-const {findDOMNode} = require('ReactDOM-fb');
+const { findDOMNode } = require("ReactDOM-fb");
 
 module.exports = findDOMNode;

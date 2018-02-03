@@ -13,18 +13,18 @@ import type {
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
   NativeMethodsMixinType,
-  ReactNativeBaseComponentViewConfig,
-} from './ReactNativeTypes';
+  ReactNativeBaseComponentViewConfig
+} from "./ReactNativeTypes";
 
-import React from 'react';
+import React from "react";
 // Modules provided by RN:
-import TextInputState from 'TextInputState';
-import UIManager from 'UIManager';
+import TextInputState from "TextInputState";
+import UIManager from "UIManager";
 
-import * as ReactNativeAttributePayload from './ReactNativeAttributePayload';
-import {mountSafeCallback} from './NativeMethodsMixinUtils';
-import findNodeHandle from './findNodeHandle';
-import findNumericNodeHandle from './findNumericNodeHandle';
+import * as ReactNativeAttributePayload from "./ReactNativeAttributePayload";
+import { mountSafeCallback } from "./NativeMethodsMixinUtils";
+import findNodeHandle from "./findNodeHandle";
+import findNumericNodeHandle from "./findNumericNodeHandle";
 
 /**
  * Superclass that provides methods to access the underlying native component.
@@ -39,7 +39,7 @@ import findNumericNodeHandle from './findNumericNodeHandle';
  */
 class ReactNativeComponent<DefaultProps, Props, State> extends React.Component<
   Props,
-  State,
+  State
 > {
   static defaultProps: DefaultProps;
   props: Props;
@@ -77,7 +77,7 @@ class ReactNativeComponent<DefaultProps, Props, State> extends React.Component<
   measure(callback: MeasureOnSuccessCallback): void {
     UIManager.measure(
       findNumericNodeHandle(this),
-      mountSafeCallback(this, callback),
+      mountSafeCallback(this, callback)
     );
   }
 
@@ -97,7 +97,7 @@ class ReactNativeComponent<DefaultProps, Props, State> extends React.Component<
   measureInWindow(callback: MeasureInWindowOnSuccessCallback): void {
     UIManager.measureInWindow(
       findNumericNodeHandle(this),
-      mountSafeCallback(this, callback),
+      mountSafeCallback(this, callback)
     );
   }
 
@@ -110,13 +110,13 @@ class ReactNativeComponent<DefaultProps, Props, State> extends React.Component<
   measureLayout(
     relativeToNativeNode: number,
     onSuccess: MeasureLayoutOnSuccessCallback,
-    onFail: () => void /* currently unused */,
+    onFail: () => void /* currently unused */
   ): void {
     UIManager.measureLayout(
       findNumericNodeHandle(this),
       relativeToNativeNode,
       mountSafeCallback(this, onFail),
-      mountSafeCallback(this, onSuccess),
+      mountSafeCallback(this, onSuccess)
     );
   }
 
@@ -153,7 +153,7 @@ class ReactNativeComponent<DefaultProps, Props, State> extends React.Component<
 
     const updatePayload = ReactNativeAttributePayload.create(
       nativeProps,
-      viewConfig.validAttributes,
+      viewConfig.validAttributes
     );
 
     // Avoid the overhead of bridge calls if there's no update.
@@ -163,7 +163,7 @@ class ReactNativeComponent<DefaultProps, Props, State> extends React.Component<
       UIManager.updateView(
         maybeInstance._nativeTag,
         viewConfig.uiViewClassName,
-        updatePayload,
+        updatePayload
       );
     }
   }

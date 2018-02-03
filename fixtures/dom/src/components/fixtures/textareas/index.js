@@ -1,19 +1,20 @@
-import FixtureSet from '../../FixtureSet';
-import TestCase from '../../TestCase';
+import FixtureSet from "../../FixtureSet";
+import TestCase from "../../TestCase";
 
 const React = window.React;
 
 export default class TextAreaFixtures extends React.Component {
-  state = {value: ''};
+  state = { value: "" };
   onChange = event => {
-    this.setState({value: event.target.value});
+    this.setState({ value: event.target.value });
   };
   render() {
     return (
       <FixtureSet title="Textareas">
         <TestCase
           title="Kitchen Sink"
-          description="Verify that the controlled textarea displays its value under 'Controlled Output', and that both textareas can be typed in">
+          description="Verify that the controlled textarea displays its value under 'Controlled Output', and that both textareas can be typed in"
+        >
           <div>
             <form className="container">
               <fieldset>
@@ -35,7 +36,7 @@ export default class TextAreaFixtures extends React.Component {
           <TestCase.ExpectedResult>
             The textarea should be rendered with the placeholder "Hello, world"
           </TestCase.ExpectedResult>
-          <div style={{margin: '10px 0px'}}>
+          <div style={{ margin: "10px 0px" }}>
             <textarea placeholder="Hello, world" />
           </div>
         </TestCase>

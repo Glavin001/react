@@ -1,19 +1,19 @@
-var path = require('path');
-var webpack = require('webpack');
+var path = require("path");
+var webpack = require("webpack");
 
 module.exports = {
-  entry: './input',
+  entry: "./input",
   output: {
-    filename: 'output.js',
+    filename: "output.js"
   },
   resolve: {
-    root: path.resolve('../../../../build/packages/'),
+    root: path.resolve("../../../../build/packages/")
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production'),
-      },
-    }),
-  ],
+      "process.env": {
+        NODE_ENV: JSON.stringify("production")
+      }
+    })
+  ]
 };

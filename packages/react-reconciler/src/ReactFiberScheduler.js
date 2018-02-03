@@ -7,15 +7,15 @@
  * @flow
  */
 
-import type {HostConfig, Deadline} from 'react-reconciler';
-import type {Fiber} from './ReactFiber';
-import type {FiberRoot, Batch} from './ReactFiberRoot';
-import type {HydrationContext} from './ReactFiberHydrationContext';
-import type {ExpirationTime} from './ReactFiberExpirationTime';
+import type { HostConfig, Deadline } from "react-reconciler";
+import type { Fiber } from "./ReactFiber";
+import type { FiberRoot, Batch } from "./ReactFiberRoot";
+import type { HydrationContext } from "./ReactFiberHydrationContext";
+import type { ExpirationTime } from "./ReactFiberExpirationTime";
 
-import {getStackAddendumByWorkInProgressFiber} from 'shared/ReactFiberComponentTreeHook';
-import ReactErrorUtils from 'shared/ReactErrorUtils';
-import {ReactCurrentOwner} from 'shared/ReactGlobalSharedState';
+import { getStackAddendumByWorkInProgressFiber } from "shared/ReactFiberComponentTreeHook";
+import ReactErrorUtils from "shared/ReactErrorUtils";
+import { ReactCurrentOwner } from "shared/ReactGlobalSharedState";
 import {
   PerformedWork,
   Placement,
@@ -25,26 +25,26 @@ import {
   ContentReset,
   Callback,
   Err,
-  Ref,
-} from 'shared/ReactTypeOfSideEffect';
+  Ref
+} from "shared/ReactTypeOfSideEffect";
 import {
   HostRoot,
   HostComponent,
   HostPortal,
-  ClassComponent,
-} from 'shared/ReactTypeOfWork';
-import {enableUserTimingAPI} from 'shared/ReactFeatureFlags';
-import getComponentName from 'shared/getComponentName';
-import invariant from 'fbjs/lib/invariant';
-import warning from 'fbjs/lib/warning';
+  ClassComponent
+} from "shared/ReactTypeOfWork";
+import { enableUserTimingAPI } from "shared/ReactFeatureFlags";
+import getComponentName from "shared/getComponentName";
+import invariant from "fbjs/lib/invariant";
+import warning from "fbjs/lib/warning";
 
-import ReactFiberBeginWork from './ReactFiberBeginWork';
-import ReactFiberCompleteWork from './ReactFiberCompleteWork';
-import ReactFiberCommitWork from './ReactFiberCommitWork';
-import ReactFiberHostContext from './ReactFiberHostContext';
-import ReactFiberHydrationContext from './ReactFiberHydrationContext';
-import ReactFiberInstrumentation from './ReactFiberInstrumentation';
-import ReactDebugCurrentFiber from './ReactDebugCurrentFiber';
+import ReactFiberBeginWork from "./ReactFiberBeginWork";
+import ReactFiberCompleteWork from "./ReactFiberCompleteWork";
+import ReactFiberCommitWork from "./ReactFiberCommitWork";
+import ReactFiberHostContext from "./ReactFiberHostContext";
+import ReactFiberHydrationContext from "./ReactFiberHydrationContext";
+import ReactFiberInstrumentation from "./ReactFiberInstrumentation";
+import ReactDebugCurrentFiber from "./ReactDebugCurrentFiber";
 import {
   recordEffect,
   recordScheduleUpdate,
@@ -60,29 +60,29 @@ import {
   startCommitHostEffectsTimer,
   stopCommitHostEffectsTimer,
   startCommitLifeCyclesTimer,
-  stopCommitLifeCyclesTimer,
-} from './ReactDebugFiberPerf';
-import {popContextProvider} from './ReactFiberContext';
-import {reset} from './ReactFiberStack';
-import {logCapturedError} from './ReactFiberErrorLogger';
-import {createWorkInProgress} from './ReactFiber';
-import {onCommitRoot} from './ReactFiberDevToolsHook';
+  stopCommitLifeCyclesTimer
+} from "./ReactDebugFiberPerf";
+import { popContextProvider } from "./ReactFiberContext";
+import { reset } from "./ReactFiberStack";
+import { logCapturedError } from "./ReactFiberErrorLogger";
+import { createWorkInProgress } from "./ReactFiber";
+import { onCommitRoot } from "./ReactFiberDevToolsHook";
 import {
   NoWork,
   Sync,
   Never,
   msToExpirationTime,
   expirationTimeToMs,
-  computeExpirationBucket,
-} from './ReactFiberExpirationTime';
-import {AsyncUpdates} from './ReactTypeOfInternalContext';
-import {getUpdateExpirationTime} from './ReactFiberUpdateQueue';
-import {resetContext} from './ReactFiberContext';
+  computeExpirationBucket
+} from "./ReactFiberExpirationTime";
+import { AsyncUpdates } from "./ReactTypeOfInternalContext";
+import { getUpdateExpirationTime } from "./ReactFiberUpdateQueue";
+import { resetContext } from "./ReactFiberContext";
 
 const {
   invokeGuardedCallback,
   hasCaughtError,
-  clearCaughtError,
+  clearCaughtError
 } = ReactErrorUtils;
 
 export type CapturedError = {
@@ -92,11 +92,11 @@ export type CapturedError = {
   errorBoundary: ?Object,
   errorBoundaryFound: boolean,
   errorBoundaryName: string | null,
-  willRetry: boolean,
+  willRetry: boolean
 };
 
 export type HandleErrorInfo = {
-  componentStack: string,
+  componentStack: string
 };
 
 let didWarnAboutStateTransition;
@@ -110,43 +110,43 @@ if (__DEV__) {
   const didWarnStateUpdateForUnmountedComponent = {};
 
   warnAboutUpdateOnUnmounted = function(fiber: Fiber) {
-    const componentName = getComponentName(fiber) || 'ReactClass';
+    const componentName = getComponentName(fiber) || "ReactClass";
     if (didWarnStateUpdateForUnmountedComponent[componentName]) {
       return;
     }
     warning(
       false,
-      'Can only update a mounted or mounting ' +
-        'component. This usually means you called setState, replaceState, ' +
-        'or forceUpdate on an unmounted component. This is a no-op.\n\nPlease ' +
-        'check the code for the %s component.',
-      componentName,
+      "Can only update a mounted or mounting " +
+        "component. This usually means you called setState, replaceState, " +
+        "or forceUpdate on an unmounted component. This is a no-op.\n\nPlease " +
+        "check the code for the %s component.",
+      componentName
     );
     didWarnStateUpdateForUnmountedComponent[componentName] = true;
   };
 
   warnAboutInvalidUpdates = function(instance: React$Component<any>) {
     switch (ReactDebugCurrentFiber.phase) {
-      case 'getChildContext':
+      case "getChildContext":
         if (didWarnSetStateChildContext) {
           return;
         }
         warning(
           false,
-          'setState(...): Cannot call setState() inside getChildContext()',
+          "setState(...): Cannot call setState() inside getChildContext()"
         );
         didWarnSetStateChildContext = true;
         break;
-      case 'render':
+      case "render":
         if (didWarnAboutStateTransition) {
           return;
         }
         warning(
           false,
-          'Cannot update during an existing state transition (such as within ' +
+          "Cannot update during an existing state transition (such as within " +
             "`render` or another component's constructor). Render methods should " +
-            'be a pure function of props and state; constructor side-effects are ' +
-            'an anti-pattern, but can be moved to `componentWillMount`.',
+            "be a pure function of props and state; constructor side-effects are " +
+            "an anti-pattern, but can be moved to `componentWillMount`."
         );
         didWarnAboutStateTransition = true;
         break;
@@ -155,24 +155,24 @@ if (__DEV__) {
 }
 
 export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
-  config: HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL>,
+  config: HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL>
 ) {
   const hostContext = ReactFiberHostContext(config);
   const hydrationContext: HydrationContext<C, CX> = ReactFiberHydrationContext(
-    config,
+    config
   );
-  const {popHostContainer, popHostContext, resetHostContainer} = hostContext;
-  const {beginWork, beginFailedWork} = ReactFiberBeginWork(
+  const { popHostContainer, popHostContext, resetHostContainer } = hostContext;
+  const { beginWork, beginFailedWork } = ReactFiberBeginWork(
     config,
     hostContext,
     hydrationContext,
     scheduleWork,
-    computeExpirationForFiber,
+    computeExpirationForFiber
   );
-  const {completeWork} = ReactFiberCompleteWork(
+  const { completeWork } = ReactFiberCompleteWork(
     config,
     hostContext,
-    hydrationContext,
+    hydrationContext
   );
   const {
     commitResetTextContent,
@@ -181,7 +181,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     commitWork,
     commitLifeCycles,
     commitAttachRef,
-    commitDetachRef,
+    commitDetachRef
   } = ReactFiberCommitWork(config, captureError);
   const {
     now,
@@ -189,7 +189,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     cancelDeferredCallback,
     useSyncScheduling,
     prepareForCommit,
-    resetAfterCommit,
+    resetAfterCommit
   } = config;
 
   // Represents the current time in ms.
@@ -354,9 +354,9 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     const root: FiberRoot = finishedWork.stateNode;
     invariant(
       root.current !== finishedWork,
-      'Cannot commit the same tree as before. This is probably a bug ' +
-        'related to the return field. This error is likely caused by a bug ' +
-        'in React. Please file an issue.',
+      "Cannot commit the same tree as before. This is probably a bug " +
+        "related to the return field. This error is likely caused by a bug " +
+        "in React. Please file an issue."
     );
     root.isReadyForCommit = false;
 
@@ -407,8 +407,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       if (didError) {
         invariant(
           nextEffect !== null,
-          'Should have next effect. This error is likely caused by a bug ' +
-            'in React. Please file an issue.',
+          "Should have next effect. This error is likely caused by a bug " +
+            "in React. Please file an issue."
         );
         captureError(nextEffect, error);
         // Clean-up
@@ -453,8 +453,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       if (didError) {
         invariant(
           nextEffect !== null,
-          'Should have next effect. This error is likely caused by a bug ' +
-            'in React. Please file an issue.',
+          "Should have next effect. This error is likely caused by a bug " +
+            "in React. Please file an issue."
         );
         captureError(nextEffect, error);
         if (nextEffect !== null) {
@@ -467,7 +467,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     isWorking = false;
     stopCommitLifeCyclesTimer();
     stopCommitTimer();
-    if (typeof onCommitRoot === 'function') {
+    if (typeof onCommitRoot === "function") {
       onCommitRoot(finishedWork.stateNode);
     }
     if (__DEV__ && ReactFiberInstrumentation.debugTool) {
@@ -499,7 +499,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
 
   function resetExpirationTime(
     workInProgress: Fiber,
-    renderTime: ExpirationTime,
+    renderTime: ExpirationTime
   ) {
     if (renderTime !== Never && workInProgress.expirationTime === Never) {
       // The children of this component are hidden. Don't bubble their
@@ -540,7 +540,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       const next = completeWork(
         current,
         workInProgress,
-        nextRenderExpirationTime,
+        nextRenderExpirationTime
       );
       if (__DEV__) {
         ReactDebugCurrentFiber.resetCurrentFiber();
@@ -666,7 +666,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     let next = beginFailedWork(
       current,
       workInProgress,
-      nextRenderExpirationTime,
+      nextRenderExpirationTime
     );
     if (__DEV__) {
       ReactDebugCurrentFiber.resetCurrentFiber();
@@ -749,7 +749,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     root: FiberRoot,
     failedWork: Fiber,
     boundary: Fiber,
-    expirationTime: ExpirationTime,
+    expirationTime: ExpirationTime
   ) {
     // We're going to restart the error boundary that captured the error.
     // Conceptually, we're unwinding the stack. We need to unwind the
@@ -769,12 +769,12 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
 
   function renderRoot(
     root: FiberRoot,
-    expirationTime: ExpirationTime,
+    expirationTime: ExpirationTime
   ): Fiber | null {
     invariant(
       !isWorking,
-      'renderRoot was called recursively. This error is likely caused ' +
-        'by a bug in React. Please file an issue.',
+      "renderRoot was called recursively. This error is likely caused " +
+        "by a bug in React. Please file an issue."
     );
     isWorking = true;
 
@@ -796,7 +796,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       nextUnitOfWork = createWorkInProgress(
         nextRoot.current,
         null,
-        expirationTime,
+        expirationTime
       );
     }
 
@@ -840,8 +840,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       const boundary = captureError(failedWork, error);
       invariant(
         boundary !== null,
-        'Should have found an error boundary. This error is likely ' +
-          'caused by a bug in React. Please file an issue.',
+        "Should have found an error boundary. This error is likely " +
+          "caused by a bug in React. Please file an issue."
       );
 
       if (didFatal) {
@@ -860,7 +860,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
           root,
           failedWork,
           boundary,
-          expirationTime,
+          expirationTime
         );
         if (hasCaughtError()) {
           didError = true;
@@ -930,7 +930,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       while (node !== null && boundary === null) {
         if (node.tag === ClassComponent) {
           const instance = node.stateNode;
-          if (typeof instance.componentDidCatch === 'function') {
+          if (typeof instance.componentDidCatch === "function") {
             errorBoundaryFound = true;
             errorBoundaryName = getComponentName(node);
 
@@ -1006,7 +1006,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         errorBoundary: errorBoundaryFound ? boundary.stateNode : null,
         errorBoundaryFound,
         errorBoundaryName,
-        willRetry,
+        willRetry
       };
 
       capturedErrors.set(boundary, capturedError);
@@ -1080,8 +1080,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
 
     invariant(
       capturedError != null,
-      'No error for given unit of work. This error is likely caused by a ' +
-        'bug in React. Please file an issue.',
+      "No error for given unit of work. This error is likely caused by a " +
+        "bug in React. Please file an issue."
     );
 
     switch (effectfulFiber.tag) {
@@ -1089,7 +1089,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         const instance = effectfulFiber.stateNode;
 
         const info: HandleErrorInfo = {
-          componentStack: capturedError.componentStack,
+          componentStack: capturedError.componentStack
         };
 
         // Allow the boundary to handle the error, usually by scheduling
@@ -1104,8 +1104,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       default:
         invariant(
           false,
-          'Invalid type of work. This error is likely caused by a bug in ' +
-            'React. Please file an issue.',
+          "Invalid type of work. This error is likely caused by a bug in " +
+            "React. Please file an issue."
         );
     }
   }
@@ -1196,7 +1196,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function checkRootNeedsClearing(
     root: FiberRoot,
     fiber: Fiber,
-    expirationTime: ExpirationTime,
+    expirationTime: ExpirationTime
   ) {
     if (
       !isWorking &&
@@ -1217,7 +1217,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function scheduleWorkImpl(
     fiber: Fiber,
     expirationTime: ExpirationTime,
-    isErrorRecovery: boolean,
+    isErrorRecovery: boolean
   ) {
     recordScheduleUpdate();
 
@@ -1347,7 +1347,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     const timeout = expirationMs - currentMs;
 
     callbackExpirationTime = expirationTime;
-    callbackID = scheduleDeferredCallback(performAsyncWork, {timeout});
+    callbackID = scheduleDeferredCallback(performAsyncWork, { timeout });
   }
 
   // requestWork is called by the scheduler whenever a root receives an update.
@@ -1356,10 +1356,10 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     if (nestedUpdateCount > NESTED_UPDATE_LIMIT) {
       invariant(
         false,
-        'Maximum update depth exceeded. This can happen when a ' +
-          'component repeatedly calls setState inside componentWillUpdate or ' +
-          'componentDidUpdate. React limits the number of nested updates to ' +
-          'prevent infinite loops.',
+        "Maximum update depth exceeded. This can happen when a " +
+          "component repeatedly calls setState inside componentWillUpdate or " +
+          "componentDidUpdate. React limits the number of nested updates to " +
+          "prevent infinite loops."
       );
     }
 
@@ -1431,8 +1431,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
           // from the loop right after.
           invariant(
             previousScheduledRoot !== null && lastScheduledRoot !== null,
-            'Should have a previous and last root. This error is likely ' +
-              'caused by a bug in React. Please file an issue.',
+            "Should have a previous and last root. This error is likely " +
+              "caused by a bug in React. Please file an issue."
           );
           if (root === root.nextScheduledRoot) {
             // This is the only root in the list.
@@ -1516,7 +1516,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       performWorkOnRoot(
         nextFlushedRoot,
         nextFlushedExpirationTime,
-        recalculateCurrentTime(),
+        recalculateCurrentTime()
       );
       // Find the next highest priority work.
       findHighestPriorityRoot();
@@ -1546,8 +1546,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function flushRoot(root: FiberRoot, expirationTime: ExpirationTime) {
     invariant(
       !isRendering,
-      'work.commit(): Cannot commit while already rendering. This likely ' +
-        'means you attempted to commit from inside a lifecycle method.',
+      "work.commit(): Cannot commit while already rendering. This likely " +
+        "means you attempted to commit from inside a lifecycle method."
     );
     // Perform work on root as if the given expiration time is the current time.
     // This has the effect of synchronously flushing all work up to and
@@ -1584,12 +1584,12 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function performWorkOnRoot(
     root: FiberRoot,
     expirationTime: ExpirationTime,
-    currentTime: ExpirationTime,
+    currentTime: ExpirationTime
   ) {
     invariant(
       !isRendering,
-      'performWorkOnRoot was called recursively. This error is likely caused ' +
-        'by a bug in React. Please file an issue.',
+      "performWorkOnRoot was called recursively. This error is likely caused " +
+        "by a bug in React. Please file an issue."
     );
 
     isRendering = true;
@@ -1639,7 +1639,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function completeRoot(
     root: FiberRoot,
     finishedWork: Fiber,
-    expirationTime: ExpirationTime,
+    expirationTime: ExpirationTime
   ): void {
     // Check if there's a batch that matches this expiration time.
     const firstBatch = root.firstBatch;
@@ -1683,8 +1683,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function onUncaughtError(error) {
     invariant(
       nextFlushedRoot !== null,
-      'Should be working on a root. This error is likely caused by a bug in ' +
-        'React. Please file an issue.',
+      "Should be working on a root. This error is likely caused by a bug in " +
+        "React. Please file an issue."
     );
     // Unschedule this root so we don't work on it again until there's
     // another update.
@@ -1735,8 +1735,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       isBatchingUpdates = previousIsBatchingUpdates;
       invariant(
         !isRendering,
-        'flushSync was called from inside a lifecycle method. It cannot be ' +
-          'called when React is already rendering.',
+        "flushSync was called from inside a lifecycle method. It cannot be " +
+          "called when React is already rendering."
       );
       performWork(Sync, null);
     }
@@ -1751,6 +1751,6 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     unbatchedUpdates,
     flushSync,
     deferredUpdates,
-    computeUniqueAsyncExpiration,
+    computeUniqueAsyncExpiration
   };
 }

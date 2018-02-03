@@ -7,7 +7,7 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactDOM;
@@ -22,42 +22,42 @@ const GET_INIT_STATE_RETURN_VAL = {
   hasWillMountCompleted: false,
   hasRenderCompleted: false,
   hasDidMountCompleted: false,
-  hasWillUnmountCompleted: false,
+  hasWillUnmountCompleted: false
 };
 
 const INIT_RENDER_STATE = {
   hasWillMountCompleted: true,
   hasRenderCompleted: false,
   hasDidMountCompleted: false,
-  hasWillUnmountCompleted: false,
+  hasWillUnmountCompleted: false
 };
 
 const DID_MOUNT_STATE = {
   hasWillMountCompleted: true,
   hasRenderCompleted: true,
   hasDidMountCompleted: false,
-  hasWillUnmountCompleted: false,
+  hasWillUnmountCompleted: false
 };
 
 const NEXT_RENDER_STATE = {
   hasWillMountCompleted: true,
   hasRenderCompleted: true,
   hasDidMountCompleted: true,
-  hasWillUnmountCompleted: false,
+  hasWillUnmountCompleted: false
 };
 
 const WILL_UNMOUNT_STATE = {
   hasWillMountCompleted: true,
   hasDidMountCompleted: true,
   hasRenderCompleted: true,
-  hasWillUnmountCompleted: false,
+  hasWillUnmountCompleted: false
 };
 
 const POST_WILL_UNMOUNT_STATE = {
   hasWillMountCompleted: true,
   hasDidMountCompleted: true,
   hasRenderCompleted: true,
-  hasWillUnmountCompleted: true,
+  hasWillUnmountCompleted: true
 };
 
 /**
@@ -68,13 +68,13 @@ type ComponentLifeCycle =
    * Mounted components have a DOM node representation and are capable of
    * receiving new props.
    */
-  | 'MOUNTED' /**
+  | "MOUNTED" /**
    * Unmounted components are inactive and cannot receive new props.
    */
-  | 'UNMOUNTED';
+  | "UNMOUNTED";
 
 function getLifeCycleState(instance): ComponentLifeCycle {
-  return instance.updater.isMounted(instance) ? 'MOUNTED' : 'UNMOUNTED';
+  return instance.updater.isMounted(instance) ? "MOUNTED" : "UNMOUNTED";
 }
 
 /**
@@ -84,17 +84,17 @@ function getLifeCycleState(instance): ComponentLifeCycle {
  * is *reused*, then that won't be the case and things will appear to work in
  * some cases. Better to just block all updates in initialization.
  */
-describe('ReactComponentLifeCycle', () => {
+describe("ReactComponentLifeCycle", () => {
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
-    ReactDOM = require('react-dom');
-    ReactTestUtils = require('react-dom/test-utils');
-    PropTypes = require('prop-types');
+    React = require("react");
+    ReactDOM = require("react-dom");
+    ReactTestUtils = require("react-dom/test-utils");
+    PropTypes = require("prop-types");
   });
 
-  it('should not reuse an instance when it has been unmounted', () => {
-    const container = document.createElement('div');
+  it("should not reuse an instance when it has been unmounted", () => {
+    const container = document.createElement("div");
 
     class StatefulComponent extends React.Component {
       state = {};
@@ -115,12 +115,12 @@ describe('ReactComponentLifeCycle', () => {
    * If a state update triggers rerendering that in turn fires an onDOMReady,
    * that second onDOMReady should not fail.
    */
-  it('it should fire onDOMReady when already in onDOMReady', () => {
+  it("it should fire onDOMReady when already in onDOMReady", () => {
     const _testJournal = [];
 
     class Child extends React.Component {
       componentDidMount() {
-        _testJournal.push('Child:onDOMReady');
+        _testJournal.push("Child:onDOMReady");
       }
 
       render() {
@@ -131,17 +131,17 @@ describe('ReactComponentLifeCycle', () => {
     class SwitcherParent extends React.Component {
       constructor(props) {
         super(props);
-        _testJournal.push('SwitcherParent:getInitialState');
-        this.state = {showHasOnDOMReadyComponent: false};
+        _testJournal.push("SwitcherParent:getInitialState");
+        this.state = { showHasOnDOMReadyComponent: false };
       }
 
       componentDidMount() {
-        _testJournal.push('SwitcherParent:onDOMReady');
+        _testJournal.push("SwitcherParent:onDOMReady");
         this.switchIt();
       }
 
       switchIt = () => {
-        this.setState({showHasOnDOMReadyComponent: true});
+        this.setState({ showHasOnDOMReadyComponent: true });
       };
 
       render() {
@@ -155,15 +155,15 @@ describe('ReactComponentLifeCycle', () => {
 
     ReactTestUtils.renderIntoDocument(<SwitcherParent />);
     expect(_testJournal).toEqual([
-      'SwitcherParent:getInitialState',
-      'SwitcherParent:onDOMReady',
-      'Child:onDOMReady',
+      "SwitcherParent:getInitialState",
+      "SwitcherParent:onDOMReady",
+      "Child:onDOMReady"
     ]);
   });
 
   // You could assign state here, but not access members of it, unless you
   // had provided a getInitialState method.
-  it('throws when accessing state in componentWillMount', () => {
+  it("throws when accessing state in componentWillMount", () => {
     class StatefulComponent extends React.Component {
       componentWillMount() {
         void this.state.yada;
@@ -180,10 +180,10 @@ describe('ReactComponentLifeCycle', () => {
     }).toThrow();
   });
 
-  it('should allow update state inside of componentWillMount', () => {
+  it("should allow update state inside of componentWillMount", () => {
     class StatefulComponent extends React.Component {
       componentWillMount() {
-        this.setState({stateField: 'something'});
+        this.setState({ stateField: "something" });
       }
 
       render() {
@@ -197,15 +197,15 @@ describe('ReactComponentLifeCycle', () => {
     }).not.toThrow();
   });
 
-  it('should not allow update state inside of getInitialState', () => {
-    spyOnDev(console, 'error');
+  it("should not allow update state inside of getInitialState", () => {
+    spyOnDev(console, "error");
 
     class StatefulComponent extends React.Component {
       constructor(props, context) {
         super(props, context);
-        this.setState({stateField: 'something'});
+        this.setState({ stateField: "something" });
 
-        this.state = {stateField: 'somethingelse'};
+        this.state = { stateField: "somethingelse" };
       }
 
       render() {
@@ -217,10 +217,10 @@ describe('ReactComponentLifeCycle', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toBe(
-        'Warning: setState(...): Can only update a mounted or ' +
-          'mounting component. This usually means you called setState() on an ' +
-          'unmounted component. This is a no-op.\n\nPlease check the code for the ' +
-          'StatefulComponent component.',
+        "Warning: setState(...): Can only update a mounted or " +
+          "mounting component. This usually means you called setState() on an " +
+          "unmounted component. This is a no-op.\n\nPlease check the code for the " +
+          "StatefulComponent component."
       );
     }
 
@@ -231,8 +231,8 @@ describe('ReactComponentLifeCycle', () => {
     }
   });
 
-  it('should correctly determine if a component is mounted', () => {
-    spyOnDev(console, 'error');
+  it("should correctly determine if a component is mounted", () => {
+    spyOnDev(console, "error");
     class Component extends React.Component {
       _isMounted() {
         // No longer a public API, but we can test that it works internally by
@@ -259,13 +259,13 @@ describe('ReactComponentLifeCycle', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Component is accessing isMounted inside its render()',
+        "Component is accessing isMounted inside its render()"
       );
     }
   });
 
-  it('should correctly determine if a null component is mounted', () => {
-    spyOnDev(console, 'error');
+  it("should correctly determine if a null component is mounted", () => {
+    spyOnDev(console, "error");
     class Component extends React.Component {
       _isMounted() {
         // No longer a public API, but we can test that it works internally by
@@ -292,19 +292,19 @@ describe('ReactComponentLifeCycle', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Component is accessing isMounted inside its render()',
+        "Component is accessing isMounted inside its render()"
       );
     }
   });
 
-  it('isMounted should return false when unmounted', () => {
+  it("isMounted should return false when unmounted", () => {
     class Component extends React.Component {
       render() {
         return <div />;
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const instance = ReactDOM.render(<Component />, container);
 
     // No longer a public API, but we can test that it works internally by
@@ -316,16 +316,16 @@ describe('ReactComponentLifeCycle', () => {
     expect(instance.updater.isMounted(instance)).toBe(false);
   });
 
-  it('warns if findDOMNode is used inside render', () => {
-    spyOnDev(console, 'error');
+  it("warns if findDOMNode is used inside render", () => {
+    spyOnDev(console, "error");
     class Component extends React.Component {
-      state = {isMounted: false};
+      state = { isMounted: false };
       componentDidMount() {
-        this.setState({isMounted: true});
+        this.setState({ isMounted: true });
       }
       render() {
         if (this.state.isMounted) {
-          expect(ReactDOM.findDOMNode(this).tagName).toBe('DIV');
+          expect(ReactDOM.findDOMNode(this).tagName).toBe("DIV");
         }
         return <div />;
       }
@@ -335,13 +335,13 @@ describe('ReactComponentLifeCycle', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Component is accessing findDOMNode inside its render()',
+        "Component is accessing findDOMNode inside its render()"
       );
     }
   });
 
-  it('should carry through each of the phases of setup', () => {
-    spyOnDev(console, 'error');
+  it("should carry through each of the phases of setup", () => {
+    spyOnDev(console, "error");
 
     class LifeCycleComponent extends React.Component {
       constructor(props, context) {
@@ -351,11 +351,11 @@ describe('ReactComponentLifeCycle', () => {
           hasWillMountCompleted: false,
           hasDidMountCompleted: false,
           hasRenderCompleted: false,
-          hasWillUnmountCompleted: false,
+          hasWillUnmountCompleted: false
         };
         this._testJournal.returnedFromGetInitialState = clone(initState);
         this._testJournal.lifeCycleAtStartOfGetInitialState = getLifeCycleState(
-          this,
+          this
         );
         this.state = initState;
       }
@@ -369,7 +369,7 @@ describe('ReactComponentLifeCycle', () => {
       componentDidMount() {
         this._testJournal.stateAtStartOfDidMount = clone(this.state);
         this._testJournal.lifeCycleAtStartOfDidMount = getLifeCycleState(this);
-        this.setState({hasDidMountCompleted: true});
+        this.setState({ hasDidMountCompleted: true });
       }
 
       render() {
@@ -389,7 +389,7 @@ describe('ReactComponentLifeCycle', () => {
       componentWillUnmount() {
         this._testJournal.stateAtStartOfWillUnmount = clone(this.state);
         this._testJournal.lifeCycleAtStartOfWillUnmount = getLifeCycleState(
-          this,
+          this
         );
         this.state.hasWillUnmountCompleted = true;
       }
@@ -398,74 +398,74 @@ describe('ReactComponentLifeCycle', () => {
     // A component that is merely "constructed" (as in "constructor") but not
     // yet initialized, or rendered.
     //
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const instance = ReactDOM.render(<LifeCycleComponent />, container);
 
     // getInitialState
     expect(instance._testJournal.returnedFromGetInitialState).toEqual(
-      GET_INIT_STATE_RETURN_VAL,
+      GET_INIT_STATE_RETURN_VAL
     );
     expect(instance._testJournal.lifeCycleAtStartOfGetInitialState).toBe(
-      'UNMOUNTED',
+      "UNMOUNTED"
     );
 
     // componentWillMount
     expect(instance._testJournal.stateAtStartOfWillMount).toEqual(
-      instance._testJournal.returnedFromGetInitialState,
+      instance._testJournal.returnedFromGetInitialState
     );
-    expect(instance._testJournal.lifeCycleAtStartOfWillMount).toBe('UNMOUNTED');
+    expect(instance._testJournal.lifeCycleAtStartOfWillMount).toBe("UNMOUNTED");
 
     // componentDidMount
     expect(instance._testJournal.stateAtStartOfDidMount).toEqual(
-      DID_MOUNT_STATE,
+      DID_MOUNT_STATE
     );
-    expect(instance._testJournal.lifeCycleAtStartOfDidMount).toBe('MOUNTED');
+    expect(instance._testJournal.lifeCycleAtStartOfDidMount).toBe("MOUNTED");
 
     // initial render
     expect(instance._testJournal.stateInInitialRender).toEqual(
-      INIT_RENDER_STATE,
+      INIT_RENDER_STATE
     );
-    expect(instance._testJournal.lifeCycleInInitialRender).toBe('UNMOUNTED');
+    expect(instance._testJournal.lifeCycleInInitialRender).toBe("UNMOUNTED");
 
-    expect(getLifeCycleState(instance)).toBe('MOUNTED');
+    expect(getLifeCycleState(instance)).toBe("MOUNTED");
 
     // Now *update the component*
     instance.forceUpdate();
 
     // render 2nd time
     expect(instance._testJournal.stateInLaterRender).toEqual(NEXT_RENDER_STATE);
-    expect(instance._testJournal.lifeCycleInLaterRender).toBe('MOUNTED');
+    expect(instance._testJournal.lifeCycleInLaterRender).toBe("MOUNTED");
 
-    expect(getLifeCycleState(instance)).toBe('MOUNTED');
+    expect(getLifeCycleState(instance)).toBe("MOUNTED");
 
     ReactDOM.unmountComponentAtNode(container);
 
     expect(instance._testJournal.stateAtStartOfWillUnmount).toEqual(
-      WILL_UNMOUNT_STATE,
+      WILL_UNMOUNT_STATE
     );
     // componentWillUnmount called right before unmount.
-    expect(instance._testJournal.lifeCycleAtStartOfWillUnmount).toBe('MOUNTED');
+    expect(instance._testJournal.lifeCycleAtStartOfWillUnmount).toBe("MOUNTED");
 
     // But the current lifecycle of the component is unmounted.
-    expect(getLifeCycleState(instance)).toBe('UNMOUNTED');
+    expect(getLifeCycleState(instance)).toBe("UNMOUNTED");
     expect(instance.state).toEqual(POST_WILL_UNMOUNT_STATE);
 
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'LifeCycleComponent is accessing isMounted inside its render() function',
+        "LifeCycleComponent is accessing isMounted inside its render() function"
       );
     }
   });
 
-  it('should not throw when updating an auxiliary component', () => {
+  it("should not throw when updating an auxiliary component", () => {
     class Tooltip extends React.Component {
       render() {
         return <div>{this.props.children}</div>;
       }
 
       componentDidMount() {
-        this.container = document.createElement('div');
+        this.container = document.createElement("div");
         this.updateTooltip();
       }
 
@@ -490,7 +490,7 @@ describe('ReactComponentLifeCycle', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     ReactDOM.render(<Component text="uno" tooltipText="one" />, container);
 
     // Since `instance` is a root component, we can set its props. This also
@@ -498,17 +498,17 @@ describe('ReactComponentLifeCycle', () => {
     ReactDOM.render(<Component text="dos" tooltipText="two" />, container);
   });
 
-  it('should allow state updates in componentDidMount', () => {
+  it("should allow state updates in componentDidMount", () => {
     /**
      * calls setState in an componentDidMount.
      */
     class SetStateInComponentDidMount extends React.Component {
       state = {
-        stateField: this.props.valueToUseInitially,
+        stateField: this.props.valueToUseInitially
       };
 
       componentDidMount() {
-        this.setState({stateField: this.props.valueToUseInOnDOMReady});
+        this.setState({ stateField: this.props.valueToUseInOnDOMReady });
       }
 
       render() {
@@ -523,10 +523,10 @@ describe('ReactComponentLifeCycle', () => {
       />
     );
     instance = ReactTestUtils.renderIntoDocument(instance);
-    expect(instance.state.stateField).toBe('goodbye');
+    expect(instance.state.stateField).toBe("goodbye");
   });
 
-  it('should call nested lifecycle methods in the right order', () => {
+  it("should call nested lifecycle methods in the right order", () => {
     let log;
     const logger = function(msg) {
       return function() {
@@ -536,13 +536,13 @@ describe('ReactComponentLifeCycle', () => {
       };
     };
     class Outer extends React.Component {
-      componentWillMount = logger('outer componentWillMount');
-      componentDidMount = logger('outer componentDidMount');
-      componentWillReceiveProps = logger('outer componentWillReceiveProps');
-      shouldComponentUpdate = logger('outer shouldComponentUpdate');
-      componentWillUpdate = logger('outer componentWillUpdate');
-      componentDidUpdate = logger('outer componentDidUpdate');
-      componentWillUnmount = logger('outer componentWillUnmount');
+      componentWillMount = logger("outer componentWillMount");
+      componentDidMount = logger("outer componentDidMount");
+      componentWillReceiveProps = logger("outer componentWillReceiveProps");
+      shouldComponentUpdate = logger("outer shouldComponentUpdate");
+      componentWillUpdate = logger("outer componentWillUpdate");
+      componentDidUpdate = logger("outer componentDidUpdate");
+      componentWillUnmount = logger("outer componentWillUnmount");
       render() {
         return (
           <div>
@@ -553,97 +553,97 @@ describe('ReactComponentLifeCycle', () => {
     }
 
     class Inner extends React.Component {
-      componentWillMount = logger('inner componentWillMount');
-      componentDidMount = logger('inner componentDidMount');
-      componentWillReceiveProps = logger('inner componentWillReceiveProps');
-      shouldComponentUpdate = logger('inner shouldComponentUpdate');
-      componentWillUpdate = logger('inner componentWillUpdate');
-      componentDidUpdate = logger('inner componentDidUpdate');
-      componentWillUnmount = logger('inner componentWillUnmount');
+      componentWillMount = logger("inner componentWillMount");
+      componentDidMount = logger("inner componentDidMount");
+      componentWillReceiveProps = logger("inner componentWillReceiveProps");
+      shouldComponentUpdate = logger("inner shouldComponentUpdate");
+      componentWillUpdate = logger("inner componentWillUpdate");
+      componentDidUpdate = logger("inner componentDidUpdate");
+      componentWillUnmount = logger("inner componentWillUnmount");
       render() {
         return <span>{this.props.x}</span>;
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     log = [];
     ReactDOM.render(<Outer x={17} />, container);
     expect(log).toEqual([
-      'outer componentWillMount',
-      'inner componentWillMount',
-      'inner componentDidMount',
-      'outer componentDidMount',
+      "outer componentWillMount",
+      "inner componentWillMount",
+      "inner componentDidMount",
+      "outer componentDidMount"
     ]);
 
     log = [];
     ReactDOM.render(<Outer x={42} />, container);
     expect(log).toEqual([
-      'outer componentWillReceiveProps',
-      'outer shouldComponentUpdate',
-      'outer componentWillUpdate',
-      'inner componentWillReceiveProps',
-      'inner shouldComponentUpdate',
-      'inner componentWillUpdate',
-      'inner componentDidUpdate',
-      'outer componentDidUpdate',
+      "outer componentWillReceiveProps",
+      "outer shouldComponentUpdate",
+      "outer componentWillUpdate",
+      "inner componentWillReceiveProps",
+      "inner shouldComponentUpdate",
+      "inner componentWillUpdate",
+      "inner componentDidUpdate",
+      "outer componentDidUpdate"
     ]);
 
     log = [];
     ReactDOM.unmountComponentAtNode(container);
     expect(log).toEqual([
-      'outer componentWillUnmount',
-      'inner componentWillUnmount',
+      "outer componentWillUnmount",
+      "inner componentWillUnmount"
     ]);
   });
 
-  it('calls effects on module-pattern component', function() {
+  it("calls effects on module-pattern component", function() {
     const log = [];
 
     function Parent() {
       return {
         render() {
-          expect(typeof this.props).toBe('object');
-          log.push('render');
+          expect(typeof this.props).toBe("object");
+          log.push("render");
           return <Child />;
         },
         componentWillMount() {
-          log.push('will mount');
+          log.push("will mount");
         },
         componentDidMount() {
-          log.push('did mount');
+          log.push("did mount");
         },
         componentDidUpdate() {
-          log.push('did update');
+          log.push("did update");
         },
         getChildContext() {
-          return {x: 2};
-        },
+          return { x: 2 };
+        }
       };
     }
     Parent.childContextTypes = {
-      x: PropTypes.number,
+      x: PropTypes.number
     };
     function Child(props, context) {
       expect(context.x).toBe(2);
       return <div />;
     }
     Child.contextTypes = {
-      x: PropTypes.number,
+      x: PropTypes.number
     };
 
-    const div = document.createElement('div');
-    ReactDOM.render(<Parent ref={c => c && log.push('ref')} />, div);
-    ReactDOM.render(<Parent ref={c => c && log.push('ref')} />, div);
+    const div = document.createElement("div");
+    ReactDOM.render(<Parent ref={c => c && log.push("ref")} />, div);
+    ReactDOM.render(<Parent ref={c => c && log.push("ref")} />, div);
 
     expect(log).toEqual([
-      'will mount',
-      'render',
-      'did mount',
-      'ref',
+      "will mount",
+      "render",
+      "did mount",
+      "ref",
 
-      'render',
-      'did update',
-      'ref',
+      "render",
+      "did update",
+      "ref"
     ]);
   });
 });

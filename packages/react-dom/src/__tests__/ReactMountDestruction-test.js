@@ -7,29 +7,29 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-const React = require('react');
-const ReactDOM = require('react-dom');
+const React = require("react");
+const ReactDOM = require("react-dom");
 
-describe('ReactMount', () => {
-  it('should destroy a react root upon request', () => {
-    const mainContainerDiv = document.createElement('div');
+describe("ReactMount", () => {
+  it("should destroy a react root upon request", () => {
+    const mainContainerDiv = document.createElement("div");
     document.body.appendChild(mainContainerDiv);
 
     const instanceOne = <div className="firstReactDiv" />;
-    const firstRootDiv = document.createElement('div');
+    const firstRootDiv = document.createElement("div");
     mainContainerDiv.appendChild(firstRootDiv);
     ReactDOM.render(instanceOne, firstRootDiv);
 
     const instanceTwo = <div className="secondReactDiv" />;
-    const secondRootDiv = document.createElement('div');
+    const secondRootDiv = document.createElement("div");
     mainContainerDiv.appendChild(secondRootDiv);
     ReactDOM.render(instanceTwo, secondRootDiv);
 
     // Test that two react roots are rendered in isolation
-    expect(firstRootDiv.firstChild.className).toBe('firstReactDiv');
-    expect(secondRootDiv.firstChild.className).toBe('secondReactDiv');
+    expect(firstRootDiv.firstChild.className).toBe("firstReactDiv");
+    expect(secondRootDiv.firstChild.className).toBe("secondReactDiv");
 
     // Test that after unmounting each, they are no longer in the document.
     ReactDOM.unmountComponentAtNode(firstRootDiv);
@@ -38,8 +38,8 @@ describe('ReactMount', () => {
     expect(secondRootDiv.firstChild).toBeNull();
   });
 
-  it('should warn when unmounting a non-container root node', () => {
-    const mainContainerDiv = document.createElement('div');
+  it("should warn when unmounting a non-container root node", () => {
+    const mainContainerDiv = document.createElement("div");
 
     const component = (
       <div>
@@ -50,21 +50,21 @@ describe('ReactMount', () => {
 
     // Test that unmounting at a root node gives a helpful warning
     const rootDiv = mainContainerDiv.firstChild;
-    spyOnDev(console, 'error');
+    spyOnDev(console, "error");
     ReactDOM.unmountComponentAtNode(rootDiv);
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toBe(
         "Warning: unmountComponentAtNode(): The node you're attempting to " +
-          'unmount was rendered by React and is not a top-level container. You ' +
-          'may have accidentally passed in a React root node instead of its ' +
-          'container.',
+          "unmount was rendered by React and is not a top-level container. You " +
+          "may have accidentally passed in a React root node instead of its " +
+          "container."
       );
     }
   });
 
-  it('should warn when unmounting a non-container, non-root node', () => {
-    const mainContainerDiv = document.createElement('div');
+  it("should warn when unmounting a non-container, non-root node", () => {
+    const mainContainerDiv = document.createElement("div");
 
     const component = (
       <div>
@@ -77,15 +77,15 @@ describe('ReactMount', () => {
 
     // Test that unmounting at a non-root node gives a different warning
     const nonRootDiv = mainContainerDiv.firstChild.firstChild;
-    spyOnDev(console, 'error');
+    spyOnDev(console, "error");
     ReactDOM.unmountComponentAtNode(nonRootDiv);
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toBe(
         "Warning: unmountComponentAtNode(): The node you're attempting to " +
-          'unmount was rendered by React and is not a top-level container. ' +
-          'Instead, have the parent component update its state and rerender in ' +
-          'order to remove this component.',
+          "unmount was rendered by React and is not a top-level container. " +
+          "Instead, have the parent component update its state and rerender in " +
+          "order to remove this component."
       );
     }
   });

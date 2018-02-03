@@ -33,8 +33,8 @@ export type ReactCall<V> = {
     props: any,
     // This should be a more specific CallHandler
     handler: (props: any, returns: Array<V>) => ReactNodeList,
-    children?: ReactNodeList,
-  },
+    children?: ReactNodeList
+  }
 };
 
 export type ReactReturn<V> = {
@@ -43,8 +43,8 @@ export type ReactReturn<V> = {
   key: null,
   ref: null,
   props: {
-    value: V,
-  },
+    value: V
+  }
 };
 
 export type ReactPortal = {
@@ -53,5 +53,5 @@ export type ReactPortal = {
   containerInfo: any,
   children: ReactNodeList,
   // TODO: figure out the API for cross-renderer implementation.
-  implementation: any,
+  implementation: any
 };

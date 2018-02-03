@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import getTextContentAccessor from '../client/getTextContentAccessor';
+import getTextContentAccessor from "../client/getTextContentAccessor";
 
 /**
  * This helper object stores information about text content of a target node,
@@ -21,7 +21,7 @@ import getTextContentAccessor from '../client/getTextContentAccessor';
 const compositionState = {
   _root: null,
   _startText: null,
-  _fallbackText: null,
+  _fallbackText: null
 };
 
 export function initialize(nativeEventTarget) {
@@ -67,7 +67,7 @@ export function getData() {
 }
 
 export function getText() {
-  if ('value' in compositionState._root) {
+  if ("value" in compositionState._root) {
     return compositionState._root.value;
   }
   return compositionState._root[getTextContentAccessor()];

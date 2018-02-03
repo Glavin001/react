@@ -4,9 +4,7 @@
   "description": "React package for working with the DOM.",
   "main": "index.js",
   "repository": "facebook/react",
-  "keywords": [
-    "react"
-  ],
+  "keywords": ["react"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/facebook/react/issues"
@@ -37,8 +35,6 @@
     "./server.js": "./server.browser.js"
   },
   "browserify": {
-    "transform": [
-      "loose-envify"
-    ]
+    "transform": ["loose-envify"]
   }
 }

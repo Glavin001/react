@@ -7,17 +7,17 @@
  * @flow
  */
 
-import {getListener} from 'events/EventPluginHub';
-import {registrationNameModules} from 'events/EventPluginRegistry';
-import {batchedUpdates} from 'events/ReactGenericBatching';
-import {handleTopLevel} from 'events/ReactEventEmitterMixin';
-import warning from 'fbjs/lib/warning';
+import { getListener } from "events/EventPluginHub";
+import { registrationNameModules } from "events/EventPluginRegistry";
+import { batchedUpdates } from "events/ReactGenericBatching";
+import { handleTopLevel } from "events/ReactEventEmitterMixin";
+import warning from "fbjs/lib/warning";
 
-import {getInstanceFromNode} from './ReactNativeComponentTree';
-import ReactNativeTagHandles from './ReactNativeTagHandles';
+import { getInstanceFromNode } from "./ReactNativeComponentTree";
+import ReactNativeTagHandles from "./ReactNativeTagHandles";
 
-export * from 'events/ReactEventEmitterMixin';
-export {getListener, registrationNameModules as registrationNames};
+export * from "events/ReactEventEmitterMixin";
+export { getListener, registrationNameModules as registrationNames };
 
 /**
  * Version of `ReactBrowserEventEmitter` that works on the receiving side of a
@@ -55,7 +55,7 @@ const touchSubsequence = function(touches, indices) {
  */
 const removeTouchesAtIndices = function(
   touches: Array<Object>,
-  indices: Array<number>,
+  indices: Array<number>
 ): Array<Object> {
   const rippedOut = [];
   // use an unsafe downcast to alias to nullable elements,
@@ -90,7 +90,7 @@ const removeTouchesAtIndices = function(
 export function _receiveRootNodeIDEvent(
   rootNodeID: number,
   topLevelType: string,
-  nativeEventParam: ?Object,
+  nativeEventParam: ?Object
 ) {
   const nativeEvent = nativeEventParam || EMPTY_NATIVE_EVENT;
   const inst = getInstanceFromNode(rootNodeID);
@@ -111,7 +111,7 @@ export function _receiveRootNodeIDEvent(
 export function receiveEvent(
   rootNodeID: number,
   topLevelType: string,
-  nativeEventParam: Object,
+  nativeEventParam: Object
 ) {
   _receiveRootNodeIDEvent(rootNodeID, topLevelType, nativeEventParam);
 }
@@ -143,11 +143,11 @@ export function receiveEvent(
 export function receiveTouches(
   eventTopLevelType: string,
   touches: Array<Object>,
-  changedIndices: Array<number>,
+  changedIndices: Array<number>
 ) {
   const changedTouches =
-    eventTopLevelType === 'topTouchEnd' ||
-    eventTopLevelType === 'topTouchCancel'
+    eventTopLevelType === "topTouchEnd" ||
+    eventTopLevelType === "topTouchCancel"
       ? removeTouchesAtIndices(touches, changedIndices)
       : touchSubsequence(touches, changedIndices);
 
@@ -165,7 +165,7 @@ export function receiveTouches(
         if (__DEV__) {
           warning(
             false,
-            'A view is reporting that a touch occurred on tag zero.',
+            "A view is reporting that a touch occurred on tag zero."
           );
         }
       } else {

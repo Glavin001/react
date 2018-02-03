@@ -5,14 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
 module.exports = function autoImporter(babel) {
   function getAssignIdent(path, file, state) {
     if (state.id) {
       return state.id;
     }
-    state.id = file.addImport('object-assign', 'default', 'assign');
+    state.id = file.addImport("object-assign", "default", "assign");
     return state.id;
   }
 
@@ -24,7 +24,7 @@ module.exports = function autoImporter(babel) {
 
     visitor: {
       CallExpression: function(path, file) {
-        if (path.get('callee').matchesPattern('Object.assign')) {
+        if (path.get("callee").matchesPattern("Object.assign")) {
           // generate identifier and require if it hasn't been already
           const id = getAssignIdent(path, file, this);
           path.node.callee = id;
@@ -32,11 +32,11 @@ module.exports = function autoImporter(babel) {
       },
 
       MemberExpression: function(path, file) {
-        if (path.matchesPattern('Object.assign')) {
+        if (path.matchesPattern("Object.assign")) {
           const id = getAssignIdent(path, file, this);
           path.replaceWith(id);
         }
-      },
-    },
+      }
+    }
   };
 };

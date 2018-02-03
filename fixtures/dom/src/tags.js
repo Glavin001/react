@@ -4,7 +4,7 @@
  * that versions will change during a single session this should be safe.
  */
 
-const TAGS_CACHE_KEY = '@react-dom-fixtures/tags';
+const TAGS_CACHE_KEY = "@react-dom-fixtures/tags";
 
 /**
  * Its possible that users will be testing changes frequently
@@ -15,21 +15,21 @@ const TAGS_CACHE_KEY = '@react-dom-fixtures/tags';
  * can manually load it by editing the URL (`?version={whatever}`)
  */
 const fallbackTags = [
-  '15.4.2',
-  '15.3.2',
-  '15.2.1',
-  '15.1.0',
-  '15.0.2',
-  '0.14.8',
-  '0.13.0',
+  "15.4.2",
+  "15.3.2",
+  "15.2.1",
+  "15.1.0",
+  "15.0.2",
+  "0.14.8",
+  "0.13.0"
 ].map(version => ({
-  name: `v${version}`,
+  name: `v${version}`
 }));
 
 let canUseSessionStorage = true;
 
 try {
-  sessionStorage.setItem('foo', '');
+  sessionStorage.setItem("foo", "");
 } catch (err) {
   canUseSessionStorage = false;
 }
@@ -52,7 +52,9 @@ export default function getVersionTags() {
       cachedTags = JSON.parse(cachedTags);
       resolve(cachedTags);
     } else {
-      fetch('https://api.github.com/repos/facebook/react/tags', {mode: 'cors'})
+      fetch("https://api.github.com/repos/facebook/react/tags", {
+        mode: "cors"
+      })
         .then(res => res.json())
         .then(tags => {
           // A message property indicates an error was sent from the API

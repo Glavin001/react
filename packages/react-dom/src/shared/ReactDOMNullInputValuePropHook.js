@@ -5,40 +5,40 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {ReactDebugCurrentFrame} from 'shared/ReactGlobalSharedState';
-import warning from 'fbjs/lib/warning';
+import { ReactDebugCurrentFrame } from "shared/ReactGlobalSharedState";
+import warning from "fbjs/lib/warning";
 
 let didWarnValueNull = false;
 
 function getStackAddendum() {
   const stack = ReactDebugCurrentFrame.getStackAddendum();
-  return stack != null ? stack : '';
+  return stack != null ? stack : "";
 }
 
 export function validateProperties(type, props) {
-  if (type !== 'input' && type !== 'textarea' && type !== 'select') {
+  if (type !== "input" && type !== "textarea" && type !== "select") {
     return;
   }
 
   if (props != null && props.value === null && !didWarnValueNull) {
     didWarnValueNull = true;
-    if (type === 'select' && props.multiple) {
+    if (type === "select" && props.multiple) {
       warning(
         false,
-        '`value` prop on `%s` should not be null. ' +
-          'Consider using an empty array when `multiple` is set to `true` ' +
-          'to clear the component or `undefined` for uncontrolled components.%s',
+        "`value` prop on `%s` should not be null. " +
+          "Consider using an empty array when `multiple` is set to `true` " +
+          "to clear the component or `undefined` for uncontrolled components.%s",
         type,
-        getStackAddendum(),
+        getStackAddendum()
       );
     } else {
       warning(
         false,
-        '`value` prop on `%s` should not be null. ' +
-          'Consider using an empty string to clear the component or `undefined` ' +
-          'for uncontrolled components.%s',
+        "`value` prop on `%s` should not be null. " +
+          "Consider using an empty string to clear the component or `undefined` " +
+          "for uncontrolled components.%s",
         type,
-        getStackAddendum(),
+        getStackAddendum()
       );
     }
   }

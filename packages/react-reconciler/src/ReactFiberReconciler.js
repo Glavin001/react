@@ -7,32 +7,32 @@
  * @flow
  */
 
-import type {Fiber} from './ReactFiber';
-import type {FiberRoot} from './ReactFiberRoot';
-import type {ReactNodeList} from 'shared/ReactTypes';
-import type {ExpirationTime} from './ReactFiberExpirationTime';
+import type { Fiber } from "./ReactFiber";
+import type { FiberRoot } from "./ReactFiberRoot";
+import type { ReactNodeList } from "shared/ReactTypes";
+import type { ExpirationTime } from "./ReactFiberExpirationTime";
 
 import {
   findCurrentHostFiber,
-  findCurrentHostFiberWithNoPortals,
-} from 'react-reconciler/reflection';
-import * as ReactInstanceMap from 'shared/ReactInstanceMap';
-import {HostComponent} from 'shared/ReactTypeOfWork';
-import emptyObject from 'fbjs/lib/emptyObject';
-import getComponentName from 'shared/getComponentName';
-import warning from 'fbjs/lib/warning';
+  findCurrentHostFiberWithNoPortals
+} from "react-reconciler/reflection";
+import * as ReactInstanceMap from "shared/ReactInstanceMap";
+import { HostComponent } from "shared/ReactTypeOfWork";
+import emptyObject from "fbjs/lib/emptyObject";
+import getComponentName from "shared/getComponentName";
+import warning from "fbjs/lib/warning";
 
 import {
   findCurrentUnmaskedContext,
   isContextProvider,
-  processChildContext,
-} from './ReactFiberContext';
-import {createFiberRoot} from './ReactFiberRoot';
-import * as ReactFiberDevToolsHook from './ReactFiberDevToolsHook';
-import ReactFiberScheduler from './ReactFiberScheduler';
-import {insertUpdateIntoFiber} from './ReactFiberUpdateQueue';
-import ReactFiberInstrumentation from './ReactFiberInstrumentation';
-import ReactDebugCurrentFiber from './ReactDebugCurrentFiber';
+  processChildContext
+} from "./ReactFiberContext";
+import { createFiberRoot } from "./ReactFiberRoot";
+import * as ReactFiberDevToolsHook from "./ReactFiberDevToolsHook";
+import ReactFiberScheduler from "./ReactFiberScheduler";
+import { insertUpdateIntoFiber } from "./ReactFiberUpdateQueue";
+import ReactFiberInstrumentation from "./ReactFiberInstrumentation";
+import ReactDebugCurrentFiber from "./ReactDebugCurrentFiber";
 
 let didWarnAboutNestedUpdates;
 
@@ -41,7 +41,7 @@ if (__DEV__) {
 }
 
 export type Deadline = {
-  timeRemaining: () => number,
+  timeRemaining: () => number
 };
 
 type OpaqueHandle = Fiber;
@@ -57,14 +57,14 @@ export type HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL> = {
     props: P,
     rootContainerInstance: C,
     hostContext: CX,
-    internalInstanceHandle: OpaqueHandle,
+    internalInstanceHandle: OpaqueHandle
   ): I,
   appendInitialChild(parentInstance: I, child: I | TI): void,
   finalizeInitialChildren(
     parentInstance: I,
     type: T,
     props: P,
-    rootContainerInstance: C,
+    rootContainerInstance: C
   ): boolean,
 
   prepareUpdate(
@@ -73,7 +73,7 @@ export type HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL> = {
     oldProps: P,
     newProps: P,
     rootContainerInstance: C,
-    hostContext: CX,
+    hostContext: CX
   ): null | PL,
 
   shouldSetTextContent(type: T, props: P): boolean,
@@ -83,12 +83,12 @@ export type HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL> = {
     text: string,
     rootContainerInstance: C,
     hostContext: CX,
-    internalInstanceHandle: OpaqueHandle,
+    internalInstanceHandle: OpaqueHandle
   ): TI,
 
   scheduleDeferredCallback(
     callback: (deadline: Deadline) => void,
-    options?: {timeout: number},
+    options?: { timeout: number }
   ): number,
   cancelDeferredCallback(callbackID: number): void,
 
@@ -102,7 +102,7 @@ export type HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL> = {
   +hydration?: HydrationHostConfig<T, P, I, TI, HI, C, CX, PL>,
 
   +mutation?: MutableUpdatesHostConfig<T, P, I, TI, C, PL>,
-  +persistence?: PersistentUpdatesHostConfig<T, P, I, TI, C, CC, PL>,
+  +persistence?: PersistentUpdatesHostConfig<T, P, I, TI, C, CC, PL>
 };
 
 type MutableUpdatesHostConfig<T, P, I, TI, C, PL> = {
@@ -112,13 +112,13 @@ type MutableUpdatesHostConfig<T, P, I, TI, C, PL> = {
     type: T,
     oldProps: P,
     newProps: P,
-    internalInstanceHandle: OpaqueHandle,
+    internalInstanceHandle: OpaqueHandle
   ): void,
   commitMount(
     instance: I,
     type: T,
     newProps: P,
-    internalInstanceHandle: OpaqueHandle,
+    internalInstanceHandle: OpaqueHandle
   ): void,
   commitTextUpdate(textInstance: TI, oldText: string, newText: string): void,
   resetTextContent(instance: I): void,
@@ -128,10 +128,10 @@ type MutableUpdatesHostConfig<T, P, I, TI, C, PL> = {
   insertInContainerBefore(
     container: C,
     child: I | TI,
-    beforeChild: I | TI,
+    beforeChild: I | TI
   ): void,
   removeChild(parentInstance: I, child: I | TI): void,
-  removeChildFromContainer(container: C, child: I | TI): void,
+  removeChildFromContainer(container: C, child: I | TI): void
 };
 
 type PersistentUpdatesHostConfig<T, P, I, TI, C, CC, PL> = {
@@ -143,7 +143,7 @@ type PersistentUpdatesHostConfig<T, P, I, TI, C, CC, PL> = {
     newProps: P,
     internalInstanceHandle: OpaqueHandle,
     keepChildren: boolean,
-    recyclableInstance: I,
+    recyclableInstance: I
   ): I,
 
   createContainerChildSet(container: C): CC,
@@ -151,7 +151,7 @@ type PersistentUpdatesHostConfig<T, P, I, TI, C, CC, PL> = {
   appendChildToContainerChildSet(childSet: CC, child: I | TI): void,
   finalizeContainerChildren(container: C, newChildren: CC): void,
 
-  replaceContainerChildren(container: C, newChildren: CC): void,
+  replaceContainerChildren(container: C, newChildren: CC): void
 };
 
 type HydrationHostConfig<T, P, I, TI, HI, C, CX, PL> = {
@@ -166,54 +166,54 @@ type HydrationHostConfig<T, P, I, TI, HI, C, CX, PL> = {
     props: P,
     rootContainerInstance: C,
     hostContext: CX,
-    internalInstanceHandle: OpaqueHandle,
+    internalInstanceHandle: OpaqueHandle
   ): null | PL,
   hydrateTextInstance(
     textInstance: TI,
     text: string,
-    internalInstanceHandle: OpaqueHandle,
+    internalInstanceHandle: OpaqueHandle
   ): boolean,
   didNotMatchHydratedContainerTextInstance(
     parentContainer: C,
     textInstance: TI,
-    text: string,
+    text: string
   ): void,
   didNotMatchHydratedTextInstance(
     parentType: T,
     parentProps: P,
     parentInstance: I,
     textInstance: TI,
-    text: string,
+    text: string
   ): void,
   didNotHydrateContainerInstance(parentContainer: C, instance: I | TI): void,
   didNotHydrateInstance(
     parentType: T,
     parentProps: P,
     parentInstance: I,
-    instance: I | TI,
+    instance: I | TI
   ): void,
   didNotFindHydratableContainerInstance(
     parentContainer: C,
     type: T,
-    props: P,
+    props: P
   ): void,
   didNotFindHydratableContainerTextInstance(
     parentContainer: C,
-    text: string,
+    text: string
   ): void,
   didNotFindHydratableInstance(
     parentType: T,
     parentProps: P,
     parentInstance: I,
     type: T,
-    props: P,
+    props: P
   ): void,
   didNotFindHydratableTextInstance(
     parentType: T,
     parentProps: P,
     parentInstance: I,
-    text: string,
-  ): void,
+    text: string
+  ): void
 };
 
 // 0 is PROD, 1 is DEV.
@@ -230,27 +230,27 @@ type DevToolsConfig<I, TI> = {|
   // Used by RN in-app inspector.
   // This API is unfortunately RN-specific.
   // TODO: Change it to accept Fiber instead and type it properly.
-  getInspectorDataForViewTag?: (tag: number) => Object,
+  getInspectorDataForViewTag?: (tag: number) => Object
 |};
 
 export type Reconciler<C, I, TI> = {
   createContainer(
     containerInfo: C,
     isAsync: boolean,
-    hydrate: boolean,
+    hydrate: boolean
   ): OpaqueRoot,
   updateContainer(
     element: ReactNodeList,
     container: OpaqueRoot,
     parentComponent: ?React$Component<any, any>,
-    callback: ?Function,
+    callback: ?Function
   ): ExpirationTime,
   updateContainerAtExpirationTime(
     element: ReactNodeList,
     container: OpaqueRoot,
     parentComponent: ?React$Component<any, any>,
     expirationTime: ExpirationTime,
-    callback: ?Function,
+    callback: ?Function
   ): ExpirationTime,
   flushRoot(root: OpaqueRoot, expirationTime: ExpirationTime): void,
   requestWork(root: OpaqueRoot, expirationTime: ExpirationTime): void,
@@ -263,18 +263,18 @@ export type Reconciler<C, I, TI> = {
 
   // Used to extract the return value from the initial render. Legacy API.
   getPublicRootInstance(
-    container: OpaqueRoot,
+    container: OpaqueRoot
   ): React$Component<any, any> | TI | I | null,
 
   // Use for findDOMNode/findHostNode. Legacy API.
   findHostInstance(component: Fiber): I | TI | null,
 
   // Used internally for filtering out portals. Legacy API.
-  findHostInstanceWithNoPortals(component: Fiber): I | TI | null,
+  findHostInstanceWithNoPortals(component: Fiber): I | TI | null
 };
 
 function getContextForSubtree(
-  parentComponent: ?React$Component<any, any>,
+  parentComponent: ?React$Component<any, any>
 ): Object {
   if (!parentComponent) {
     return emptyObject;
@@ -288,9 +288,9 @@ function getContextForSubtree(
 }
 
 export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
-  config: HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL>,
+  config: HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL>
 ): Reconciler<C, I, TI> {
-  const {getPublicInstance} = config;
+  const { getPublicInstance } = config;
 
   const {
     computeUniqueAsyncExpiration,
@@ -301,29 +301,29 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     batchedUpdates,
     unbatchedUpdates,
     flushSync,
-    deferredUpdates,
+    deferredUpdates
   } = ReactFiberScheduler(config);
 
   function scheduleRootUpdate(
     current: Fiber,
     element: ReactNodeList,
     expirationTime: ExpirationTime,
-    callback: ?Function,
+    callback: ?Function
   ) {
     if (__DEV__) {
       if (
-        ReactDebugCurrentFiber.phase === 'render' &&
+        ReactDebugCurrentFiber.phase === "render" &&
         ReactDebugCurrentFiber.current !== null &&
         !didWarnAboutNestedUpdates
       ) {
         didWarnAboutNestedUpdates = true;
         warning(
           false,
-          'Render methods should be a pure function of props and state; ' +
-            'triggering nested component updates from render is not allowed. ' +
-            'If necessary, trigger nested updates in componentDidUpdate.\n\n' +
-            'Check the render method of %s.',
-          getComponentName(ReactDebugCurrentFiber.current) || 'Unknown',
+          "Render methods should be a pure function of props and state; " +
+            "triggering nested component updates from render is not allowed. " +
+            "If necessary, trigger nested updates in componentDidUpdate.\n\n" +
+            "Check the render method of %s.",
+          getComponentName(ReactDebugCurrentFiber.current) || "Unknown"
         );
       }
     }
@@ -331,20 +331,20 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     callback = callback === undefined ? null : callback;
     if (__DEV__) {
       warning(
-        callback === null || typeof callback === 'function',
-        'render(...): Expected the last optional `callback` argument to be a ' +
-          'function. Instead received: %s.',
-        callback,
+        callback === null || typeof callback === "function",
+        "render(...): Expected the last optional `callback` argument to be a " +
+          "function. Instead received: %s.",
+        callback
       );
     }
 
     const update = {
       expirationTime,
-      partialState: {element},
+      partialState: { element },
       callback,
       isReplace: false,
       isForced: false,
-      next: null,
+      next: null
     };
     insertUpdateIntoFiber(current, update);
     scheduleWork(current, expirationTime);
@@ -357,7 +357,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     container: OpaqueRoot,
     parentComponent: ?React$Component<any, any>,
     expirationTime: ExpirationTime,
-    callback: ?Function,
+    callback: ?Function
   ) {
     // TODO: If this is a nested container, this won't be the root.
     const current = container.current;
@@ -396,7 +396,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     createContainer(
       containerInfo: C,
       isAsync: boolean,
-      hydrate: boolean,
+      hydrate: boolean
     ): OpaqueRoot {
       return createFiberRoot(containerInfo, isAsync, hydrate);
     },
@@ -405,7 +405,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       element: ReactNodeList,
       container: OpaqueRoot,
       parentComponent: ?React$Component<any, any>,
-      callback: ?Function,
+      callback: ?Function
     ): ExpirationTime {
       const current = container.current;
       const expirationTime = computeExpirationForFiber(current);
@@ -414,7 +414,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         container,
         parentComponent,
         expirationTime,
-        callback,
+        callback
       );
     },
 
@@ -435,7 +435,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     flushSync,
 
     getPublicRootInstance(
-      container: OpaqueRoot,
+      container: OpaqueRoot
     ): React$Component<any, any> | PI | null {
       const containerFiber = container.current;
       if (!containerFiber.child) {
@@ -460,7 +460,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     },
 
     injectIntoDevTools(devToolsConfig: DevToolsConfig<I, TI>): boolean {
-      const {findFiberByHostInstance} = devToolsConfig;
+      const { findFiberByHostInstance } = devToolsConfig;
       return ReactFiberDevToolsHook.injectInternals({
         ...devToolsConfig,
         findHostInstanceByFiber(fiber: Fiber): I | TI | null {
@@ -472,8 +472,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
             return null;
           }
           return findFiberByHostInstance(instance);
-        },
+        }
       });
-    },
+    }
   };
 }

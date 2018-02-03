@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 module.exports = {
   env: {
     commonjs: true,
-    browser: true,
+    browser: true
   },
   globals: {
     // ES6
@@ -16,14 +16,14 @@ module.exports = {
     MSApp: true,
     __REACT_DEVTOOLS_GLOBAL_HOOK__: true,
     // FB
-    __DEV__: true,
+    __DEV__: true
   },
   parserOptions: {
     ecmaVersion: 5,
-    sourceType: 'script',
+    sourceType: "script"
   },
   rules: {
-    'no-undef': 'error',
-    'no-shadow-restricted-names': 'error',
-  },
+    "no-undef": "error",
+    "no-shadow-restricted-names": "error"
+  }
 };

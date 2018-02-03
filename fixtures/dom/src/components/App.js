@@ -1,6 +1,6 @@
-import Header from './Header';
-import Fixtures from './fixtures';
-import '../style.css';
+import Header from "./Header";
+import Fixtures from "./fixtures";
+import "../style.css";
 
 const React = window.React;
 

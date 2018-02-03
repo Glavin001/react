@@ -1,20 +1,12 @@
 {
   "name": "react",
   "description": "React is a JavaScript library for building user interfaces.",
-  "keywords": [
-    "react"
-  ],
+  "keywords": ["react"],
   "version": "16.2.0",
   "homepage": "https://reactjs.org/",
   "bugs": "https://github.com/facebook/react/issues",
   "license": "MIT",
-  "files": [
-    "LICENSE",
-    "README.md",
-    "index.js",
-    "cjs/",
-    "umd/"
-  ],
+  "files": ["LICENSE", "README.md", "index.js", "cjs/", "umd/"],
   "main": "index.js",
   "repository": "facebook/react",
   "engines": {
@@ -27,8 +19,6 @@
     "prop-types": "^15.6.0"
   },
   "browserify": {
-    "transform": [
-      "loose-envify"
-    ]
+    "transform": ["loose-envify"]
   }
 }

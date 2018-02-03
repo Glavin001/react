@@ -7,33 +7,33 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-describe('FallbackCompositionState', () => {
+describe("FallbackCompositionState", () => {
   let FallbackCompositionState;
 
-  const TEXT = 'Hello world';
+  const TEXT = "Hello world";
 
   beforeEach(() => {
     // TODO: can we express this test with only public API?
-    FallbackCompositionState = require('../FallbackCompositionState');
+    FallbackCompositionState = require("../FallbackCompositionState");
   });
 
   function getInput() {
-    const input = document.createElement('input');
+    const input = document.createElement("input");
     input.value = TEXT;
     return input;
   }
 
   function getTextarea() {
-    const textarea = document.createElement('textarea');
+    const textarea = document.createElement("textarea");
     textarea.value = TEXT;
     return textarea;
   }
 
   function getContentEditable() {
-    const editable = document.createElement('div');
-    const inner = document.createElement('span');
+    const editable = document.createElement("div");
+    const inner = document.createElement("span");
     inner.appendChild(document.createTextNode(TEXT));
     editable.appendChild(inner);
     return editable;
@@ -47,7 +47,7 @@ describe('FallbackCompositionState', () => {
     FallbackCompositionState.reset();
   }
 
-  it('extracts value via `getText()`', () => {
+  it("extracts value via `getText()`", () => {
     FallbackCompositionState.initialize(getInput());
     expect(FallbackCompositionState.getText()).toBe(TEXT);
     FallbackCompositionState.reset();
@@ -61,31 +61,31 @@ describe('FallbackCompositionState', () => {
     FallbackCompositionState.reset();
   });
 
-  describe('Extract fallback data inserted at collapsed cursor', () => {
-    it('extracts when inserted at start of text', () => {
-      assertExtractedData('XXXHello world', 'XXX');
+  describe("Extract fallback data inserted at collapsed cursor", () => {
+    it("extracts when inserted at start of text", () => {
+      assertExtractedData("XXXHello world", "XXX");
     });
 
-    it('extracts when inserted within text', () => {
-      assertExtractedData('Hello XXXworld', 'XXX');
+    it("extracts when inserted within text", () => {
+      assertExtractedData("Hello XXXworld", "XXX");
     });
 
-    it('extracts when inserted at end of text', () => {
-      assertExtractedData('Hello worldXXX', 'XXX');
+    it("extracts when inserted at end of text", () => {
+      assertExtractedData("Hello worldXXX", "XXX");
     });
   });
 
-  describe('Extract fallback data for non-collapsed range', () => {
-    it('extracts when inserted at start of text', () => {
-      assertExtractedData('XXX world', 'XXX');
+  describe("Extract fallback data for non-collapsed range", () => {
+    it("extracts when inserted at start of text", () => {
+      assertExtractedData("XXX world", "XXX");
     });
 
-    it('extracts when inserted within text', () => {
-      assertExtractedData('HelXXXrld', 'XXX');
+    it("extracts when inserted within text", () => {
+      assertExtractedData("HelXXXrld", "XXX");
     });
 
-    it('extracts when inserted at end of text', () => {
-      assertExtractedData('Hello XXX', 'XXX');
+    it("extracts when inserted at end of text", () => {
+      assertExtractedData("Hello XXX", "XXX");
     });
   });
 });

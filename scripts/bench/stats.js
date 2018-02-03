@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const chalk = require('chalk');
-const Table = require('cli-table');
+const chalk = require("chalk");
+const Table = require("cli-table");
 
 function percentChange(prev, current, prevSem, currentSem) {
   const [mean, sd] = calculateMeanAndSdOfRatioFromDeltaMethod(
@@ -13,8 +13,8 @@ function percentChange(prev, current, prevSem, currentSem) {
   const pctChange = +(mean * 100).toFixed(1);
   const ci95 = +(100 * 1.96 * sd).toFixed(1);
 
-  const ciInfo = ci95 > 0 ? ` +- ${ci95} %` : '';
-  const text = `${pctChange > 0 ? '+' : ''}${pctChange} %${ciInfo}`;
+  const ciInfo = ci95 > 0 ? ` +- ${ci95} %` : "";
+  const text = `${pctChange > 0 ? "+" : ""}${pctChange} %${ciInfo}`;
   if (pctChange + ci95 < 0) {
     return chalk.green(text);
   } else if (pctChange - ci95 > 0) {
@@ -48,13 +48,13 @@ function addBenchmarkResults(table, localResults, remoteMasterResults) {
   benchmarks.forEach(benchmark => {
     const rowHeader = [chalk.white.bold(benchmark)];
     if (remoteMasterResults) {
-      rowHeader.push(chalk.white.bold('Time'));
+      rowHeader.push(chalk.white.bold("Time"));
     }
     if (localResults) {
-      rowHeader.push(chalk.white.bold('Time'));
+      rowHeader.push(chalk.white.bold("Time"));
     }
     if (localResults && remoteMasterResults) {
-      rowHeader.push(chalk.white.bold('Diff'));
+      rowHeader.push(chalk.white.bold("Diff"));
     }
     table.push(rowHeader);
 
@@ -72,7 +72,7 @@ function addBenchmarkResults(table, localResults, remoteMasterResults) {
         // https://en.wikipedia.org/wiki/1.96 gives a 99% confidence interval.
         const ci95 = remoteSem * 1.96;
         row.push(
-          chalk.white(+remoteMean.toFixed(2) + ' ms +- ' + ci95.toFixed(2))
+          chalk.white(+remoteMean.toFixed(2) + " ms +- " + ci95.toFixed(2))
         );
       }
       let localMean;
@@ -82,7 +82,7 @@ function addBenchmarkResults(table, localResults, remoteMasterResults) {
         localSem = localResults.benchmarks[benchmark].averages[i].sem;
         const ci95 = localSem * 1.96;
         row.push(
-          chalk.white(+localMean.toFixed(2) + ' ms +- ' + ci95.toFixed(2))
+          chalk.white(+localMean.toFixed(2) + " ms +- " + ci95.toFixed(2))
         );
       }
       if (localResults && remoteMasterResults) {
@@ -94,17 +94,17 @@ function addBenchmarkResults(table, localResults, remoteMasterResults) {
 }
 
 function printResults(localResults, remoteMasterResults) {
-  const head = [''];
+  const head = [""];
   if (remoteMasterResults) {
-    head.push(chalk.yellow.bold('Remote (Merge Base)'));
+    head.push(chalk.yellow.bold("Remote (Merge Base)"));
   }
   if (localResults) {
-    head.push(chalk.green.bold('Local (Current Branch)'));
+    head.push(chalk.green.bold("Local (Current Branch)"));
   }
   if (localResults && remoteMasterResults) {
-    head.push('');
+    head.push("");
   }
-  const table = new Table({head});
+  const table = new Table({ head });
   addBenchmarkResults(table, localResults, remoteMasterResults);
   console.log(table.toString());
 }

@@ -5,36 +5,36 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
-import ReactFiberReconciler from 'react-reconciler';
-import * as ReactDOMFrameScheduling from 'shared/ReactDOMFrameScheduling';
-import Mode from 'art/modes/current';
-import FastNoSideEffects from 'art/modes/fast-noSideEffects';
-import Transform from 'art/core/transform';
-import invariant from 'fbjs/lib/invariant';
-import emptyObject from 'fbjs/lib/emptyObject';
+import React from "react";
+import ReactFiberReconciler from "react-reconciler";
+import * as ReactDOMFrameScheduling from "shared/ReactDOMFrameScheduling";
+import Mode from "art/modes/current";
+import FastNoSideEffects from "art/modes/fast-noSideEffects";
+import Transform from "art/core/transform";
+import invariant from "fbjs/lib/invariant";
+import emptyObject from "fbjs/lib/emptyObject";
 
 Mode.setCurrent(
   // Change to 'art/modes/dom' for easier debugging via SVG
-  FastNoSideEffects,
+  FastNoSideEffects
 );
 
 const pooledTransform = new Transform();
 
 const EVENT_TYPES = {
-  onClick: 'click',
-  onMouseMove: 'mousemove',
-  onMouseOver: 'mouseover',
-  onMouseOut: 'mouseout',
-  onMouseUp: 'mouseup',
-  onMouseDown: 'mousedown',
+  onClick: "click",
+  onMouseMove: "mousemove",
+  onMouseOver: "mouseover",
+  onMouseOut: "mouseout",
+  onMouseUp: "mouseup",
+  onMouseDown: "mousedown"
 };
 
 const TYPES = {
-  CLIPPING_RECTANGLE: 'ClippingRectangle',
-  GROUP: 'Group',
-  SHAPE: 'Shape',
-  TEXT: 'Text',
+  CLIPPING_RECTANGLE: "ClippingRectangle",
+  GROUP: "Group",
+  SHAPE: "Shape",
+  TEXT: "Text"
 };
 
 const UPDATE_SIGNAL = {};
@@ -56,7 +56,7 @@ function addEventListeners(instance, type, listener) {
       instance._subscriptions[type] = instance.subscribe(
         type,
         createEventHandler(instance),
-        instance,
+        instance
       );
     }
   } else {
@@ -69,13 +69,13 @@ function addEventListeners(instance, type, listener) {
 
 function childrenAsString(children) {
   if (!children) {
-    return '';
-  } else if (typeof children === 'string') {
+    return "";
+  } else if (typeof children === "string") {
     return children;
   } else if (children.length) {
-    return children.join('');
+    return children.join("");
   } else {
-    return '';
+    return "";
   }
 }
 
@@ -85,7 +85,7 @@ function createEventHandler(instance) {
 
     if (!listener) {
       // Noop
-    } else if (typeof listener === 'function') {
+    } else if (typeof listener === "function") {
       listener.call(instance, event);
     } else if (listener.handleEvent) {
       listener.handleEvent(event);
@@ -127,7 +127,7 @@ function getScaleY(props) {
 function isSameFont(oldFont, newFont) {
   if (oldFont === newFont) {
     return true;
-  } else if (typeof newFont === 'string' || typeof oldFont === 'string') {
+  } else if (typeof newFont === "string" || typeof oldFont === "string") {
     return false;
   } else {
     return (
@@ -225,7 +225,7 @@ function applyRenderableNodeProps(instance, props, prevProps = {}) {
       props.strokeWidth,
       props.strokeCap,
       props.strokeJoin,
-      props.strokeDash,
+      props.strokeDash
     );
   }
 }
@@ -306,7 +306,7 @@ class Pattern {
 
 class Surface extends React.Component {
   componentDidMount() {
-    const {height, width} = this.props;
+    const { height, width } = this.props;
 
     this._surface = Mode.Surface(+width, +height, this._tagRef);
 
@@ -362,11 +362,11 @@ class Text extends React.Component {
     super(props);
     // We allow reading these props. Ideally we could expose the Text node as
     // ref directly.
-    ['height', 'width', 'x', 'y'].forEach(key => {
+    ["height", "width", "x", "y"].forEach(key => {
       Object.defineProperty(this, key, {
         get: function() {
           return this._text ? this._text[key] : undefined;
-        },
+        }
       });
     });
   }
@@ -385,9 +385,9 @@ class Text extends React.Component {
 
 const ARTRenderer = ReactFiberReconciler({
   appendInitialChild(parentInstance, child) {
-    if (typeof child === 'string') {
+    if (typeof child === "string") {
       // Noop for string children of Text (eg <Text>{'foo'}{'bar'}</Text>)
-      invariant(false, 'Text children should already be flattened.');
+      invariant(false, "Text children should already be flattened.");
       return;
     }
 
@@ -415,7 +415,7 @@ const ARTRenderer = ReactFiberReconciler({
           props.children,
           props.font,
           props.alignment,
-          props.path,
+          props.path
         );
         instance._applyProps = applyTextProps;
         break;
@@ -472,7 +472,7 @@ const ARTRenderer = ReactFiberReconciler({
 
   shouldSetTextContent(type, props) {
     return (
-      typeof props.children === 'string' || typeof props.children === 'number'
+      typeof props.children === "string" || typeof props.children === "number"
     );
   },
 
@@ -498,7 +498,7 @@ const ARTRenderer = ReactFiberReconciler({
     insertBefore(parentInstance, child, beforeChild) {
       invariant(
         child !== beforeChild,
-        'ReactART: Can not insert node before itself',
+        "ReactART: Can not insert node before itself"
       );
       child.injectBefore(beforeChild);
     },
@@ -506,7 +506,7 @@ const ARTRenderer = ReactFiberReconciler({
     insertInContainerBefore(parentInstance, child, beforeChild) {
       invariant(
         child !== beforeChild,
-        'ReactART: Can not insert node before itself',
+        "ReactART: Can not insert node before itself"
       );
       child.injectBefore(beforeChild);
     },
@@ -531,8 +531,8 @@ const ARTRenderer = ReactFiberReconciler({
 
     commitUpdate(instance, updatePayload, type, oldProps, newProps) {
       instance._applyProps(instance, newProps, oldProps);
-    },
-  },
+    }
+  }
 });
 
 /** API */
@@ -541,4 +541,4 @@ export const ClippingRectangle = TYPES.CLIPPING_RECTANGLE;
 export const Group = TYPES.GROUP;
 export const Shape = TYPES.SHAPE;
 export const Path = Mode.Path;
-export {LinearGradient, Pattern, RadialGradient, Surface, Text, Transform};
+export { LinearGradient, Pattern, RadialGradient, Surface, Text, Transform };

@@ -1,7 +1,7 @@
-import Fixture from '../../Fixture';
-import FixtureSet from '../../FixtureSet';
-import TestCase from '../../TestCase';
-import SwitchDateTestCase from './switch-date-test-case';
+import Fixture from "../../Fixture";
+import FixtureSet from "../../FixtureSet";
+import TestCase from "../../TestCase";
+import SwitchDateTestCase from "./switch-date-test-case";
 
 const React = window.React;
 

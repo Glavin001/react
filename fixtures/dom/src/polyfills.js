@@ -1,6 +1,6 @@
-import 'core-js/es6/promise';
-import 'core-js/es6/set';
-import 'core-js/es6/map';
+import "core-js/es6/promise";
+import "core-js/es6/set";
+import "core-js/es6/map";
 
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
@@ -9,12 +9,12 @@ import 'core-js/es6/map';
 // MIT license
 (function() {
   var lastTime = 0;
-  var vendors = ['ms', 'moz', 'webkit', 'o'];
+  var vendors = ["ms", "moz", "webkit", "o"];
   for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+    window.requestAnimationFrame = window[vendors[x] + "RequestAnimationFrame"];
     window.cancelAnimationFrame =
-      window[vendors[x] + 'CancelAnimationFrame'] ||
-      window[vendors[x] + 'CancelRequestAnimationFrame'];
+      window[vendors[x] + "CancelAnimationFrame"] ||
+      window[vendors[x] + "CancelRequestAnimationFrame"];
   }
 
   if (!window.requestAnimationFrame)

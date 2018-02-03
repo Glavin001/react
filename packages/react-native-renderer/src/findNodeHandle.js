@@ -7,15 +7,15 @@
  * @flow
  */
 
-import type {Fiber} from 'react-reconciler/src/ReactFiber';
+import type { Fiber } from "react-reconciler/src/ReactFiber";
 
-import * as ReactInstanceMap from 'shared/ReactInstanceMap';
-import {ReactCurrentOwner} from 'shared/ReactGlobalSharedState';
-import getComponentName from 'shared/getComponentName';
-import invariant from 'fbjs/lib/invariant';
-import warning from 'fbjs/lib/warning';
+import * as ReactInstanceMap from "shared/ReactInstanceMap";
+import { ReactCurrentOwner } from "shared/ReactGlobalSharedState";
+import getComponentName from "shared/getComponentName";
+import invariant from "fbjs/lib/invariant";
+import warning from "fbjs/lib/warning";
 
-import ReactNativeFiberRenderer from './ReactNativeFiberRenderer';
+import ReactNativeFiberRenderer from "./ReactNativeFiberRenderer";
 
 /**
  * ReactNative vs ReactWeb
@@ -56,12 +56,12 @@ function findNodeHandle(componentOrHandle: any): any {
     if (owner !== null && owner.stateNode !== null) {
       warning(
         owner.stateNode._warnedAboutRefsInRender,
-        '%s is accessing findNodeHandle inside its render(). ' +
-          'render() should be a pure function of props and state. It should ' +
-          'never access something that requires stale data from the previous ' +
-          'render, such as refs. Move this logic to componentDidMount and ' +
-          'componentDidUpdate instead.',
-        getComponentName(owner) || 'A component',
+        "%s is accessing findNodeHandle inside its render(). " +
+          "render() should be a pure function of props and state. It should " +
+          "never access something that requires stale data from the previous " +
+          "render, such as refs. Move this logic to componentDidMount and " +
+          "componentDidUpdate instead.",
+        getComponentName(owner) || "A component"
       );
 
       owner.stateNode._warnedAboutRefsInRender = true;
@@ -70,7 +70,7 @@ function findNodeHandle(componentOrHandle: any): any {
   if (componentOrHandle == null) {
     return null;
   }
-  if (typeof componentOrHandle === 'number') {
+  if (typeof componentOrHandle === "number") {
     // Already a node handle
     return componentOrHandle;
   }
@@ -88,18 +88,18 @@ function findNodeHandle(componentOrHandle: any): any {
     } else {
       invariant(
         // Native
-        (typeof component === 'object' && '_nativeTag' in component) ||
+        (typeof component === "object" && "_nativeTag" in component) ||
           // Composite
-          (component.render != null && typeof component.render === 'function'),
-        'findNodeHandle(...): Argument is not a component ' +
-          '(type: %s, keys: %s)',
+          (component.render != null && typeof component.render === "function"),
+        "findNodeHandle(...): Argument is not a component " +
+          "(type: %s, keys: %s)",
         typeof component,
-        Object.keys(component),
+        Object.keys(component)
       );
       invariant(
         false,
-        'findNodeHandle(...): Unable to find node handle for unmounted ' +
-          'component.',
+        "findNodeHandle(...): Unable to find node handle for unmounted " +
+          "component."
       );
     }
   }

@@ -7,16 +7,16 @@
  * @flow
  */
 
-import type {Fiber} from './ReactFiber';
-import type {ExpirationTime} from './ReactFiberExpirationTime';
+import type { Fiber } from "./ReactFiber";
+import type { ExpirationTime } from "./ReactFiberExpirationTime";
 
-import {debugRenderPhaseSideEffects} from 'shared/ReactFeatureFlags';
-import {Callback as CallbackEffect} from 'shared/ReactTypeOfSideEffect';
-import {ClassComponent, HostRoot} from 'shared/ReactTypeOfWork';
-import invariant from 'fbjs/lib/invariant';
-import warning from 'fbjs/lib/warning';
+import { debugRenderPhaseSideEffects } from "shared/ReactFeatureFlags";
+import { Callback as CallbackEffect } from "shared/ReactTypeOfSideEffect";
+import { ClassComponent, HostRoot } from "shared/ReactTypeOfWork";
+import invariant from "fbjs/lib/invariant";
+import warning from "fbjs/lib/warning";
 
-import {NoWork} from './ReactFiberExpirationTime';
+import { NoWork } from "./ReactFiberExpirationTime";
 
 let didWarnUpdateInsideUpdate;
 
@@ -37,7 +37,7 @@ export type Update<State> = {
   callback: Callback | null,
   isReplace: boolean,
   isForced: boolean,
-  next: Update<State> | null,
+  next: Update<State> | null
 };
 
 // Singly linked-list of updates. When an update is scheduled, it is added to
@@ -66,7 +66,7 @@ export type UpdateQueue<State> = {
   isInitialized: boolean,
 
   // Dev only
-  isProcessing?: boolean,
+  isProcessing?: boolean
 };
 
 function createUpdateQueue<State>(baseState: State): UpdateQueue<State> {
@@ -77,7 +77,7 @@ function createUpdateQueue<State>(baseState: State): UpdateQueue<State> {
     last: null,
     callbackList: null,
     hasForceUpdate: false,
-    isInitialized: false,
+    isInitialized: false
   };
   if (__DEV__) {
     queue.isProcessing = false;
@@ -87,7 +87,7 @@ function createUpdateQueue<State>(baseState: State): UpdateQueue<State> {
 
 export function insertUpdateIntoQueue<State>(
   queue: UpdateQueue<State>,
-  update: Update<State>,
+  update: Update<State>
 ): void {
   // Append the update to the end of the list.
   if (queue.last === null) {
@@ -107,7 +107,7 @@ export function insertUpdateIntoQueue<State>(
 
 export function insertUpdateIntoFiber<State>(
   fiber: Fiber,
-  update: Update<State>,
+  update: Update<State>
 ): void {
   // We'll have at least one and at most two distinct update queues.
   const alternateFiber = fiber.alternate;
@@ -139,10 +139,10 @@ export function insertUpdateIntoFiber<State>(
     ) {
       warning(
         false,
-        'An update (setState, replaceState, or forceUpdate) was scheduled ' +
-          'from inside an update function. Update functions should be pure, ' +
-          'with zero side-effects. Consider using componentDidUpdate or a ' +
-          'callback.',
+        "An update (setState, replaceState, or forceUpdate) was scheduled " +
+          "from inside an update function. Update functions should be pure, " +
+          "with zero side-effects. Consider using componentDidUpdate or a " +
+          "callback."
       );
       didWarnUpdateInsideUpdate = true;
     }
@@ -182,7 +182,7 @@ export function getUpdateExpirationTime(fiber: Fiber): ExpirationTime {
 
 function getStateFromUpdate(update, instance, prevState, props) {
   const partialState = update.partialState;
-  if (typeof partialState === 'function') {
+  if (typeof partialState === "function") {
     const updateFn = partialState;
 
     // Invoke setState callback an extra time to help detect side-effects.
@@ -202,7 +202,7 @@ export function processUpdateQueue<State>(
   queue: UpdateQueue<State>,
   instance: any,
   props: any,
-  renderExpirationTime: ExpirationTime,
+  renderExpirationTime: ExpirationTime
 ): State {
   if (current !== null && current.updateQueue === queue) {
     // We need to create a work-in-progress queue, by cloning the current queue.
@@ -216,7 +216,7 @@ export function processUpdateQueue<State>(
       // These fields are no longer valid because they were already committed.
       // Reset them.
       callbackList: null,
-      hasForceUpdate: false,
+      hasForceUpdate: false
     };
   }
 
@@ -329,7 +329,7 @@ export function processUpdateQueue<State>(
 
 export function commitCallbacks<State>(
   queue: UpdateQueue<State>,
-  context: any,
+  context: any
 ) {
   const callbackList = queue.callbackList;
   if (callbackList === null) {
@@ -344,10 +344,10 @@ export function commitCallbacks<State>(
     // called once.
     update.callback = null;
     invariant(
-      typeof callback === 'function',
-      'Invalid argument passed as callback. Expected a function. Instead ' +
-        'received: %s',
-      callback,
+      typeof callback === "function",
+      "Invalid argument passed as callback. Expected a function. Instead " +
+        "received: %s",
+      callback
     );
     callback.call(context);
   }

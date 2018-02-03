@@ -7,9 +7,9 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-const ReactDOMServerIntegrationUtils = require('./utils/ReactDOMServerIntegrationTestUtils');
+const ReactDOMServerIntegrationUtils = require("./utils/ReactDOMServerIntegrationTestUtils");
 
 let React;
 let ReactDOM;
@@ -18,36 +18,36 @@ let ReactDOMServer;
 function initModules() {
   // Reset warning cache.
   jest.resetModuleRegistry();
-  React = require('react');
-  ReactDOM = require('react-dom');
-  ReactDOMServer = require('react-dom/server');
+  React = require("react");
+  ReactDOM = require("react-dom");
+  ReactDOMServer = require("react-dom/server");
 
   // Make them available to the helpers.
   return {
     ReactDOM,
-    ReactDOMServer,
+    ReactDOMServer
   };
 }
 
-const {resetModules, itRenders} = ReactDOMServerIntegrationUtils(initModules);
+const { resetModules, itRenders } = ReactDOMServerIntegrationUtils(initModules);
 
-describe('ReactDOMServerIntegration', () => {
+describe("ReactDOMServerIntegration", () => {
   beforeEach(() => {
     resetModules();
   });
 
-  describe('React.Fragment', () => {
-    itRenders('a fragment with one child', async render => {
+  describe("React.Fragment", () => {
+    itRenders("a fragment with one child", async render => {
       let e = await render(
         <React.Fragment>
           <div>text1</div>
-        </React.Fragment>,
+        </React.Fragment>
       );
       let parent = e.parentNode;
-      expect(parent.childNodes[0].tagName).toBe('DIV');
+      expect(parent.childNodes[0].tagName).toBe("DIV");
     });
 
-    itRenders('a fragment with several children', async render => {
+    itRenders("a fragment with several children", async render => {
       let Header = props => {
         return <p>header</p>;
       };
@@ -65,17 +65,17 @@ describe('ReactDOMServerIntegration', () => {
           <span>text2</span>
           <Header />
           <Footer />
-        </React.Fragment>,
+        </React.Fragment>
       );
       let parent = e.parentNode;
-      expect(parent.childNodes[0].tagName).toBe('DIV');
-      expect(parent.childNodes[1].tagName).toBe('SPAN');
-      expect(parent.childNodes[2].tagName).toBe('P');
-      expect(parent.childNodes[3].tagName).toBe('H2');
-      expect(parent.childNodes[4].tagName).toBe('H3');
+      expect(parent.childNodes[0].tagName).toBe("DIV");
+      expect(parent.childNodes[1].tagName).toBe("SPAN");
+      expect(parent.childNodes[2].tagName).toBe("P");
+      expect(parent.childNodes[3].tagName).toBe("H2");
+      expect(parent.childNodes[4].tagName).toBe("H3");
     });
 
-    itRenders('a nested fragment', async render => {
+    itRenders("a nested fragment", async render => {
       let e = await render(
         <React.Fragment>
           <React.Fragment>
@@ -91,15 +91,15 @@ describe('ReactDOMServerIntegration', () => {
               {false}
             </React.Fragment>
           </React.Fragment>
-        </React.Fragment>,
+        </React.Fragment>
       );
       let parent = e.parentNode;
-      expect(parent.childNodes[0].tagName).toBe('DIV');
-      expect(parent.childNodes[1].tagName).toBe('SPAN');
-      expect(parent.childNodes[2].tagName).toBe('P');
+      expect(parent.childNodes[0].tagName).toBe("DIV");
+      expect(parent.childNodes[1].tagName).toBe("SPAN");
+      expect(parent.childNodes[2].tagName).toBe("P");
     });
 
-    itRenders('an empty framgent', async render => {
+    itRenders("an empty framgent", async render => {
       expect(await render(<React.Fragment />)).toBe(null);
     });
   });

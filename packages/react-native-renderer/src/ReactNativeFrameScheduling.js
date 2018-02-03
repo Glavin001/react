@@ -7,10 +7,10 @@
  * @flow
  */
 
-import type {Deadline} from 'react-reconciler';
+import type { Deadline } from "react-reconciler";
 
 const hasNativePerformanceNow =
-  typeof performance === 'object' && typeof performance.now === 'function';
+  typeof performance === "object" && typeof performance.now === "function";
 
 const now = hasNativePerformanceNow
   ? () => performance.now()
@@ -22,7 +22,7 @@ let scheduledCallback: Callback | null = null;
 let frameDeadline: number = 0;
 
 const frameDeadlineObject: Deadline = {
-  timeRemaining: () => frameDeadline - now(),
+  timeRemaining: () => frameDeadline - now()
 };
 
 function setTimeoutCallback() {
@@ -53,4 +53,4 @@ function cancelDeferredCallback(callbackID: number) {
   clearTimeout(callbackID);
 }
 
-export {now, scheduleDeferredCallback, cancelDeferredCallback};
+export { now, scheduleDeferredCallback, cancelDeferredCallback };

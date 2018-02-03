@@ -7,13 +7,13 @@
  * @flow
  */
 
-import type {Fiber} from 'react-reconciler/src/ReactFiber';
+import type { Fiber } from "react-reconciler/src/ReactFiber";
 import type {
   DispatchConfig,
-  ReactSyntheticEvent,
-} from './ReactSyntheticEventType';
+  ReactSyntheticEvent
+} from "./ReactSyntheticEventType";
 
-export type EventTypes = {[key: string]: DispatchConfig};
+export type EventTypes = { [key: string]: DispatchConfig };
 
 export type AnyNativeEvent = Event | KeyboardEvent | MouseEvent | Touch;
 
@@ -25,7 +25,7 @@ export type PluginModule<NativeEvent> = {
     topLevelType: string,
     targetInst: Fiber,
     nativeTarget: NativeEvent,
-    nativeEventTarget: EventTarget,
+    nativeEventTarget: EventTarget
   ) => ?ReactSyntheticEvent,
-  tapMoveThreshold?: number,
+  tapMoveThreshold?: number
 };

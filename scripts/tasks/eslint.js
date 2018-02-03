@@ -5,18 +5,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
-const runESLint = require('../eslint');
+const runESLint = require("../eslint");
 
-console.log('Linting all files...');
+console.log("Linting all files...");
 if (!process.CI) {
-  console.log('Hint: run `yarn linc` to only lint changed files.');
+  console.log("Hint: run `yarn linc` to only lint changed files.");
 }
 
-if (runESLint({onlyChanged: false})) {
-  console.log('Lint passed.');
+if (runESLint({ onlyChanged: false })) {
+  console.log("Lint passed.");
 } else {
-  console.log('Lint failed.');
+  console.log("Lint failed.");
   process.exit(1);
 }

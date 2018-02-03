@@ -7,45 +7,45 @@
  * @flow
  */
 
-import type {ReactElement} from 'shared/ReactElementType';
+import type { ReactElement } from "shared/ReactElementType";
 
-import React from 'react';
-import emptyFunction from 'fbjs/lib/emptyFunction';
-import emptyObject from 'fbjs/lib/emptyObject';
-import hyphenateStyleName from 'fbjs/lib/hyphenateStyleName';
-import invariant from 'fbjs/lib/invariant';
-import memoizeStringOnly from 'fbjs/lib/memoizeStringOnly';
-import warning from 'fbjs/lib/warning';
-import checkPropTypes from 'prop-types/checkPropTypes';
-import describeComponentFrame from 'shared/describeComponentFrame';
-import {ReactDebugCurrentFrame} from 'shared/ReactGlobalSharedState';
+import React from "react";
+import emptyFunction from "fbjs/lib/emptyFunction";
+import emptyObject from "fbjs/lib/emptyObject";
+import hyphenateStyleName from "fbjs/lib/hyphenateStyleName";
+import invariant from "fbjs/lib/invariant";
+import memoizeStringOnly from "fbjs/lib/memoizeStringOnly";
+import warning from "fbjs/lib/warning";
+import checkPropTypes from "prop-types/checkPropTypes";
+import describeComponentFrame from "shared/describeComponentFrame";
+import { ReactDebugCurrentFrame } from "shared/ReactGlobalSharedState";
 import {
   REACT_FRAGMENT_TYPE,
   REACT_CALL_TYPE,
   REACT_RETURN_TYPE,
-  REACT_PORTAL_TYPE,
-} from 'shared/ReactSymbols';
+  REACT_PORTAL_TYPE
+} from "shared/ReactSymbols";
 
 import {
   createMarkupForCustomAttribute,
   createMarkupForProperty,
-  createMarkupForRoot,
-} from './DOMMarkupOperations';
-import escapeTextForBrowser from './escapeTextForBrowser';
+  createMarkupForRoot
+} from "./DOMMarkupOperations";
+import escapeTextForBrowser from "./escapeTextForBrowser";
 import {
   Namespaces,
   getIntrinsicNamespace,
-  getChildNamespace,
-} from '../shared/DOMNamespaces';
-import ReactControlledValuePropTypes from '../shared/ReactControlledValuePropTypes';
-import assertValidProps from '../shared/assertValidProps';
-import dangerousStyleValue from '../shared/dangerousStyleValue';
-import isCustomComponent from '../shared/isCustomComponent';
-import omittedCloseTags from '../shared/omittedCloseTags';
-import warnValidStyle from '../shared/warnValidStyle';
-import {validateProperties as validateARIAProperties} from '../shared/ReactDOMInvalidARIAHook';
-import {validateProperties as validateInputProperties} from '../shared/ReactDOMNullInputValuePropHook';
-import {validateProperties as validateUnknownProperties} from '../shared/ReactDOMUnknownPropertyHook';
+  getChildNamespace
+} from "../shared/DOMNamespaces";
+import ReactControlledValuePropTypes from "../shared/ReactControlledValuePropTypes";
+import assertValidProps from "../shared/assertValidProps";
+import dangerousStyleValue from "../shared/dangerousStyleValue";
+import isCustomComponent from "../shared/isCustomComponent";
+import omittedCloseTags from "../shared/omittedCloseTags";
+import warnValidStyle from "../shared/warnValidStyle";
+import { validateProperties as validateARIAProperties } from "../shared/ReactDOMInvalidARIAHook";
+import { validateProperties as validateInputProperties } from "../shared/ReactDOMNullInputValuePropHook";
+import { validateProperties as validateUnknownProperties } from "../shared/ReactDOMUnknownPropertyHook";
 
 // Based on reading the React.Children implementation. TODO: type this somewhere?
 type ReactNode = string | number | ReactElement;
@@ -56,8 +56,8 @@ const toArray = ((React.Children.toArray: any): toArrayType);
 let currentDebugStack;
 let currentDebugElementStack;
 
-let getStackAddendum = emptyFunction.thatReturns('');
-let describeStackFrame = emptyFunction.thatReturns('');
+let getStackAddendum = emptyFunction.thatReturns("");
+let describeStackFrame = emptyFunction.thatReturns("");
 
 let validatePropertiesInDevelopment = (type, props) => {};
 let setCurrentDebugStack = (stack: Array<Frame>) => {};
@@ -101,9 +101,9 @@ if (__DEV__) {
   };
   getStackAddendum = function(): null | string {
     if (currentDebugStack === null) {
-      return '';
+      return "";
     }
-    let stack = '';
+    let stack = "";
     let debugStack = currentDebugStack;
     for (let i = debugStack.length - 1; i >= 0; i--) {
       const frame: Frame = debugStack[i];
@@ -122,17 +122,17 @@ let didWarnDefaultSelectValue = false;
 let didWarnDefaultTextareaValue = false;
 let didWarnInvalidOptionChildren = false;
 const didWarnAboutNoopUpdateForComponent = {};
-const valuePropNames = ['value', 'defaultValue'];
+const valuePropNames = ["value", "defaultValue"];
 const newlineEatingTags = {
   listing: true,
   pre: true,
-  textarea: true,
+  textarea: true
 };
 
 function getComponentName(type) {
-  return typeof type === 'string'
+  return typeof type === "string"
     ? type
-    : typeof type === 'function' ? type.displayName || type.name : null;
+    : typeof type === "function" ? type.displayName || type.name : null;
 }
 
 // We accept any tag to be rendered but since this gets injected into arbitrary
@@ -142,7 +142,7 @@ const VALID_TAG_REGEX = /^[a-zA-Z][a-zA-Z:_\.\-\d]*$/; // Simplified subset
 const validatedTagCache = {};
 function validateDangerousTag(tag) {
   if (!validatedTagCache.hasOwnProperty(tag)) {
-    invariant(VALID_TAG_REGEX.test(tag), 'Invalid tag: %s', tag);
+    invariant(VALID_TAG_REGEX.test(tag), "Invalid tag: %s", tag);
     validatedTagCache[tag] = true;
   }
 }
@@ -152,13 +152,13 @@ const processStyleName = memoizeStringOnly(function(styleName) {
 });
 
 function createMarkupForStyles(styles): string | null {
-  let serialized = '';
-  let delimiter = '';
+  let serialized = "";
+  let delimiter = "";
   for (const styleName in styles) {
     if (!styles.hasOwnProperty(styleName)) {
       continue;
     }
-    const isCustomProperty = styleName.indexOf('--') === 0;
+    const isCustomProperty = styleName.indexOf("--") === 0;
     const styleValue = styles[styleName];
     if (__DEV__) {
       if (!isCustomProperty) {
@@ -166,14 +166,14 @@ function createMarkupForStyles(styles): string | null {
       }
     }
     if (styleValue != null) {
-      serialized += delimiter + processStyleName(styleName) + ':';
+      serialized += delimiter + processStyleName(styleName) + ":";
       serialized += dangerousStyleValue(
         styleName,
         styleValue,
-        isCustomProperty,
+        isCustomProperty
       );
 
-      delimiter = ';';
+      delimiter = ";";
     }
   }
   return serialized || null;
@@ -181,12 +181,12 @@ function createMarkupForStyles(styles): string | null {
 
 function warnNoop(
   publicInstance: React$Component<any, any>,
-  callerName: string,
+  callerName: string
 ) {
   if (__DEV__) {
     const constructor = publicInstance.constructor;
     const componentName =
-      (constructor && getComponentName(constructor)) || 'ReactClass';
+      (constructor && getComponentName(constructor)) || "ReactClass";
     const warningKey = `${componentName}.${callerName}`;
     if (didWarnAboutNoopUpdateForComponent[warningKey]) {
       return;
@@ -194,12 +194,12 @@ function warnNoop(
 
     warning(
       false,
-      '%s(...): Can only update a mounting component. ' +
-        'This usually means you called %s() outside componentWillMount() on the server. ' +
-        'This is a no-op.\n\nPlease check the code for the %s component.',
+      "%s(...): Can only update a mounting component. " +
+        "This usually means you called %s() outside componentWillMount() on the server. " +
+        "This is a no-op.\n\nPlease check the code for the %s component.",
       callerName,
       callerName,
-      componentName,
+      componentName
     );
     didWarnAboutNoopUpdateForComponent[warningKey] = true;
   }
@@ -217,7 +217,7 @@ function getNonChildrenInnerMarkup(props) {
     }
   } else {
     const content = props.children;
-    if (typeof content === 'string' || typeof content === 'number') {
+    if (typeof content === "string" || typeof content === "number") {
       return escapeTextForBrowser(content);
     }
   }
@@ -241,14 +241,14 @@ function flattenTopLevelChildren(children: mixed): FlatReactChildren {
 }
 
 function flattenOptionChildren(children: mixed): string {
-  let content = '';
+  let content = "";
   // Flatten children and warn if they aren't strings or numbers;
   // invalid types are ignored.
   React.Children.forEach(children, function(child) {
     if (child == null) {
       return;
     }
-    if (typeof child === 'string' || typeof child === 'number') {
+    if (typeof child === "string" || typeof child === "number") {
       content += child;
     } else {
       if (__DEV__) {
@@ -256,7 +256,7 @@ function flattenOptionChildren(children: mixed): string {
           didWarnInvalidOptionChildren = true;
           warning(
             false,
-            'Only strings and numbers are supported as <option> children.',
+            "Only strings and numbers are supported as <option> children."
           );
         }
       }
@@ -279,7 +279,7 @@ function maskContext(type, context) {
 
 function checkContextTypes(typeSpecs, values, location: string) {
   if (__DEV__) {
-    checkPropTypes(typeSpecs, values, location, 'Component', getStackAddendum);
+    checkPropTypes(typeSpecs, values, location, "Component", getStackAddendum);
   }
 }
 
@@ -287,18 +287,18 @@ function processContext(type, context) {
   const maskedContext = maskContext(type, context);
   if (__DEV__) {
     if (type.contextTypes) {
-      checkContextTypes(type.contextTypes, maskedContext, 'context');
+      checkContextTypes(type.contextTypes, maskedContext, "context");
     }
   }
   return maskedContext;
 }
 
-const STYLE = 'style';
+const STYLE = "style";
 const RESERVED_PROPS = {
   children: null,
   dangerouslySetInnerHTML: null,
   suppressContentEditableWarning: null,
-  suppressHydrationWarning: null,
+  suppressHydrationWarning: null
 };
 
 function createOpenTagMarkup(
@@ -307,9 +307,9 @@ function createOpenTagMarkup(
   props: Object,
   namespace: string,
   makeStaticMarkup: boolean,
-  isRootElement: boolean,
+  isRootElement: boolean
 ): string {
-  let ret = '<' + tagVerbatim;
+  let ret = "<" + tagVerbatim;
 
   for (const propKey in props) {
     if (!props.hasOwnProperty(propKey)) {
@@ -331,7 +331,7 @@ function createOpenTagMarkup(
       markup = createMarkupForProperty(propKey, propValue);
     }
     if (markup) {
-      ret += ' ' + markup;
+      ret += " " + markup;
     }
   }
 
@@ -342,7 +342,7 @@ function createOpenTagMarkup(
   }
 
   if (isRootElement) {
-    ret += ' ' + createMarkupForRoot();
+    ret += " " + createMarkupForRoot();
   }
   return ret;
 }
@@ -351,20 +351,20 @@ function validateRenderResult(child, type) {
   if (child === undefined) {
     invariant(
       false,
-      '%s(...): Nothing was returned from render. This usually means a ' +
-        'return statement is missing. Or, to render nothing, ' +
-        'return null.',
-      getComponentName(type) || 'Component',
+      "%s(...): Nothing was returned from render. This usually means a " +
+        "return statement is missing. Or, to render nothing, " +
+        "return null.",
+      getComponentName(type) || "Component"
     );
   }
 }
 
 function resolve(
   child: mixed,
-  context: Object,
+  context: Object
 ): {|
   child: mixed,
-  context: Object,
+  context: Object
 |} {
   let element: ReactElement;
 
@@ -388,7 +388,7 @@ function resolve(
       pushElementToDebugStack(element);
     }
     Component = element.type;
-    if (typeof Component !== 'function') {
+    if (typeof Component !== "function") {
       break;
     }
     publicContext = processContext(Component, context);
@@ -401,7 +401,7 @@ function resolve(
       },
       enqueueForceUpdate: function(publicInstance) {
         if (queue === null) {
-          warnNoop(publicInstance, 'forceUpdate');
+          warnNoop(publicInstance, "forceUpdate");
           return null;
         }
       },
@@ -411,11 +411,11 @@ function resolve(
       },
       enqueueSetState: function(publicInstance, currentPartialState) {
         if (queue === null) {
-          warnNoop(publicInstance, 'setState');
+          warnNoop(publicInstance, "setState");
           return null;
         }
         queue.push(currentPartialState);
-      },
+      }
     };
 
     if (shouldConstruct(Component)) {
@@ -453,7 +453,7 @@ function resolve(
           for (let i = oldReplace ? 1 : 0; i < oldQueue.length; i++) {
             partial = oldQueue[i];
             partialState =
-              typeof partial === 'function'
+              typeof partial === "function"
                 ? partial.call(inst, nextState, element.props, publicContext)
                 : partial;
             if (partialState) {
@@ -482,24 +482,24 @@ function resolve(
     }
     validateRenderResult(child, Component);
 
-    if (typeof inst.getChildContext === 'function') {
+    if (typeof inst.getChildContext === "function") {
       childContextTypes = Component.childContextTypes;
-      if (typeof childContextTypes === 'object') {
+      if (typeof childContextTypes === "object") {
         childContext = inst.getChildContext();
         for (contextKey in childContext) {
           invariant(
             contextKey in childContextTypes,
             '%s.getChildContext(): key "%s" is not defined in childContextTypes.',
-            getComponentName(Component) || 'Unknown',
-            contextKey,
+            getComponentName(Component) || "Unknown",
+            contextKey
           );
         }
       } else {
         warning(
           false,
-          '%s.getChildContext(): childContextTypes must be defined in order to ' +
-            'use getChildContext().',
-          getComponentName(Component) || 'Unknown',
+          "%s.getChildContext(): childContextTypes must be defined in order to " +
+            "use getChildContext().",
+          getComponentName(Component) || "Unknown"
         );
       }
     }
@@ -507,7 +507,7 @@ function resolve(
       context = Object.assign({}, context, childContext);
     }
   }
-  return {child, context};
+  return { child, context };
 }
 
 type Frame = {
@@ -515,11 +515,11 @@ type Frame = {
   children: FlatReactChildren,
   childIndex: number,
   context: Object,
-  footer: string,
+  footer: string
 };
 
 type FrameDev = Frame & {
-  debugElementStack: Array<ReactElement>,
+  debugElementStack: Array<ReactElement>
 };
 
 class ReactDOMServerRenderer {
@@ -540,7 +540,7 @@ class ReactDOMServerRenderer {
       children: flatChildren,
       childIndex: 0,
       context: emptyObject,
-      footer: '',
+      footer: ""
     };
     if (__DEV__) {
       ((topFrame: any): FrameDev).debugElementStack = [];
@@ -557,7 +557,7 @@ class ReactDOMServerRenderer {
       return null;
     }
 
-    let out = '';
+    let out = "";
     while (out.length < bytes) {
       if (this.stack.length === 0) {
         this.exhausted = true;
@@ -567,11 +567,11 @@ class ReactDOMServerRenderer {
       if (frame.childIndex >= frame.children.length) {
         const footer = frame.footer;
         out += footer;
-        if (footer !== '') {
+        if (footer !== "") {
           this.previousWasTextNode = false;
         }
         this.stack.pop();
-        if (frame.tag === 'select') {
+        if (frame.tag === "select") {
           this.currentSelectValue = null;
         }
         continue;
@@ -592,41 +592,41 @@ class ReactDOMServerRenderer {
   render(
     child: ReactNode | null,
     context: Object,
-    parentNamespace: string,
+    parentNamespace: string
   ): string {
-    if (typeof child === 'string' || typeof child === 'number') {
-      const text = '' + child;
-      if (text === '') {
-        return '';
+    if (typeof child === "string" || typeof child === "number") {
+      const text = "" + child;
+      if (text === "") {
+        return "";
       }
       if (this.makeStaticMarkup) {
         return escapeTextForBrowser(text);
       }
       if (this.previousWasTextNode) {
-        return '<!-- -->' + escapeTextForBrowser(text);
+        return "<!-- -->" + escapeTextForBrowser(text);
       }
       this.previousWasTextNode = true;
       return escapeTextForBrowser(text);
     } else {
       let nextChild;
-      ({child: nextChild, context} = resolve(child, context));
+      ({ child: nextChild, context } = resolve(child, context));
       if (nextChild === null || nextChild === false) {
-        return '';
+        return "";
       } else if (!React.isValidElement(nextChild)) {
         if (nextChild != null && nextChild.$$typeof != null) {
           // Catch unexpected special types early.
           const $$typeof = nextChild.$$typeof;
           invariant(
             $$typeof !== REACT_PORTAL_TYPE,
-            'Portals are not currently supported by the server renderer. ' +
-              'Render them conditionally so that they only appear on the client render.',
+            "Portals are not currently supported by the server renderer. " +
+              "Render them conditionally so that they only appear on the client render."
           );
           // Catch-all to prevent an infinite loop if React.Children.toArray() supports some new type.
           invariant(
             false,
-            'Unknown element-like object type: %s. This is likely a bug in React. ' +
-              'Please file an issue.',
-            ($$typeof: any).toString(),
+            "Unknown element-like object type: %s. This is likely a bug in React. " +
+              "Please file an issue.",
+            ($$typeof: any).toString()
           );
         }
         const nextChildren = toArray(nextChild);
@@ -635,13 +635,13 @@ class ReactDOMServerRenderer {
           children: nextChildren,
           childIndex: 0,
           context: context,
-          footer: '',
+          footer: ""
         };
         if (__DEV__) {
           ((frame: any): FrameDev).debugElementStack = [];
         }
         this.stack.push(frame);
-        return '';
+        return "";
       }
       // Safe because we just checked it's an element.
       const nextElement = ((nextChild: any): ReactElement);
@@ -649,26 +649,26 @@ class ReactDOMServerRenderer {
       switch (elementType) {
         case REACT_FRAGMENT_TYPE:
           const nextChildren = toArray(
-            ((nextChild: any): ReactElement).props.children,
+            ((nextChild: any): ReactElement).props.children
           );
           const frame: Frame = {
             domNamespace: parentNamespace,
             children: nextChildren,
             childIndex: 0,
             context: context,
-            footer: '',
+            footer: ""
           };
           if (__DEV__) {
             ((frame: any): FrameDev).debugElementStack = [];
           }
           this.stack.push(frame);
-          return '';
+          return "";
         case REACT_CALL_TYPE:
         case REACT_RETURN_TYPE:
           invariant(
             false,
-            'The experimental Call and Return types are not currently ' +
-              'supported by the server renderer.',
+            "The experimental Call and Return types are not currently " +
+              "supported by the server renderer."
           );
         // eslint-disable-next-line-no-fallthrough
         default:
@@ -680,7 +680,7 @@ class ReactDOMServerRenderer {
   renderDOM(
     element: ReactElement,
     context: Object,
-    parentNamespace: string,
+    parentNamespace: string
   ): string {
     const tag = element.type.toLowerCase();
 
@@ -695,9 +695,9 @@ class ReactDOMServerRenderer {
         // allow <SVG> or <mATH>.
         warning(
           tag === element.type,
-          '<%s /> is using uppercase HTML. Always use lowercase HTML tags ' +
-            'in React.',
-          element.type,
+          "<%s /> is using uppercase HTML. Always use lowercase HTML tags " +
+            "in React.",
+          element.type
         );
       }
     }
@@ -705,12 +705,12 @@ class ReactDOMServerRenderer {
     validateDangerousTag(tag);
 
     let props = element.props;
-    if (tag === 'input') {
+    if (tag === "input") {
       if (__DEV__) {
         ReactControlledValuePropTypes.checkPropTypes(
-          'input',
+          "input",
           props,
-          getStackAddendum,
+          getStackAddendum
         );
 
         if (
@@ -720,14 +720,14 @@ class ReactDOMServerRenderer {
         ) {
           warning(
             false,
-            '%s contains an input of type %s with both checked and defaultChecked props. ' +
-              'Input elements must be either controlled or uncontrolled ' +
-              '(specify either the checked prop, or the defaultChecked prop, but not ' +
-              'both). Decide between using a controlled or uncontrolled input ' +
-              'element and remove one of these props. More info: ' +
-              'https://fb.me/react-controlled-components',
-            'A component',
-            props.type,
+            "%s contains an input of type %s with both checked and defaultChecked props. " +
+              "Input elements must be either controlled or uncontrolled " +
+              "(specify either the checked prop, or the defaultChecked prop, but not " +
+              "both). Decide between using a controlled or uncontrolled input " +
+              "element and remove one of these props. More info: " +
+              "https://fb.me/react-controlled-components",
+            "A component",
+            props.type
           );
           didWarnDefaultChecked = true;
         }
@@ -738,14 +738,14 @@ class ReactDOMServerRenderer {
         ) {
           warning(
             false,
-            '%s contains an input of type %s with both value and defaultValue props. ' +
-              'Input elements must be either controlled or uncontrolled ' +
-              '(specify either the value prop, or the defaultValue prop, but not ' +
-              'both). Decide between using a controlled or uncontrolled input ' +
-              'element and remove one of these props. More info: ' +
-              'https://fb.me/react-controlled-components',
-            'A component',
-            props.type,
+            "%s contains an input of type %s with both value and defaultValue props. " +
+              "Input elements must be either controlled or uncontrolled " +
+              "(specify either the value prop, or the defaultValue prop, but not " +
+              "both). Decide between using a controlled or uncontrolled input " +
+              "element and remove one of these props. More info: " +
+              "https://fb.me/react-controlled-components",
+            "A component",
+            props.type
           );
           didWarnDefaultInputValue = true;
         }
@@ -753,22 +753,22 @@ class ReactDOMServerRenderer {
 
       props = Object.assign(
         {
-          type: undefined,
+          type: undefined
         },
         props,
         {
           defaultChecked: undefined,
           defaultValue: undefined,
           value: props.value != null ? props.value : props.defaultValue,
-          checked: props.checked != null ? props.checked : props.defaultChecked,
-        },
+          checked: props.checked != null ? props.checked : props.defaultChecked
+        }
       );
-    } else if (tag === 'textarea') {
+    } else if (tag === "textarea") {
       if (__DEV__) {
         ReactControlledValuePropTypes.checkPropTypes(
-          'textarea',
+          "textarea",
           props,
-          getStackAddendum,
+          getStackAddendum
         );
         if (
           props.value !== undefined &&
@@ -777,11 +777,11 @@ class ReactDOMServerRenderer {
         ) {
           warning(
             false,
-            'Textarea elements must be either controlled or uncontrolled ' +
-              '(specify either the value prop, or the defaultValue prop, but not ' +
-              'both). Decide between using a controlled or uncontrolled textarea ' +
-              'and remove one of these props. More info: ' +
-              'https://fb.me/react-controlled-components',
+            "Textarea elements must be either controlled or uncontrolled " +
+              "(specify either the value prop, or the defaultValue prop, but not " +
+              "both). Decide between using a controlled or uncontrolled textarea " +
+              "and remove one of these props. More info: " +
+              "https://fb.me/react-controlled-components"
           );
           didWarnDefaultTextareaValue = true;
         }
@@ -796,40 +796,40 @@ class ReactDOMServerRenderer {
           if (__DEV__) {
             warning(
               false,
-              'Use the `defaultValue` or `value` props instead of setting ' +
-                'children on <textarea>.',
+              "Use the `defaultValue` or `value` props instead of setting " +
+                "children on <textarea>."
             );
           }
           invariant(
             defaultValue == null,
-            'If you supply `defaultValue` on a <textarea>, do not pass children.',
+            "If you supply `defaultValue` on a <textarea>, do not pass children."
           );
           if (Array.isArray(textareaChildren)) {
             invariant(
               textareaChildren.length <= 1,
-              '<textarea> can only have at most one child.',
+              "<textarea> can only have at most one child."
             );
             textareaChildren = textareaChildren[0];
           }
 
-          defaultValue = '' + textareaChildren;
+          defaultValue = "" + textareaChildren;
         }
         if (defaultValue == null) {
-          defaultValue = '';
+          defaultValue = "";
         }
         initialValue = defaultValue;
       }
 
       props = Object.assign({}, props, {
         value: undefined,
-        children: '' + initialValue,
+        children: "" + initialValue
       });
-    } else if (tag === 'select') {
+    } else if (tag === "select") {
       if (__DEV__) {
         ReactControlledValuePropTypes.checkPropTypes(
-          'select',
+          "select",
           props,
-          getStackAddendum,
+          getStackAddendum
         );
 
         for (let i = 0; i < valuePropNames.length; i++) {
@@ -841,18 +841,18 @@ class ReactDOMServerRenderer {
           if (props.multiple && !isArray) {
             warning(
               false,
-              'The `%s` prop supplied to <select> must be an array if ' +
-                '`multiple` is true.%s',
+              "The `%s` prop supplied to <select> must be an array if " +
+                "`multiple` is true.%s",
               propName,
-              '', // getDeclarationErrorAddendum(),
+              "" // getDeclarationErrorAddendum(),
             );
           } else if (!props.multiple && isArray) {
             warning(
               false,
-              'The `%s` prop supplied to <select> must be a scalar ' +
-                'value if `multiple` is false.%s',
+              "The `%s` prop supplied to <select> must be a scalar " +
+                "value if `multiple` is false.%s",
               propName,
-              '', // getDeclarationErrorAddendum(),
+              "" // getDeclarationErrorAddendum(),
             );
           }
         }
@@ -864,11 +864,11 @@ class ReactDOMServerRenderer {
         ) {
           warning(
             false,
-            'Select elements must be either controlled or uncontrolled ' +
-              '(specify either the value prop, or the defaultValue prop, but not ' +
-              'both). Decide between using a controlled or uncontrolled select ' +
-              'element and remove one of these props. More info: ' +
-              'https://fb.me/react-controlled-components',
+            "Select elements must be either controlled or uncontrolled " +
+              "(specify either the value prop, or the defaultValue prop, but not " +
+              "both). Decide between using a controlled or uncontrolled select " +
+              "element and remove one of these props. More info: " +
+              "https://fb.me/react-controlled-components"
           );
           didWarnDefaultSelectValue = true;
         }
@@ -876,16 +876,16 @@ class ReactDOMServerRenderer {
       this.currentSelectValue =
         props.value != null ? props.value : props.defaultValue;
       props = Object.assign({}, props, {
-        value: undefined,
+        value: undefined
       });
-    } else if (tag === 'option') {
+    } else if (tag === "option") {
       let selected = null;
       const selectValue = this.currentSelectValue;
       const optionChildren = flattenOptionChildren(props.children);
       if (selectValue != null) {
         let value;
         if (props.value != null) {
-          value = props.value + '';
+          value = props.value + "";
         } else {
           value = optionChildren;
         }
@@ -893,25 +893,25 @@ class ReactDOMServerRenderer {
         if (Array.isArray(selectValue)) {
           // multiple
           for (let j = 0; j < selectValue.length; j++) {
-            if ('' + selectValue[j] === value) {
+            if ("" + selectValue[j] === value) {
               selected = true;
               break;
             }
           }
         } else {
-          selected = '' + selectValue === value;
+          selected = "" + selectValue === value;
         }
 
         props = Object.assign(
           {
             selected: undefined,
-            children: undefined,
+            children: undefined
           },
           props,
           {
             selected: selected,
-            children: optionChildren,
-          },
+            children: optionChildren
+          }
         );
       }
     }
@@ -928,20 +928,20 @@ class ReactDOMServerRenderer {
       props,
       namespace,
       this.makeStaticMarkup,
-      this.stack.length === 1,
+      this.stack.length === 1
     );
-    let footer = '';
+    let footer = "";
     if (omittedCloseTags.hasOwnProperty(tag)) {
-      out += '/>';
+      out += "/>";
     } else {
-      out += '>';
-      footer = '</' + element.type + '>';
+      out += ">";
+      footer = "</" + element.type + ">";
     }
     let children;
     const innerMarkup = getNonChildrenInnerMarkup(props);
     if (innerMarkup != null) {
       children = [];
-      if (newlineEatingTags[tag] && innerMarkup.charAt(0) === '\n') {
+      if (newlineEatingTags[tag] && innerMarkup.charAt(0) === "\n") {
         // text/html ignores the first character in these tags if it's a newline
         // Prefer to break application/xml over text/html (for now) by adding
         // a newline specifically to get eaten by the parser. (Alternately for
@@ -952,7 +952,7 @@ class ReactDOMServerRenderer {
         // See: <http://www.w3.org/TR/html5/syntax.html#newlines>
         // See: Parsing of "textarea" "listing" and "pre" elements
         //  from <http://www.w3.org/TR/html5/syntax.html#parsing-main-inbody>
-        out += '\n';
+        out += "\n";
       }
       out += innerMarkup;
     } else {
@@ -964,7 +964,7 @@ class ReactDOMServerRenderer {
       children,
       childIndex: 0,
       context: context,
-      footer: footer,
+      footer: footer
     };
     if (__DEV__) {
       ((frame: any): FrameDev).debugElementStack = [];

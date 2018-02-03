@@ -1,10 +1,10 @@
-import FixtureSet from '../../FixtureSet';
-import TestCase from '../../TestCase';
+import FixtureSet from "../../FixtureSet";
+import TestCase from "../../TestCase";
 
 const React = window.React;
 const ReactDOM = window.ReactDOM;
 
-const supportsCustomElements = typeof customElements !== 'undefined';
+const supportsCustomElements = typeof customElements !== "undefined";
 
 class HelloWorld extends React.Component {
   render() {
@@ -17,9 +17,9 @@ if (supportsCustomElements) {
   // https://github.com/w3c/webcomponents/issues/587
   // eslint-disable-next-line no-new-func
   const MyElement = new Function(
-    'React',
-    'ReactDOM',
-    'HelloWorld',
+    "React",
+    "ReactDOM",
+    "HelloWorld",
     `
     return class MyElement extends HTMLElement {
       constructor() {
@@ -29,7 +29,7 @@ if (supportsCustomElements) {
       }
     }`
   )(React, ReactDOM, HelloWorld);
-  customElements.define('my-element', MyElement);
+  customElements.define("my-element", MyElement);
 }
 
 export default class ButtonTestCases extends React.Component {
@@ -37,10 +37,11 @@ export default class ButtonTestCases extends React.Component {
     return (
       <FixtureSet
         title="Custom Elements"
-        description="Support for Custom Element DOM standards.">
+        description="Support for Custom Element DOM standards."
+      >
         <TestCase title="Rendering into shadow root">
           <TestCase.ExpectedResult>
-            You should see "Hello, World" printed below.{' '}
+            You should see "Hello, World" printed below.{" "}
           </TestCase.ExpectedResult>
           {supportsCustomElements ? (
             <my-element />

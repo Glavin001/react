@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {restoreStateIfNeeded} from './ReactControlledComponent';
+import { restoreStateIfNeeded } from "./ReactControlledComponent";
 
 // Used as a way to call batchedUpdates when we don't have a reference to
 // the renderer. Such as when we're dispatching events or if third party
@@ -42,7 +42,7 @@ export function batchedUpdates(fn, bookkeeping) {
 const ReactGenericBatchingInjection = {
   injectFiberBatchedUpdates: function(_batchedUpdates) {
     fiberBatchedUpdates = _batchedUpdates;
-  },
+  }
 };
 
 export const injection = ReactGenericBatchingInjection;

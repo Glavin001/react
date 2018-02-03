@@ -7,14 +7,14 @@
  * @flow
  */
 
-import * as ReactFiberTreeReflection from 'react-reconciler/reflection';
-import * as ReactInstanceMap from 'shared/ReactInstanceMap';
-import {addUserTimingListener} from 'shared/ReactFeatureFlags';
+import * as ReactFiberTreeReflection from "react-reconciler/reflection";
+import * as ReactInstanceMap from "shared/ReactInstanceMap";
+import { addUserTimingListener } from "shared/ReactFeatureFlags";
 
-import ReactDOM from './ReactDOM';
-import * as ReactBrowserEventEmitter from '../events/ReactBrowserEventEmitter';
-import * as ReactDOMComponentTree from './ReactDOMComponentTree';
-import TapEventPlugin from '../events/TapEventPlugin';
+import ReactDOM from "./ReactDOM";
+import * as ReactBrowserEventEmitter from "../events/ReactBrowserEventEmitter";
+import * as ReactDOMComponentTree from "./ReactDOMComponentTree";
+import TapEventPlugin from "../events/TapEventPlugin";
 
 Object.assign(
   (ReactDOM.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: any),
@@ -27,8 +27,8 @@ Object.assign(
     // Used by www msite:
     TapEventPlugin,
     // Perf experiment
-    addUserTimingListener,
-  },
+    addUserTimingListener
+  }
 );
 
 export default ReactDOM;

@@ -7,39 +7,39 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let createReactNativeComponentClass;
 let React;
 let ReactNative;
 
-describe('createReactNativeComponentClass', () => {
+describe("createReactNativeComponentClass", () => {
   beforeEach(() => {
     jest.resetModules();
 
-    createReactNativeComponentClass = require('../createReactNativeComponentClass')
+    createReactNativeComponentClass = require("../createReactNativeComponentClass")
       .default;
-    React = require('react');
-    ReactNative = require('react-native-renderer');
+    React = require("react");
+    ReactNative = require("react-native-renderer");
   });
 
-  it('should register viewConfigs', () => {
+  it("should register viewConfigs", () => {
     const textViewConfig = {
       validAttributes: {},
-      uiViewClassName: 'Text',
+      uiViewClassName: "Text"
     };
     const viewViewConfig = {
       validAttributes: {},
-      uiViewClassName: 'View',
+      uiViewClassName: "View"
     };
 
     const Text = createReactNativeComponentClass(
       textViewConfig.uiViewClassName,
-      () => textViewConfig,
+      () => textViewConfig
     );
     const View = createReactNativeComponentClass(
       viewViewConfig.uiViewClassName,
-      () => viewViewConfig,
+      () => viewViewConfig
     );
 
     expect(Text).not.toBe(View);
@@ -48,26 +48,26 @@ describe('createReactNativeComponentClass', () => {
     ReactNative.render(<View />, 1);
   });
 
-  it('should not allow viewConfigs with duplicate uiViewClassNames to be registered', () => {
+  it("should not allow viewConfigs with duplicate uiViewClassNames to be registered", () => {
     const textViewConfig = {
       validAttributes: {},
-      uiViewClassName: 'Text',
+      uiViewClassName: "Text"
     };
     const altTextViewConfig = {
       validAttributes: {},
-      uiViewClassName: 'Text', // Same
+      uiViewClassName: "Text" // Same
     };
 
     createReactNativeComponentClass(
       textViewConfig.uiViewClassName,
-      () => textViewConfig,
+      () => textViewConfig
     );
 
     expect(() => {
       createReactNativeComponentClass(
         altTextViewConfig.uiViewClassName,
-        () => altTextViewConfig,
+        () => altTextViewConfig
       );
-    }).toThrow('Tried to register two views with the same name Text');
+    }).toThrow("Tried to register two views with the same name Text");
   });
 });

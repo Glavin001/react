@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import dangerousStyleValue from './dangerousStyleValue';
-import hyphenateStyleName from 'fbjs/lib/hyphenateStyleName';
-import warnValidStyle from './warnValidStyle';
+import dangerousStyleValue from "./dangerousStyleValue";
+import hyphenateStyleName from "fbjs/lib/hyphenateStyleName";
+import warnValidStyle from "./warnValidStyle";
 
 /**
  * Operations for dealing with CSS properties.
@@ -21,23 +21,23 @@ import warnValidStyle from './warnValidStyle';
  */
 export function createDangerousStringForStyles(styles) {
   if (__DEV__) {
-    let serialized = '';
-    let delimiter = '';
+    let serialized = "";
+    let delimiter = "";
     for (const styleName in styles) {
       if (!styles.hasOwnProperty(styleName)) {
         continue;
       }
       const styleValue = styles[styleName];
       if (styleValue != null) {
-        const isCustomProperty = styleName.indexOf('--') === 0;
-        serialized += delimiter + hyphenateStyleName(styleName) + ':';
+        const isCustomProperty = styleName.indexOf("--") === 0;
+        serialized += delimiter + hyphenateStyleName(styleName) + ":";
         serialized += dangerousStyleValue(
           styleName,
           styleValue,
-          isCustomProperty,
+          isCustomProperty
         );
 
-        delimiter = ';';
+        delimiter = ";";
       }
     }
     return serialized || null;
@@ -57,7 +57,7 @@ export function setValueForStyles(node, styles, getStack) {
     if (!styles.hasOwnProperty(styleName)) {
       continue;
     }
-    const isCustomProperty = styleName.indexOf('--') === 0;
+    const isCustomProperty = styleName.indexOf("--") === 0;
     if (__DEV__) {
       if (!isCustomProperty) {
         warnValidStyle(styleName, styles[styleName], getStack);
@@ -66,10 +66,10 @@ export function setValueForStyles(node, styles, getStack) {
     const styleValue = dangerousStyleValue(
       styleName,
       styles[styleName],
-      isCustomProperty,
+      isCustomProperty
     );
-    if (styleName === 'float') {
-      styleName = 'cssFloat';
+    if (styleName === "float") {
+      styleName = "cssFloat";
     }
     if (isCustomProperty) {
       style.setProperty(styleName, styleValue);

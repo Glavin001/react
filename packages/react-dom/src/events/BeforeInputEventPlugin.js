@@ -5,23 +5,23 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import type {TopLevelTypes} from './BrowserEventConstants';
+import type { TopLevelTypes } from "./BrowserEventConstants";
 
-import {accumulateTwoPhaseDispatches} from 'events/EventPropagators';
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment';
+import { accumulateTwoPhaseDispatches } from "events/EventPropagators";
+import ExecutionEnvironment from "fbjs/lib/ExecutionEnvironment";
 
-import * as FallbackCompositionState from './FallbackCompositionState';
-import SyntheticCompositionEvent from './SyntheticCompositionEvent';
-import SyntheticInputEvent from './SyntheticInputEvent';
+import * as FallbackCompositionState from "./FallbackCompositionState";
+import SyntheticCompositionEvent from "./SyntheticCompositionEvent";
+import SyntheticInputEvent from "./SyntheticInputEvent";
 
 const END_KEYCODES = [9, 13, 27, 32]; // Tab, Return, Esc, Space
 const START_KEYCODE = 229;
 
 const canUseCompositionEvent =
-  ExecutionEnvironment.canUseDOM && 'CompositionEvent' in window;
+  ExecutionEnvironment.canUseDOM && "CompositionEvent" in window;
 
 let documentMode = null;
-if (ExecutionEnvironment.canUseDOM && 'documentMode' in document) {
+if (ExecutionEnvironment.canUseDOM && "documentMode" in document) {
   documentMode = document.documentMode;
 }
 
@@ -30,7 +30,7 @@ if (ExecutionEnvironment.canUseDOM && 'documentMode' in document) {
 // useful, so we don't use it.
 const canUseTextInputEvent =
   ExecutionEnvironment.canUseDOM &&
-  'TextEvent' in window &&
+  "TextEvent" in window &&
   !documentMode &&
   !isPresto();
 
@@ -50,8 +50,8 @@ function isPresto() {
   const opera = window.opera;
   return (
     opera !== null &&
-    typeof opera === 'object' &&
-    typeof opera.version === 'function' &&
+    typeof opera === "object" &&
+    typeof opera.version === "function" &&
     parseInt(opera.version(), 10) <= 12
   );
 }
@@ -63,58 +63,58 @@ const SPACEBAR_CHAR = String.fromCharCode(SPACEBAR_CODE);
 const eventTypes = {
   beforeInput: {
     phasedRegistrationNames: {
-      bubbled: 'onBeforeInput',
-      captured: 'onBeforeInputCapture',
+      bubbled: "onBeforeInput",
+      captured: "onBeforeInputCapture"
     },
     dependencies: [
-      'topCompositionEnd',
-      'topKeyPress',
-      'topTextInput',
-      'topPaste',
-    ],
+      "topCompositionEnd",
+      "topKeyPress",
+      "topTextInput",
+      "topPaste"
+    ]
   },
   compositionEnd: {
     phasedRegistrationNames: {
-      bubbled: 'onCompositionEnd',
-      captured: 'onCompositionEndCapture',
+      bubbled: "onCompositionEnd",
+      captured: "onCompositionEndCapture"
     },
     dependencies: [
-      'topBlur',
-      'topCompositionEnd',
-      'topKeyDown',
-      'topKeyPress',
-      'topKeyUp',
-      'topMouseDown',
-    ],
+      "topBlur",
+      "topCompositionEnd",
+      "topKeyDown",
+      "topKeyPress",
+      "topKeyUp",
+      "topMouseDown"
+    ]
   },
   compositionStart: {
     phasedRegistrationNames: {
-      bubbled: 'onCompositionStart',
-      captured: 'onCompositionStartCapture',
+      bubbled: "onCompositionStart",
+      captured: "onCompositionStartCapture"
     },
     dependencies: [
-      'topBlur',
-      'topCompositionStart',
-      'topKeyDown',
-      'topKeyPress',
-      'topKeyUp',
-      'topMouseDown',
-    ],
+      "topBlur",
+      "topCompositionStart",
+      "topKeyDown",
+      "topKeyPress",
+      "topKeyUp",
+      "topMouseDown"
+    ]
   },
   compositionUpdate: {
     phasedRegistrationNames: {
-      bubbled: 'onCompositionUpdate',
-      captured: 'onCompositionUpdateCapture',
+      bubbled: "onCompositionUpdate",
+      captured: "onCompositionUpdateCapture"
     },
     dependencies: [
-      'topBlur',
-      'topCompositionUpdate',
-      'topKeyDown',
-      'topKeyPress',
-      'topKeyUp',
-      'topMouseDown',
-    ],
-  },
+      "topBlur",
+      "topCompositionUpdate",
+      "topKeyDown",
+      "topKeyPress",
+      "topKeyUp",
+      "topMouseDown"
+    ]
+  }
 };
 
 // Track whether we've ever handled a keypress on the space key.
@@ -141,11 +141,11 @@ function isKeypressCommand(nativeEvent) {
  */
 function getCompositionEventType(topLevelType) {
   switch (topLevelType) {
-    case 'topCompositionStart':
+    case "topCompositionStart":
       return eventTypes.compositionStart;
-    case 'topCompositionEnd':
+    case "topCompositionEnd":
       return eventTypes.compositionEnd;
-    case 'topCompositionUpdate':
+    case "topCompositionUpdate":
       return eventTypes.compositionUpdate;
   }
 }
@@ -159,7 +159,7 @@ function getCompositionEventType(topLevelType) {
  * @return {boolean}
  */
 function isFallbackCompositionStart(topLevelType, nativeEvent) {
-  return topLevelType === 'topKeyDown' && nativeEvent.keyCode === START_KEYCODE;
+  return topLevelType === "topKeyDown" && nativeEvent.keyCode === START_KEYCODE;
 }
 
 /**
@@ -171,16 +171,16 @@ function isFallbackCompositionStart(topLevelType, nativeEvent) {
  */
 function isFallbackCompositionEnd(topLevelType, nativeEvent) {
   switch (topLevelType) {
-    case 'topKeyUp':
+    case "topKeyUp":
       // Command keys insert or clear IME input.
       return END_KEYCODES.indexOf(nativeEvent.keyCode) !== -1;
-    case 'topKeyDown':
+    case "topKeyDown":
       // Expect IME keyCode on each keydown. If we get any other
       // code we must have exited earlier.
       return nativeEvent.keyCode !== START_KEYCODE;
-    case 'topKeyPress':
-    case 'topMouseDown':
-    case 'topBlur':
+    case "topKeyPress":
+    case "topMouseDown":
+    case "topBlur":
       // Events are not possible without cancelling IME.
       return true;
     default:
@@ -199,7 +199,7 @@ function isFallbackCompositionEnd(topLevelType, nativeEvent) {
  */
 function getDataFromCustomEvent(nativeEvent) {
   const detail = nativeEvent.detail;
-  if (typeof detail === 'object' && 'data' in detail) {
+  if (typeof detail === "object" && "data" in detail) {
     return detail.data;
   }
   return null;
@@ -215,7 +215,7 @@ function extractCompositionEvent(
   topLevelType,
   targetInst,
   nativeEvent,
-  nativeEventTarget,
+  nativeEventTarget
 ) {
   let eventType;
   let fallbackData;
@@ -250,7 +250,7 @@ function extractCompositionEvent(
     eventType,
     targetInst,
     nativeEvent,
-    nativeEventTarget,
+    nativeEventTarget
   );
 
   if (fallbackData) {
@@ -275,9 +275,9 @@ function extractCompositionEvent(
  */
 function getNativeBeforeInputChars(topLevelType: TopLevelTypes, nativeEvent) {
   switch (topLevelType) {
-    case 'topCompositionEnd':
+    case "topCompositionEnd":
       return getDataFromCustomEvent(nativeEvent);
-    case 'topKeyPress':
+    case "topKeyPress":
       /**
        * If native `textInput` events are available, our goal is to make
        * use of them. However, there is a special case: the spacebar key.
@@ -300,7 +300,7 @@ function getNativeBeforeInputChars(topLevelType: TopLevelTypes, nativeEvent) {
       hasSpaceKeypress = true;
       return SPACEBAR_CHAR;
 
-    case 'topTextInput':
+    case "topTextInput":
       // Record the characters to be added to the DOM.
       const chars = nativeEvent.data;
 
@@ -334,7 +334,7 @@ function getFallbackBeforeInputChars(topLevelType: TopLevelTypes, nativeEvent) {
   // compositionevent, otherwise extract it at fallback events.
   if (isComposing) {
     if (
-      topLevelType === 'topCompositionEnd' ||
+      topLevelType === "topCompositionEnd" ||
       (!canUseCompositionEvent &&
         isFallbackCompositionEnd(topLevelType, nativeEvent))
     ) {
@@ -347,11 +347,11 @@ function getFallbackBeforeInputChars(topLevelType: TopLevelTypes, nativeEvent) {
   }
 
   switch (topLevelType) {
-    case 'topPaste':
+    case "topPaste":
       // If a paste event occurs after a keypress, throw out the input
       // chars. Paste events should not lead to BeforeInput events.
       return null;
-    case 'topKeyPress':
+    case "topKeyPress":
       /**
        * As of v27, Firefox may fire keypress events even when no character
        * will be inserted. A few possibilities:
@@ -382,7 +382,7 @@ function getFallbackBeforeInputChars(topLevelType: TopLevelTypes, nativeEvent) {
         }
       }
       return null;
-    case 'topCompositionEnd':
+    case "topCompositionEnd":
       return useFallbackCompositionData ? null : nativeEvent.data;
     default:
       return null;
@@ -399,7 +399,7 @@ function extractBeforeInputEvent(
   topLevelType,
   targetInst,
   nativeEvent,
-  nativeEventTarget,
+  nativeEventTarget
 ) {
   let chars;
 
@@ -419,7 +419,7 @@ function extractBeforeInputEvent(
     eventTypes.beforeInput,
     targetInst,
     nativeEvent,
-    nativeEventTarget,
+    nativeEventTarget
   );
 
   event.data = chars;
@@ -452,20 +452,20 @@ const BeforeInputEventPlugin = {
     topLevelType,
     targetInst,
     nativeEvent,
-    nativeEventTarget,
+    nativeEventTarget
   ) {
     const composition = extractCompositionEvent(
       topLevelType,
       targetInst,
       nativeEvent,
-      nativeEventTarget,
+      nativeEventTarget
     );
 
     const beforeInput = extractBeforeInputEvent(
       topLevelType,
       targetInst,
       nativeEvent,
-      nativeEventTarget,
+      nativeEventTarget
     );
 
     if (composition === null) {
@@ -477,7 +477,7 @@ const BeforeInputEventPlugin = {
     }
 
     return [composition, beforeInput];
-  },
+  }
 };
 
 export default BeforeInputEventPlugin;

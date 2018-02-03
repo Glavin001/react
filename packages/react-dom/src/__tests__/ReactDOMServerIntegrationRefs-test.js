@@ -7,9 +7,9 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-const ReactDOMServerIntegrationUtils = require('./utils/ReactDOMServerIntegrationTestUtils');
+const ReactDOMServerIntegrationUtils = require("./utils/ReactDOMServerIntegrationTestUtils");
 
 let React;
 let ReactDOM;
@@ -18,14 +18,14 @@ let ReactDOMServer;
 function initModules() {
   // Reset warning cache.
   jest.resetModuleRegistry();
-  React = require('react');
-  ReactDOM = require('react-dom');
-  ReactDOMServer = require('react-dom/server');
+  React = require("react");
+  ReactDOM = require("react-dom");
+  ReactDOMServer = require("react-dom/server");
 
   // Make them available to the helpers.
   return {
     ReactDOM,
-    ReactDOMServer,
+    ReactDOMServer
   };
 }
 
@@ -33,16 +33,16 @@ const {
   resetModules,
   asyncReactDOMRender,
   clientRenderOnServerString,
-  expectMarkupMatch,
+  expectMarkupMatch
 } = ReactDOMServerIntegrationUtils(initModules);
 
-describe('ReactDOMServerIntegration', () => {
+describe("ReactDOMServerIntegration", () => {
   beforeEach(() => {
     resetModules();
   });
 
-  describe('refs', function() {
-    it('should not run ref code on server', async () => {
+  describe("refs", function() {
+    it("should not run ref code on server", async () => {
       let refCount = 0;
       class RefsComponent extends React.Component {
         render() {
@@ -53,7 +53,7 @@ describe('ReactDOMServerIntegration', () => {
       expect(refCount).toBe(0);
     });
 
-    it('should run ref code on client', async () => {
+    it("should run ref code on client", async () => {
       let refCount = 0;
       class RefsComponent extends React.Component {
         render() {
@@ -64,7 +64,7 @@ describe('ReactDOMServerIntegration', () => {
       expect(refCount).toBe(1);
     });
 
-    it('should send the correct element to ref functions on client', async () => {
+    it("should send the correct element to ref functions on client", async () => {
       let refElement = null;
       class RefsComponent extends React.Component {
         render() {
@@ -76,7 +76,7 @@ describe('ReactDOMServerIntegration', () => {
       expect(refElement).toBe(e);
     });
 
-    it('should have string refs on client when rendered over server markup', async () => {
+    it("should have string refs on client when rendered over server markup", async () => {
       class RefsComponent extends React.Component {
         render() {
           return <div ref="myDiv" />;
@@ -84,14 +84,14 @@ describe('ReactDOMServerIntegration', () => {
       }
 
       const markup = ReactDOMServer.renderToString(<RefsComponent />);
-      const root = document.createElement('div');
+      const root = document.createElement("div");
       root.innerHTML = markup;
       let component = null;
       resetModules();
       await asyncReactDOMRender(
         <RefsComponent ref={e => (component = e)} />,
         root,
-        true,
+        true
       );
       expect(component.refs.myDiv).toBe(root.firstChild);
     });

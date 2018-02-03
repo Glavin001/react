@@ -1,16 +1,16 @@
-import Fixture from '../../Fixture';
+import Fixture from "../../Fixture";
 
 const React = window.React;
 
 class NumberInputDecimal extends React.Component {
-  state = {value: '.98'};
+  state = { value: ".98" };
   changeValue = () => {
     this.setState({
-      value: '0.98',
+      value: "0.98"
     });
   };
   render() {
-    const {value} = this.state;
+    const { value } = this.state;
     return (
       <Fixture>
         <div>{this.props.children}</div>
@@ -20,7 +20,7 @@ class NumberInputDecimal extends React.Component {
             type="number"
             value={value}
             onChange={e => {
-              this.setState({value: e.target.value});
+              this.setState({ value: e.target.value });
             }}
           />
           <button onClick={this.changeValue}>change.98 to 0.98</button>

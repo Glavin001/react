@@ -4,14 +4,14 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
+"use strict";
 
-describe('transform-prevent-infinite-loops', () => {
+describe("transform-prevent-infinite-loops", () => {
   // Note: instead of testing the transform by applying it,
   // we assume that it *is* already applied. Since we expect
   // it to be applied to all our tests.
 
-  it('fails the test for `while` loops', () => {
+  it("fails the test for `while` loops", () => {
     expect(global.infiniteLoopError).toBe(null);
     expect(() => {
       while (true) {
@@ -24,7 +24,7 @@ describe('transform-prevent-infinite-loops', () => {
     global.infiniteLoopError = null;
   });
 
-  it('fails the test for `for` loops', () => {
+  it("fails the test for `for` loops", () => {
     expect(global.infiniteLoopError).toBe(null);
     expect(() => {
       for (;;) {

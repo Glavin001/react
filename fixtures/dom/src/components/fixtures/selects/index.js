@@ -1,17 +1,17 @@
-import FixtureSet from '../../FixtureSet';
-import TestCase from '../../TestCase';
+import FixtureSet from "../../FixtureSet";
+import TestCase from "../../TestCase";
 
 const React = window.React;
 const ReactDOM = window.ReactDOM;
 
 class SelectFixture extends React.Component {
-  state = {value: ''};
+  state = { value: "" };
   _nestedDOMNode = null;
   _singleFormDOMNode = null;
   _multipleFormDOMNode = null;
 
   onChange = event => {
-    this.setState({value: event.target.value});
+    this.setState({ value: event.target.value });
   };
 
   resetSingleOptionForm = event => {
@@ -149,7 +149,7 @@ class SelectFixture extends React.Component {
 
           <div className="test-fixture">
             <form ref={n => (this._multipleFormDOMNode = n)}>
-              <select multiple defaultValue={['foo', 'baz']}>
+              <select multiple defaultValue={["foo", "baz"]}>
                 <option value="foo">foo</option>
                 <option value="bar">bar</option>
                 <option value="baz">baz</option>

@@ -1,30 +1,30 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
-const {logPromise, runYarnTask} = require('../utils');
+const { logPromise, runYarnTask } = require("../utils");
 
-module.exports = async ({cwd}) => {
+module.exports = async ({ cwd }) => {
   await logPromise(
-    runYarnTask(cwd, 'lint-build', 'Lint bundle failed'),
-    'Running ESLint on bundle'
+    runYarnTask(cwd, "lint-build", "Lint bundle failed"),
+    "Running ESLint on bundle"
   );
   await logPromise(
     runYarnTask(
       cwd,
-      'test-build',
-      'Jest tests on the bundle failed in development'
+      "test-build",
+      "Jest tests on the bundle failed in development"
     ),
-    'Running Jest tests on the bundle in the development environment',
+    "Running Jest tests on the bundle in the development environment",
     true
   );
   await logPromise(
     runYarnTask(
       cwd,
-      'test-build-prod',
-      'Jest tests on the bundle failed in production'
+      "test-build-prod",
+      "Jest tests on the bundle failed in production"
     ),
-    'Running Jest tests on the bundle in the production environment',
+    "Running Jest tests on the bundle in the production environment",
     true
   );
 };

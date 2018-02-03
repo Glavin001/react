@@ -1,5 +1,5 @@
 (function() {
-  'use strict';
+  "use strict";
 
   const e = React.createElement;
 
@@ -8,90 +8,90 @@
     const minutes = (now - time) / 60;
 
     if (minutes < 60) {
-      return Math.round(minutes) + ' minutes ago';
+      return Math.round(minutes) + " minutes ago";
     }
-    return Math.round(minutes / 60) + ' hours ago';
+    return Math.round(minutes / 60) + " hours ago";
   }
 
   function getHostUrl(url) {
-    return (url + '')
-      .replace('https://', '')
-      .replace('http://', '')
-      .split('/')[0];
+    return (url + "")
+      .replace("https://", "")
+      .replace("http://", "")
+      .split("/")[0];
   }
 
   function HeaderBar() {
     return e(
-      'tr',
+      "tr",
       {
         style: {
-          backgroundColor: '#222',
-        },
+          backgroundColor: "#222"
+        }
       },
       e(
-        'table',
+        "table",
         {
           style: {
-            padding: 4,
+            padding: 4
           },
-          width: '100%',
+          width: "100%",
           cellSpacing: 0,
-          cellPadding: 0,
+          cellPadding: 0
         },
         e(
-          'tbody',
+          "tbody",
           null,
           e(
-            'tr',
+            "tr",
             null,
             e(
-              'td',
+              "td",
               {
                 style: {
                   width: 18,
-                  paddingRight: 4,
-                },
+                  paddingRight: 4
+                }
               },
               e(
-                'a',
+                "a",
                 {
-                  href: '#',
+                  href: "#"
                 },
-                e('img', {
-                  src: 'logo.png',
+                e("img", {
+                  src: "logo.png",
                   width: 16,
                   height: 16,
                   style: {
-                    border: '1px solid #00d8ff',
-                  },
+                    border: "1px solid #00d8ff"
+                  }
                 })
               )
             ),
             e(
-              'td',
+              "td",
               {
                 style: {
-                  lineHeight: '12pt',
+                  lineHeight: "12pt"
                 },
-                height: 10,
+                height: 10
               },
               e(
-                'span',
+                "span",
                 {
-                  className: 'pagetop',
+                  className: "pagetop"
                 },
-                e('b', {className: 'hnname'}, 'React HN Benchmark'),
-                e('a', {href: '#'}, 'new'),
-                ' | ',
-                e('a', {href: '#'}, 'comments'),
-                ' | ',
-                e('a', {href: '#'}, 'show'),
-                ' | ',
-                e('a', {href: '#'}, 'ask'),
-                ' | ',
-                e('a', {href: '#'}, 'jobs'),
-                ' | ',
-                e('a', {href: '#'}, 'submit')
+                e("b", { className: "hnname" }, "React HN Benchmark"),
+                e("a", { href: "#" }, "new"),
+                " | ",
+                e("a", { href: "#" }, "comments"),
+                " | ",
+                e("a", { href: "#" }, "show"),
+                " | ",
+                e("a", { href: "#" }, "ask"),
+                " | ",
+                e("a", { href: "#" }, "jobs"),
+                " | ",
+                e("a", { href: "#" }, "submit")
               )
             )
           )
@@ -100,172 +100,172 @@
     );
   }
 
-  function Story({story, rank}) {
+  function Story({ story, rank }) {
     return [
       e(
-        'tr',
+        "tr",
         {
-          className: 'athing',
+          className: "athing"
         },
         e(
-          'td',
+          "td",
           {
             style: {
-              verticalAlign: 'top',
-              textAlign: 'right',
+              verticalAlign: "top",
+              textAlign: "right"
             },
-            className: 'title',
+            className: "title"
           },
           e(
-            'span',
+            "span",
             {
-              className: 'rank',
+              className: "rank"
             },
             `${rank}.`
           )
         ),
         e(
-          'td',
+          "td",
           {
-            className: 'votelinks',
+            className: "votelinks",
             style: {
-              verticalAlign: 'top',
-            },
+              verticalAlign: "top"
+            }
           },
           e(
-            'center',
+            "center",
             null,
             e(
-              'a',
+              "a",
               {
-                href: '#',
+                href: "#"
               },
-              e('div', {
-                className: 'votearrow',
-                title: 'upvote',
+              e("div", {
+                className: "votearrow",
+                title: "upvote"
               })
             )
           )
         ),
         e(
-          'td',
+          "td",
           {
-            className: 'title',
+            className: "title"
           },
           e(
-            'a',
+            "a",
             {
-              href: '#',
-              className: 'storylink',
+              href: "#",
+              className: "storylink"
             },
             story.title
           ),
           story.url
             ? e(
-                'span',
+                "span",
                 {
-                  className: 'sitebit comhead',
+                  className: "sitebit comhead"
                 },
-                ' (',
+                " (",
                 e(
-                  'a',
+                  "a",
                   {
-                    href: '#',
+                    href: "#"
                   },
                   getHostUrl(story.url)
                 ),
-                ')'
+                ")"
               )
             : null
         )
       ),
       e(
-        'tr',
+        "tr",
         null,
-        e('td', {
-          colSpan: 2,
+        e("td", {
+          colSpan: 2
         }),
         e(
-          'td',
+          "td",
           {
-            className: 'subtext',
+            className: "subtext"
           },
           e(
-            'span',
+            "span",
             {
-              className: 'score',
+              className: "score"
             },
             `${story.score} points`
           ),
-          ' by ',
+          " by ",
           e(
-            'a',
+            "a",
             {
-              href: '#',
-              className: 'hnuser',
+              href: "#",
+              className: "hnuser"
             },
             story.by
           ),
-          ' ',
+          " ",
           e(
-            'span',
+            "span",
             {
-              className: 'age',
+              className: "age"
             },
             e(
-              'a',
+              "a",
               {
-                href: '#',
+                href: "#"
               },
               timeAge(story.time)
             )
           ),
-          ' | ',
+          " | ",
           e(
-            'a',
+            "a",
             {
-              href: '#',
+              href: "#"
             },
-            'hide'
+            "hide"
           ),
-          ' | ',
+          " | ",
           e(
-            'a',
+            "a",
             {
-              href: '#',
+              href: "#"
             },
             `${story.descendants || 0} comments`
           )
         )
       ),
-      e('tr', {
+      e("tr", {
         style: {
-          height: 5,
+          height: 5
         },
-        className: 'spacer',
-      }),
+        className: "spacer"
+      })
     ];
   }
 
-  function StoryList({stories}) {
+  function StoryList({ stories }) {
     return e(
-      'tr',
+      "tr",
       null,
       e(
-        'td',
+        "td",
         null,
         e(
-          'table',
+          "table",
           {
             cellPadding: 0,
             cellSpacing: 0,
-            classList: 'itemlist',
+            classList: "itemlist"
           },
           e(
-            'tbody',
+            "tbody",
             null,
             stories.map((story, i) =>
-              e(Story, {story, rank: ++i, key: story.id})
+              e(Story, { story, rank: ++i, key: story.id })
             )
           )
         )
@@ -273,41 +273,41 @@
     );
   }
 
-  function App({stories}) {
+  function App({ stories }) {
     return e(
-      'center',
+      "center",
       null,
       e(
-        'table',
+        "table",
         {
-          id: 'hnmain',
+          id: "hnmain",
           border: 0,
           cellPadding: 0,
           cellSpacing: 0,
-          width: '85%',
+          width: "85%",
           style: {
-            'background-color': '#f6f6ef',
-          },
+            "background-color": "#f6f6ef"
+          }
         },
         e(
-          'tbody',
+          "tbody",
           null,
           e(HeaderBar, null),
-          e('tr', {height: 10}),
+          e("tr", { height: 10 }),
           e(StoryList, {
-            stories,
+            stories
           })
         )
       )
     );
   }
 
-  const app = document.getElementById('app');
+  const app = document.getElementById("app");
 
   window.render = function render() {
     ReactDOM.render(
       React.createElement(App, {
-        stories: window.stories,
+        stories: window.stories
       }),
       app
     );

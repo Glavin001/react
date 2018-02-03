@@ -1,156 +1,156 @@
-import React from 'react';
-import {createElement} from 'glamor/react'; // eslint-disable-line
+import React from "react";
+import { createElement } from "glamor/react"; // eslint-disable-line
 /* @jsx createElement */
 
-import {MultiGrid, AutoSizer} from 'react-virtualized';
-import 'react-virtualized/styles.css';
-import FileSaver from 'file-saver';
+import { MultiGrid, AutoSizer } from "react-virtualized";
+import "react-virtualized/styles.css";
+import FileSaver from "file-saver";
 
 import {
   inject as injectErrorOverlay,
-  uninject as uninjectErrorOverlay,
-} from 'react-error-overlay/lib/overlay';
+  uninject as uninjectErrorOverlay
+} from "react-error-overlay/lib/overlay";
 
-import attributes from './attributes';
+import attributes from "./attributes";
 
 const types = [
   {
-    name: 'string',
-    testValue: 'a string',
-    testDisplayValue: "'a string'",
+    name: "string",
+    testValue: "a string",
+    testDisplayValue: "'a string'"
   },
   {
-    name: 'empty string',
-    testValue: '',
-    testDisplayValue: "''",
+    name: "empty string",
+    testValue: "",
+    testDisplayValue: "''"
   },
   {
-    name: 'array with string',
-    testValue: ['string'],
-    testDisplayValue: "['string']",
+    name: "array with string",
+    testValue: ["string"],
+    testDisplayValue: "['string']"
   },
   {
-    name: 'empty array',
+    name: "empty array",
     testValue: [],
-    testDisplayValue: '[]',
+    testDisplayValue: "[]"
   },
   {
-    name: 'object',
+    name: "object",
     testValue: {
       toString() {
-        return 'result of toString()';
-      },
+        return "result of toString()";
+      }
     },
-    testDisplayValue: "{ toString() { return 'result of toString()'; } }",
+    testDisplayValue: "{ toString() { return 'result of toString()'; } }"
   },
   {
-    name: 'numeric string',
-    testValue: '42',
-    displayValue: "'42'",
+    name: "numeric string",
+    testValue: "42",
+    displayValue: "'42'"
   },
   {
-    name: '-1',
-    testValue: -1,
+    name: "-1",
+    testValue: -1
   },
   {
-    name: '0',
-    testValue: 0,
+    name: "0",
+    testValue: 0
   },
   {
-    name: 'integer',
-    testValue: 1,
+    name: "integer",
+    testValue: 1
   },
   {
-    name: 'NaN',
-    testValue: NaN,
+    name: "NaN",
+    testValue: NaN
   },
   {
-    name: 'float',
-    testValue: 99.99,
+    name: "float",
+    testValue: 99.99
   },
   {
-    name: 'true',
-    testValue: true,
+    name: "true",
+    testValue: true
   },
   {
-    name: 'false',
-    testValue: false,
+    name: "false",
+    testValue: false
   },
   {
     name: "string 'true'",
-    testValue: 'true',
-    displayValue: "'true'",
+    testValue: "true",
+    displayValue: "'true'"
   },
   {
     name: "string 'false'",
-    testValue: 'false',
-    displayValue: "'false'",
+    testValue: "false",
+    displayValue: "'false'"
   },
   {
     name: "string 'on'",
-    testValue: 'on',
-    displayValue: "'on'",
+    testValue: "on",
+    displayValue: "'on'"
   },
   {
     name: "string 'off'",
-    testValue: 'off',
-    displayValue: "'off'",
+    testValue: "off",
+    displayValue: "'off'"
   },
   {
-    name: 'symbol',
-    testValue: Symbol('foo'),
-    testDisplayValue: "Symbol('foo')",
+    name: "symbol",
+    testValue: Symbol("foo"),
+    testDisplayValue: "Symbol('foo')"
   },
   {
-    name: 'function',
-    testValue: function f() {},
+    name: "function",
+    testValue: function f() {}
   },
   {
-    name: 'null',
-    testValue: null,
+    name: "null",
+    testValue: null
   },
   {
-    name: 'undefined',
-    testValue: undefined,
-  },
+    name: "undefined",
+    testValue: undefined
+  }
 ];
 
-const ALPHABETICAL = 'alphabetical';
-const REV_ALPHABETICAL = 'reverse_alphabetical';
-const GROUPED_BY_ROW_PATTERN = 'grouped_by_row_pattern';
+const ALPHABETICAL = "alphabetical";
+const REV_ALPHABETICAL = "reverse_alphabetical";
+const GROUPED_BY_ROW_PATTERN = "grouped_by_row_pattern";
 
-const ALL = 'all';
-const COMPLETE = 'complete';
-const INCOMPLETE = 'incomplete';
+const ALL = "all";
+const COMPLETE = "complete";
+const INCOMPLETE = "incomplete";
 
 function getCanonicalizedValue(value) {
   switch (typeof value) {
-    case 'undefined':
-      return '<undefined>';
-    case 'object':
+    case "undefined":
+      return "<undefined>";
+    case "object":
       if (value === null) {
-        return '<null>';
+        return "<null>";
       }
-      if ('baseVal' in value) {
+      if ("baseVal" in value) {
         return getCanonicalizedValue(value.baseVal);
       }
       if (value instanceof SVGLength) {
-        return '<SVGLength: ' + value.valueAsString + '>';
+        return "<SVGLength: " + value.valueAsString + ">";
       }
       if (value instanceof SVGRect) {
         return (
-          '<SVGRect: ' +
-          [value.x, value.y, value.width, value.height].join(',') +
-          '>'
+          "<SVGRect: " +
+          [value.x, value.y, value.width, value.height].join(",") +
+          ">"
         );
       }
       if (value instanceof SVGPreserveAspectRatio) {
         return (
-          '<SVGPreserveAspectRatio: ' +
+          "<SVGPreserveAspectRatio: " +
           value.align +
-          '/' +
+          "/" +
           value.meetOrSlice +
-          '>'
+          ">"
         );
       }
       if (value instanceof SVGNumber) {
@@ -158,56 +158,56 @@ function getCanonicalizedValue(value) {
       }
       if (value instanceof SVGMatrix) {
         return (
-          '<SVGMatrix ' +
+          "<SVGMatrix " +
           value.a +
-          ' ' +
+          " " +
           value.b +
-          ' ' +
+          " " +
           value.c +
-          ' ' +
+          " " +
           value.d +
-          ' ' +
+          " " +
           value.e +
-          ' ' +
+          " " +
           value.f +
-          '>'
+          ">"
         );
       }
       if (value instanceof SVGTransform) {
         return (
           getCanonicalizedValue(value.matrix) +
-          '/' +
+          "/" +
           value.type +
-          '/' +
+          "/" +
           value.angle
         );
       }
-      if (typeof value.length === 'number') {
+      if (typeof value.length === "number") {
         return (
-          '[' +
+          "[" +
           Array.from(value)
             .map(v => getCanonicalizedValue(v))
-            .join(', ') +
-          ']'
+            .join(", ") +
+          "]"
         );
       }
-      let name = (value.constructor && value.constructor.name) || 'object';
-      return '<' + name + '>';
-    case 'function':
-      return '<function>';
-    case 'symbol':
-      return '<symbol>';
-    case 'number':
+      let name = (value.constructor && value.constructor.name) || "object";
+      return "<" + name + ">";
+    case "function":
+      return "<function>";
+    case "symbol":
+      return "<symbol>";
+    case "number":
       return `<number: ${value}>`;
-    case 'string':
-      if (value === '') {
-        return '<empty string>';
+    case "string":
+      if (value === "") {
+        return "<empty string>";
       }
       return '"' + value + '"';
-    case 'boolean':
+    case "boolean":
       return `<boolean: ${value}>`;
     default:
-      throw new Error('Switch statement should be exhaustive.');
+      throw new Error("Switch statement should be exhaustive.");
   }
 }
 
@@ -215,7 +215,7 @@ let _didWarn = false;
 function warn(str) {
   _didWarn = true;
 }
-const UNKNOWN_HTML_TAGS = new Set(['keygen', 'time', 'command']);
+const UNKNOWN_HTML_TAGS = new Set(["keygen", "time", "command"]);
 function getRenderedAttributeValue(
   react,
   renderer,
@@ -226,14 +226,14 @@ function getRenderedAttributeValue(
   const originalConsoleError = console.error;
   console.error = warn;
 
-  const containerTagName = attribute.containerTagName || 'div';
-  const tagName = attribute.tagName || 'div';
+  const containerTagName = attribute.containerTagName || "div";
+  const tagName = attribute.tagName || "div";
 
   function createContainer() {
-    if (containerTagName === 'svg') {
-      return document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    } else if (containerTagName === 'document') {
-      return document.implementation.createHTMLDocument('');
+    if (containerTagName === "svg") {
+      return document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    } else if (containerTagName === "document") {
+      return document.implementation.createHTMLDocument("");
     } else {
       return document.createElement(containerTagName);
     }
@@ -243,10 +243,10 @@ function getRenderedAttributeValue(
   let testValue = type.testValue;
   if (attribute.overrideStringValue !== undefined) {
     switch (type.name) {
-      case 'string':
+      case "string":
         testValue = attribute.overrideStringValue;
         break;
-      case 'array with string':
+      case "array with string":
         testValue = [attribute.overrideStringValue];
         break;
       default:
@@ -254,14 +254,14 @@ function getRenderedAttributeValue(
     }
   }
   let baseProps = {
-    ...attribute.extraProps,
+    ...attribute.extraProps
   };
   if (attribute.type) {
     baseProps.type = attribute.type;
   }
   const props = {
     ...baseProps,
-    [attribute.name]: testValue,
+    [attribute.name]: testValue
   };
 
   let defaultValue;
@@ -299,7 +299,7 @@ function getRenderedAttributeValue(
   let hasUnknownElement = false;
   try {
     let container;
-    if (containerTagName === 'document') {
+    if (containerTagName === "document") {
       const html = serverRenderer.renderToString(
         react.createElement(tagName, props)
       );
@@ -313,7 +313,7 @@ function getRenderedAttributeValue(
           react.createElement(tagName, props)
         )
       );
-      const outerContainer = document.createElement('div');
+      const outerContainer = document.createElement("div");
       outerContainer.innerHTML = html;
       container = outerContainer.firstChild;
     }
@@ -345,10 +345,10 @@ function getRenderedAttributeValue(
   console.error = originalConsoleError;
 
   if (hasTagMismatch) {
-    throw new Error('Tag mismatch. Expected: ' + tagName);
+    throw new Error("Tag mismatch. Expected: " + tagName);
   }
   if (hasUnknownElement) {
-    throw new Error('Unexpected unknown element: ' + tagName);
+    throw new Error("Unexpected unknown element: " + tagName);
   }
 
   let ssrHasSameBehavior;
@@ -381,7 +381,7 @@ function getRenderedAttributeValue(
     ssrDidWarn,
     ssrDidError,
     ssrHasSameBehavior,
-    ssrHasSameBehaviorExceptWarnings,
+    ssrHasSameBehaviorExceptWarnings
   };
 }
 
@@ -393,7 +393,7 @@ function prepareState(initGlobals) {
       ReactDOMServerStable,
       ReactNext,
       ReactDOMNext,
-      ReactDOMServerNext,
+      ReactDOMServerNext
     } = initGlobals(attribute, type);
     const reactStableValue = getRenderedAttributeValue(
       ReactStable,
@@ -426,7 +426,7 @@ function prepareState(initGlobals) {
     return {
       reactStable: reactStableValue,
       reactNext: reactNextValue,
-      hasSameBehavior,
+      hasSameBehavior
     };
   }
 
@@ -438,7 +438,7 @@ function prepareState(initGlobals) {
   for (let attribute of attributes) {
     const results = new Map();
     let hasSameBehaviorForAll = true;
-    let rowPatternHash = '';
+    let rowPatternHash = "";
     for (let type of types) {
       const result = getRenderedAttributeValues(attribute, type);
       results.set(type.name, result);
@@ -451,10 +451,10 @@ function prepareState(initGlobals) {
             res.canonicalResult,
             res.canonicalDefaultValue,
             res.didWarn,
-            res.didError,
-          ].join('||')
+            res.didError
+          ].join("||")
         )
-        .join('||');
+        .join("||");
     }
     const row = {
       results,
@@ -463,7 +463,7 @@ function prepareState(initGlobals) {
       // "Good enough" id that we can store in localStorage
       rowIdHash: `${attribute.name} ${attribute.tagName} ${
         attribute.overrideStringValue
-      }`,
+      }`
     };
     const rowGroup = rowPatternHashes.get(rowPatternHash) || new Set();
     rowGroup.add(row);
@@ -476,13 +476,13 @@ function prepareState(initGlobals) {
 
   return {
     table,
-    rowPatternHashes,
+    rowPatternHashes
   };
 }
 
-const successColor = 'white';
-const warnColor = 'yellow';
-const errorColor = 'red';
+const successColor = "white";
+const warnColor = "yellow";
+const errorColor = "red";
 
 function RendererResult({
   result,
@@ -492,7 +492,7 @@ function RendererResult({
   didWarn,
   didError,
   ssrHasSameBehavior,
-  ssrHasSameBehaviorExceptWarnings,
+  ssrHasSameBehaviorExceptWarnings
 }) {
   let backgroundColor;
   if (didError) {
@@ -500,22 +500,22 @@ function RendererResult({
   } else if (didWarn) {
     backgroundColor = warnColor;
   } else if (canonicalResult !== canonicalDefaultValue) {
-    backgroundColor = 'cyan';
+    backgroundColor = "cyan";
   } else {
     backgroundColor = successColor;
   }
 
   let style = {
-    display: 'flex',
-    alignItems: 'center',
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    backgroundColor,
+    display: "flex",
+    alignItems: "center",
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    backgroundColor
   };
 
   if (!ssrHasSameBehavior) {
-    const color = ssrHasSameBehaviorExceptWarnings ? 'gray' : 'magenta';
+    const color = ssrHasSameBehaviorExceptWarnings ? "gray" : "magenta";
     style.border = `3px dotted ${color}`;
   }
 
@@ -526,14 +526,15 @@ function ResultPopover(props) {
   return (
     <pre
       css={{
-        padding: '1em',
-        width: '25em',
-      }}>
+        padding: "1em",
+        width: "25em"
+      }}
+    >
       {JSON.stringify(
         {
           reactStable: props.reactStable,
           reactNext: props.reactNext,
-          hasSameBehavior: props.hasSameBehavior,
+          hasSameBehavior: props.hasSameBehavior
         },
         null,
         2
@@ -543,20 +544,20 @@ function ResultPopover(props) {
 }
 
 class Result extends React.Component {
-  state = {showInfo: false};
+  state = { showInfo: false };
   onMouseEnter = () => {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
     this.timeout = setTimeout(() => {
-      this.setState({showInfo: true});
+      this.setState({ showInfo: true });
     }, 250);
   };
   onMouseLeave = () => {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
-    this.setState({showInfo: false});
+    this.setState({ showInfo: false });
   };
 
   componentWillUnmount() {
@@ -566,11 +567,11 @@ class Result extends React.Component {
   }
 
   render() {
-    const {reactStable, reactNext, hasSameBehavior} = this.props;
+    const { reactStable, reactNext, hasSameBehavior } = this.props;
     const style = {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
+      position: "absolute",
+      width: "100%",
+      height: "100%"
     };
 
     let highlight = null;
@@ -579,10 +580,10 @@ class Result extends React.Component {
       highlight = (
         <div
           css={{
-            position: 'absolute',
-            height: '100%',
-            width: '100%',
-            border: '2px solid blue',
+            position: "absolute",
+            height: "100%",
+            width: "100%",
+            border: "2px solid blue"
           }}
         />
       );
@@ -590,35 +591,38 @@ class Result extends React.Component {
       popover = (
         <div
           css={{
-            backgroundColor: 'white',
-            border: '1px solid black',
-            position: 'absolute',
-            top: '100%',
-            zIndex: 999,
-          }}>
+            backgroundColor: "white",
+            border: "1px solid black",
+            position: "absolute",
+            top: "100%",
+            zIndex: 999
+          }}
+        >
           <ResultPopover {...this.props} />
         </div>
       );
     }
 
     if (!hasSameBehavior) {
-      style.border = '4px solid purple';
+      style.border = "4px solid purple";
     }
     return (
       <div
         css={style}
         onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}>
-        <div css={{position: 'absolute', width: '50%', height: '100%'}}>
+        onMouseLeave={this.onMouseLeave}
+      >
+        <div css={{ position: "absolute", width: "50%", height: "100%" }}>
           <RendererResult {...reactStable} />
         </div>
         <div
           css={{
-            position: 'absolute',
-            width: '50%',
-            left: '50%',
-            height: '100%',
-          }}>
+            position: "absolute",
+            width: "50%",
+            left: "50%",
+            height: "100%"
+          }}
+        >
           <RendererResult {...reactNext} />
         </div>
         {highlight}
@@ -628,31 +632,33 @@ class Result extends React.Component {
   }
 }
 
-function ColumnHeader({children}) {
+function ColumnHeader({ children }) {
   return (
     <div
       css={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-      }}>
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center"
+      }}
+    >
       {children}
     </div>
   );
 }
 
-function RowHeader({children, checked, onChange}) {
+function RowHeader({ children, checked, onChange }) {
   return (
     <div
       css={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-      }}>
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center"
+      }}
+    >
       <input type="checkbox" checked={checked} onChange={onChange} />
       {children}
     </div>
@@ -666,7 +672,7 @@ function CellContent(props) {
     attributesInSortedOrder,
     completedHashes,
     toggleAttribute,
-    table,
+    table
   } = props;
   const attribute = attributesInSortedOrder[rowIndex - 1];
   const type = types[columnIndex - 1];
@@ -680,11 +686,12 @@ function CellContent(props) {
     return (
       <RowHeader
         checked={completedHashes.has(rowPatternHash)}
-        onChange={() => toggleAttribute(rowPatternHash)}>
+        onChange={() => toggleAttribute(rowPatternHash)}
+      >
         {row.hasSameBehaviorForAll ? (
           attribute.name
         ) : (
-          <b css={{color: 'purple'}}>{attribute.name}</b>
+          <b css={{ color: "purple" }}>{attribute.name}</b>
         )}
       </RowHeader>
     );
@@ -702,11 +709,11 @@ function CellContent(props) {
 
 function saveToLocalStorage(completedHashes) {
   const str = JSON.stringify([...completedHashes]);
-  localStorage.setItem('completedHashes', str);
+  localStorage.setItem("completedHashes", str);
 }
 
 function restoreFromLocalStorage() {
-  const str = localStorage.getItem('completedHashes');
+  const str = localStorage.getItem("completedHashes");
   if (str) {
     const completedHashes = new Set(JSON.parse(str));
     return completedHashes;
@@ -722,7 +729,7 @@ class App extends React.Component {
     filter: ALL,
     completedHashes: restoreFromLocalStorage(),
     table: null,
-    rowPatternHashes: null,
+    rowPatternHashes: null
   };
 
   renderCell = props => {
@@ -740,11 +747,11 @@ class App extends React.Component {
   };
 
   onUpdateSort = e => {
-    this.setState({sortOrder: e.target.value});
+    this.setState({ sortOrder: e.target.value });
   };
 
   onUpdateFilter = e => {
-    this.setState({filter: e.target.value});
+    this.setState({ filter: e.target.value });
   };
 
   toggleAttribute = rowPatternHash => {
@@ -754,19 +761,21 @@ class App extends React.Component {
     } else {
       completedHashes.add(rowPatternHash);
     }
-    this.setState({completedHashes}, () => saveToLocalStorage(completedHashes));
+    this.setState({ completedHashes }, () =>
+      saveToLocalStorage(completedHashes)
+    );
   };
 
   async componentDidMount() {
     const sources = {
-      ReactStable: 'https://unpkg.com/react@latest/umd/react.development.js',
+      ReactStable: "https://unpkg.com/react@latest/umd/react.development.js",
       ReactDOMStable:
-        'https://unpkg.com/react-dom@latest/umd/react-dom.development.js',
+        "https://unpkg.com/react-dom@latest/umd/react-dom.development.js",
       ReactDOMServerStable:
-        'https://unpkg.com/react-dom@latest/umd/react-dom-server.browser.development.js',
-      ReactNext: '/react.development.js',
-      ReactDOMNext: '/react-dom.development.js',
-      ReactDOMServerNext: '/react-dom-server.browser.development.js',
+        "https://unpkg.com/react-dom@latest/umd/react-dom-server.browser.development.js",
+      ReactNext: "/react.development.js",
+      ReactDOMNext: "/react-dom.development.js",
+      ReactDOMServerNext: "/react-dom-server.browser.development.js"
     };
     const codePromises = Object.values(sources).map(src =>
       fetch(src).then(res => res.text())
@@ -799,24 +808,24 @@ class App extends React.Component {
       let globals = {};
       Object.keys(sources).forEach((name, i) => {
         eval.call(window, codesByIndex[i]); // eslint-disable-line
-        globals[name] = window[name.replace(/Stable|Next/g, '')];
+        globals[name] = window[name.replace(/Stable|Next/g, "")];
       });
 
       // Cache for future use (for different attributes).
       pool.push({
         globals,
-        testedAttributes: new Set([attribute.name]),
+        testedAttributes: new Set([attribute.name])
       });
 
       return globals;
     }
 
-    const {table, rowPatternHashes} = prepareState(initGlobals);
-    document.title = 'Ready';
+    const { table, rowPatternHashes } = prepareState(initGlobals);
+    document.title = "Ready";
 
     this.setState({
       table,
-      rowPatternHashes,
+      rowPatternHashes
     });
   }
 
@@ -860,7 +869,7 @@ class App extends React.Component {
         });
         break;
       default:
-        throw new Error('Switch statement should be exhuastive');
+        throw new Error("Switch statement should be exhuastive");
     }
 
     // Sort
@@ -887,7 +896,7 @@ class App extends React.Component {
         });
       }
       default:
-        throw new Error('Switch statement should be exhuastive');
+        throw new Error("Switch statement should be exhuastive");
     }
   }
 
@@ -896,17 +905,17 @@ class App extends React.Component {
 
     if (useFastMode) {
       alert(
-        'Fast mode is not accurate. Please remove ?fast from the query string, and reload.'
+        "Fast mode is not accurate. Please remove ?fast from the query string, and reload."
       );
       return;
     }
 
-    let log = '';
+    let log = "";
     for (let attribute of attributes) {
       log += `## \`${attribute.name}\` (on \`<${attribute.tagName ||
-        'div'}>\` inside \`<${attribute.containerTagName || 'div'}>\`)\n`;
-      log += '| Test Case | Flags | Result |\n';
-      log += '| --- | --- | --- |\n';
+        "div"}>\` inside \`<${attribute.containerTagName || "div"}>\`)\n`;
+      log += "| Test Case | Flags | Result |\n";
+      log += "| --- | --- | --- |\n";
 
       const attributeResults = this.state.table.get(attribute).results;
       for (let type of types) {
@@ -917,41 +926,41 @@ class App extends React.Component {
           canonicalDefaultValue,
           ssrDidError,
           ssrHasSameBehavior,
-          ssrHasSameBehaviorExceptWarnings,
+          ssrHasSameBehaviorExceptWarnings
         } = attributeResults.get(type.name).reactNext;
 
         let descriptions = [];
         if (canonicalResult === canonicalDefaultValue) {
-          descriptions.push('initial');
+          descriptions.push("initial");
         } else {
-          descriptions.push('changed');
+          descriptions.push("changed");
         }
         if (didError) {
-          descriptions.push('error');
+          descriptions.push("error");
         }
         if (didWarn) {
-          descriptions.push('warning');
+          descriptions.push("warning");
         }
         if (ssrDidError) {
-          descriptions.push('ssr error');
+          descriptions.push("ssr error");
         }
         if (!ssrHasSameBehavior) {
           if (ssrHasSameBehaviorExceptWarnings) {
-            descriptions.push('ssr warning');
+            descriptions.push("ssr warning");
           } else {
-            descriptions.push('ssr mismatch');
+            descriptions.push("ssr mismatch");
           }
         }
         log +=
           `| \`${attribute.name}=(${type.name})\`` +
-          `| (${descriptions.join(', ')})` +
-          `| \`${canonicalResult || ''}\` |\n`;
+          `| (${descriptions.join(", ")})` +
+          `| \`${canonicalResult || ""}\` |\n`;
       }
-      log += '\n';
+      log += "\n";
     }
 
-    const blob = new Blob([log], {type: 'text/plain;charset=utf-8'});
-    FileSaver.saveAs(blob, 'AttributeTableSnapshot.md');
+    const blob = new Blob([log], { type: "text/plain;charset=utf-8" });
+    FileSaver.saveAs(blob, "AttributeTableSnapshot.md");
   };
 
   render() {
@@ -980,15 +989,15 @@ class App extends React.Component {
             <option value={INCOMPLETE}>incomplete</option>
             <option value={COMPLETE}>complete</option>
           </select>
-          <button style={{marginLeft: '10px'}} onClick={this.handleSaveClick}>
-            Save latest results to a file{' '}
+          <button style={{ marginLeft: "10px" }} onClick={this.handleSaveClick}>
+            Save latest results to a file{" "}
             <span role="img" aria-label="Save">
               💾
             </span>
           </button>
         </div>
         <AutoSizer disableHeight={true}>
-          {({width}) => (
+          {({ width }) => (
             <MultiGrid
               ref={input => {
                 this.grid = input;

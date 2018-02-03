@@ -8,9 +8,9 @@
  */
 
 // Module provided by RN:
-import UIManager from 'UIManager';
+import UIManager from "UIManager";
 
-import findNumericNodeHandle from './findNumericNodeHandle';
+import findNumericNodeHandle from "./findNumericNodeHandle";
 
 /**
  * Capture an image of the screen, window or an individual view. The image
@@ -30,16 +30,16 @@ import findNumericNodeHandle from './findNumericNodeHandle';
  * @platform ios
  */
 export default function takeSnapshot(
-  view?: 'window' | React$Element<any> | number,
+  view?: "window" | React$Element<any> | number,
   options?: {
     width?: number,
     height?: number,
-    format?: 'png' | 'jpeg',
-    quality?: number,
-  },
+    format?: "png" | "jpeg",
+    quality?: number
+  }
 ): Promise<any> {
-  if (typeof view !== 'number' && view !== 'window') {
-    view = findNumericNodeHandle(view) || 'window';
+  if (typeof view !== "number" && view !== "window") {
+    view = findNumericNodeHandle(view) || "window";
   }
 
   // Call the hidden '__takeSnapshot' method; the main one throws an error to

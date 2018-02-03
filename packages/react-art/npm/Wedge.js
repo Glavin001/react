@@ -18,14 +18,14 @@
  *
  */
 
-'use strict';
+"use strict";
 
-var assign = require('object-assign');
-var PropTypes = require('prop-types');
-var React = require('react');
-var ReactART = require('react-art');
+var assign = require("object-assign");
+var PropTypes = require("prop-types");
+var React = require("react");
+var ReactART = require("react-art");
 
-var createReactClass = require('create-react-class');
+var createReactClass = require("create-react-class");
 
 var Shape = ReactART.Shape;
 var Path = ReactART.Path;
@@ -35,13 +35,13 @@ var Path = ReactART.Path;
  * ReactART components, it must be used in a <Surface>.
  */
 var Wedge = createReactClass({
-  displayName: 'Wedge',
+  displayName: "Wedge",
 
   propTypes: {
     outerRadius: PropTypes.number.isRequired,
     startAngle: PropTypes.number.isRequired,
     endAngle: PropTypes.number.isRequired,
-    innerRadius: PropTypes.number,
+    innerRadius: PropTypes.number
   },
 
   circleRadians: Math.PI * 2,
@@ -181,8 +181,8 @@ var Wedge = createReactClass({
       path = this._createArcPath(startAngle, endAngle, or, ir);
     }
 
-    return React.createElement(Shape, assign({}, this.props, {d: path}));
-  },
+    return React.createElement(Shape, assign({}, this.props, { d: path }));
+  }
 });
 
 module.exports = Wedge;

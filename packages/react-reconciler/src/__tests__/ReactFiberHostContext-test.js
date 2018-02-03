@@ -7,19 +7,19 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactFiberReconciler;
 
-describe('ReactFiberHostContext', () => {
+describe("ReactFiberHostContext", () => {
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
-    ReactFiberReconciler = require('react-reconciler');
+    React = require("react");
+    ReactFiberReconciler = require("react-reconciler");
   });
 
-  it('works with null host context', () => {
+  it("works with null host context", () => {
     let creates = 0;
     const Renderer = ReactFiberReconciler({
       prepareForCommit: function() {},
@@ -49,8 +49,8 @@ describe('ReactFiberHostContext', () => {
       mutation: {
         appendChildToContainer: function() {
           return null;
-        },
-      },
+        }
+      }
     });
 
     const container = Renderer.createContainer(/* root: */ null);
@@ -60,7 +60,7 @@ describe('ReactFiberHostContext', () => {
       </a>,
       container,
       /* parentComponent: */ null,
-      /* callback: */ null,
+      /* callback: */ null
     );
     expect(creates).toBe(2);
   });

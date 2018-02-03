@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import escapeTextForBrowser from './escapeTextForBrowser';
+import escapeTextForBrowser from "./escapeTextForBrowser";
 
 /**
  * Escapes attribute value to prevent scripting attacks.

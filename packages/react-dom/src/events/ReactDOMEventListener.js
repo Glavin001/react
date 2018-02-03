@@ -5,13 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {batchedUpdates} from 'events/ReactGenericBatching';
-import {isFiberMounted} from 'react-reconciler/reflection';
-import {HostRoot} from 'shared/ReactTypeOfWork';
+import { batchedUpdates } from "events/ReactGenericBatching";
+import { isFiberMounted } from "react-reconciler/reflection";
+import { HostRoot } from "shared/ReactTypeOfWork";
 
-import {addEventBubbleListener, addEventCaptureListener} from './EventListener';
-import getEventTarget from './getEventTarget';
-import {getClosestInstanceFromNode} from '../client/ReactDOMComponentTree';
+import {
+  addEventBubbleListener,
+  addEventCaptureListener
+} from "./EventListener";
+import getEventTarget from "./getEventTarget";
+import { getClosestInstanceFromNode } from "../client/ReactDOMComponentTree";
 
 const CALLBACK_BOOKKEEPING_POOL_SIZE = 10;
 const callbackBookkeepingPool = [];
@@ -48,7 +51,7 @@ function getTopLevelCallbackBookKeeping(topLevelType, nativeEvent, targetInst) {
     topLevelType,
     nativeEvent,
     targetInst,
-    ancestors: [],
+    ancestors: []
   };
 }
 
@@ -89,7 +92,7 @@ function handleTopLevelImpl(bookKeeping) {
       bookKeeping.topLevelType,
       targetInst,
       bookKeeping.nativeEvent,
-      getEventTarget(bookKeeping.nativeEvent),
+      getEventTarget(bookKeeping.nativeEvent)
     );
   }
 }
@@ -127,7 +130,7 @@ export function trapBubbledEvent(topLevelType, handlerBaseName, element) {
   addEventBubbleListener(
     element,
     handlerBaseName,
-    dispatchEvent.bind(null, topLevelType),
+    dispatchEvent.bind(null, topLevelType)
   );
 }
 
@@ -148,7 +151,7 @@ export function trapCapturedEvent(topLevelType, handlerBaseName, element) {
   addEventCaptureListener(
     element,
     handlerBaseName,
-    dispatchEvent.bind(null, topLevelType),
+    dispatchEvent.bind(null, topLevelType)
   );
 }
 
@@ -161,7 +164,7 @@ export function dispatchEvent(topLevelType, nativeEvent) {
   let targetInst = getClosestInstanceFromNode(nativeEventTarget);
   if (
     targetInst !== null &&
-    typeof targetInst.tag === 'number' &&
+    typeof targetInst.tag === "number" &&
     !isFiberMounted(targetInst)
   ) {
     // If we get an event (ex: img onload) before committing that
@@ -174,7 +177,7 @@ export function dispatchEvent(topLevelType, nativeEvent) {
   const bookKeeping = getTopLevelCallbackBookKeeping(
     topLevelType,
     nativeEvent,
-    targetInst,
+    targetInst
   );
 
   try {

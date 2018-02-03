@@ -7,19 +7,19 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactDOM;
 
-describe('SyntheticKeyboardEvent', () => {
+describe("SyntheticKeyboardEvent", () => {
   let container;
 
   beforeEach(() => {
-    React = require('react');
-    ReactDOM = require('react-dom');
+    React = require("react");
+    ReactDOM = require("react-dom");
     // The container has to be attached for events to fire.
-    container = document.createElement('div');
+    container = document.createElement("div");
     document.body.appendChild(container);
   });
 
@@ -28,11 +28,11 @@ describe('SyntheticKeyboardEvent', () => {
     container = null;
   });
 
-  describe('KeyboardEvent interface', () => {
-    describe('charCode', () => {
-      describe('when event is `keypress`', () => {
-        describe('when charCode is present in nativeEvent', () => {
-          it('when charCode is 0 and keyCode is 13, returns 13', () => {
+  describe("KeyboardEvent interface", () => {
+    describe("charCode", () => {
+      describe("when event is `keypress`", () => {
+        describe("when charCode is present in nativeEvent", () => {
+          it("when charCode is 0 and keyCode is 13, returns 13", () => {
             let charCode = null;
             const node = ReactDOM.render(
               <input
@@ -40,20 +40,20 @@ describe('SyntheticKeyboardEvent', () => {
                   charCode = e.charCode;
                 }}
               />,
-              container,
+              container
             );
             node.dispatchEvent(
-              new KeyboardEvent('keypress', {
+              new KeyboardEvent("keypress", {
                 charCode: 0,
                 keyCode: 13,
                 bubbles: true,
-                cancelable: true,
-              }),
+                cancelable: true
+              })
             );
             expect(charCode).toBe(13);
           });
 
-          it('when charCode is 32 or bigger and keyCode is missing, returns charCode', () => {
+          it("when charCode is 32 or bigger and keyCode is missing, returns charCode", () => {
             let charCode = null;
             const node = ReactDOM.render(
               <input
@@ -61,19 +61,19 @@ describe('SyntheticKeyboardEvent', () => {
                   charCode = e.charCode;
                 }}
               />,
-              container,
+              container
             );
             node.dispatchEvent(
-              new KeyboardEvent('keypress', {
+              new KeyboardEvent("keypress", {
                 charCode: 32,
                 bubbles: true,
-                cancelable: true,
-              }),
+                cancelable: true
+              })
             );
             expect(charCode).toBe(32);
           });
 
-          it('when charCode is 13 and keyCode is missing, returns charCode', () => {
+          it("when charCode is 13 and keyCode is missing, returns charCode", () => {
             let charCode = null;
             const node = ReactDOM.render(
               <input
@@ -81,14 +81,14 @@ describe('SyntheticKeyboardEvent', () => {
                   charCode = e.charCode;
                 }}
               />,
-              container,
+              container
             );
             node.dispatchEvent(
-              new KeyboardEvent('keypress', {
+              new KeyboardEvent("keypress", {
                 charCode: 13,
                 bubbles: true,
-                cancelable: true,
-              }),
+                cancelable: true
+              })
             );
             expect(charCode).toBe(13);
           });
@@ -96,7 +96,7 @@ describe('SyntheticKeyboardEvent', () => {
           // Firefox creates a keypress event for function keys too. This removes
           // the unwanted keypress events. Enter is however both printable and
           // non-printable. One would expect Tab to be as well (but it isn't).
-          it('when charCode is smaller than 32 but is not 13, and keyCode is missing, ignores keypress', () => {
+          it("when charCode is smaller than 32 but is not 13, and keyCode is missing, ignores keypress", () => {
             let called = false;
             const node = ReactDOM.render(
               <input
@@ -104,14 +104,14 @@ describe('SyntheticKeyboardEvent', () => {
                   called = true;
                 }}
               />,
-              container,
+              container
             );
             node.dispatchEvent(
-              new KeyboardEvent('keypress', {
+              new KeyboardEvent("keypress", {
                 charCode: 31,
                 bubbles: true,
-                cancelable: true,
-              }),
+                cancelable: true
+              })
             );
             expect(called).toBe(false);
           });
@@ -119,13 +119,13 @@ describe('SyntheticKeyboardEvent', () => {
 
         // TODO: this seems IE8 specific.
         // We can probably remove this normalization.
-        describe('when charCode is not present in nativeEvent', () => {
+        describe("when charCode is not present in nativeEvent", () => {
           let charCodeDescriptor;
 
           beforeEach(() => {
             charCodeDescriptor = Object.getOwnPropertyDescriptor(
               KeyboardEvent.prototype,
-              'charCode',
+              "charCode"
             );
             delete KeyboardEvent.prototype.charCode;
           });
@@ -134,13 +134,13 @@ describe('SyntheticKeyboardEvent', () => {
             // Don't forget to restore for other tests.
             Object.defineProperty(
               KeyboardEvent.prototype,
-              'charCode',
-              charCodeDescriptor,
+              "charCode",
+              charCodeDescriptor
             );
             charCodeDescriptor = null;
           });
 
-          it('when keyCode is 32 or bigger, returns keyCode', () => {
+          it("when keyCode is 32 or bigger, returns keyCode", () => {
             let charCode = null;
             const node = ReactDOM.render(
               <input
@@ -148,19 +148,19 @@ describe('SyntheticKeyboardEvent', () => {
                   charCode = e.charCode;
                 }}
               />,
-              container,
+              container
             );
             node.dispatchEvent(
-              new KeyboardEvent('keypress', {
+              new KeyboardEvent("keypress", {
                 keyCode: 32,
                 bubbles: true,
-                cancelable: true,
-              }),
+                cancelable: true
+              })
             );
             expect(charCode).toBe(32);
           });
 
-          it('when keyCode is 13, returns 13', () => {
+          it("when keyCode is 13, returns 13", () => {
             let charCode = null;
             const node = ReactDOM.render(
               <input
@@ -168,19 +168,19 @@ describe('SyntheticKeyboardEvent', () => {
                   charCode = e.charCode;
                 }}
               />,
-              container,
+              container
             );
             node.dispatchEvent(
-              new KeyboardEvent('keypress', {
+              new KeyboardEvent("keypress", {
                 keyCode: 13,
                 bubbles: true,
-                cancelable: true,
-              }),
+                cancelable: true
+              })
             );
             expect(charCode).toBe(13);
           });
 
-          it('when keyCode is smaller than 32 and is not 13, ignores keypress', () => {
+          it("when keyCode is smaller than 32 and is not 13, ignores keypress", () => {
             let called = false;
             const node = ReactDOM.render(
               <input
@@ -188,22 +188,22 @@ describe('SyntheticKeyboardEvent', () => {
                   called = true;
                 }}
               />,
-              container,
+              container
             );
             node.dispatchEvent(
-              new KeyboardEvent('keypress', {
+              new KeyboardEvent("keypress", {
                 keyCode: 31,
                 bubbles: true,
-                cancelable: true,
-              }),
+                cancelable: true
+              })
             );
             expect(called).toBe(false);
           });
         });
       });
 
-      describe('when event is not `keypress`', () => {
-        it('returns 0', () => {
+      describe("when event is not `keypress`", () => {
+        it("returns 0", () => {
           let charCodeDown = null;
           let charCodeUp = null;
           const node = ReactDOM.render(
@@ -215,28 +215,28 @@ describe('SyntheticKeyboardEvent', () => {
                 charCodeUp = e.charCode;
               }}
             />,
-            container,
+            container
           );
           node.dispatchEvent(
-            new KeyboardEvent('keydown', {
-              key: 'Del',
+            new KeyboardEvent("keydown", {
+              key: "Del",
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           node.dispatchEvent(
-            new KeyboardEvent('keyup', {
-              key: 'Del',
+            new KeyboardEvent("keyup", {
+              key: "Del",
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           expect(charCodeDown).toBe(0);
           expect(charCodeUp).toBe(0);
         });
       });
 
-      it('when charCode is smaller than 32 but is not 13, and keyCode is missing, charCode is 0', () => {
+      it("when charCode is smaller than 32 but is not 13, and keyCode is missing, charCode is 0", () => {
         let charCode = null;
         const node = ReactDOM.render(
           <input
@@ -244,22 +244,22 @@ describe('SyntheticKeyboardEvent', () => {
               charCode = e.charCode;
             }}
           />,
-          container,
+          container
         );
         node.dispatchEvent(
-          new KeyboardEvent('keydown', {
+          new KeyboardEvent("keydown", {
             charCode: 31,
             bubbles: true,
-            cancelable: true,
-          }),
+            cancelable: true
+          })
         );
         expect(charCode).toBe(0);
       });
     });
 
-    describe('keyCode', () => {
-      describe('when event is `keydown` or `keyup`', () => {
-        it('returns a passed keyCode', () => {
+    describe("keyCode", () => {
+      describe("when event is `keydown` or `keyup`", () => {
+        it("returns a passed keyCode", () => {
           let keyCodeDown = null;
           let keyCodeUp = null;
           const node = ReactDOM.render(
@@ -271,29 +271,29 @@ describe('SyntheticKeyboardEvent', () => {
                 keyCodeUp = e.keyCode;
               }}
             />,
-            container,
+            container
           );
           node.dispatchEvent(
-            new KeyboardEvent('keydown', {
+            new KeyboardEvent("keydown", {
               keyCode: 40,
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           node.dispatchEvent(
-            new KeyboardEvent('keyup', {
+            new KeyboardEvent("keyup", {
               keyCode: 40,
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           expect(keyCodeDown).toBe(40);
           expect(keyCodeUp).toBe(40);
         });
       });
 
-      describe('when event is `keypress`', () => {
-        it('returns 0', () => {
+      describe("when event is `keypress`", () => {
+        it("returns 0", () => {
           let keyCode = null;
           const node = ReactDOM.render(
             <input
@@ -301,23 +301,23 @@ describe('SyntheticKeyboardEvent', () => {
                 keyCode = e.keyCode;
               }}
             />,
-            container,
+            container
           );
           node.dispatchEvent(
-            new KeyboardEvent('keypress', {
+            new KeyboardEvent("keypress", {
               charCode: 65,
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           expect(keyCode).toBe(0);
         });
       });
     });
 
-    describe('which', () => {
-      describe('when event is `keypress`', () => {
-        it('is consistent with `charCode`', () => {
+    describe("which", () => {
+      describe("when event is `keypress`", () => {
+        it("is consistent with `charCode`", () => {
           let calls = 0;
           const node = ReactDOM.render(
             <input
@@ -326,37 +326,37 @@ describe('SyntheticKeyboardEvent', () => {
                 calls++;
               }}
             />,
-            container,
+            container
           );
           // Try different combinations from other tests.
           node.dispatchEvent(
-            new KeyboardEvent('keypress', {
+            new KeyboardEvent("keypress", {
               charCode: 0,
               keyCode: 13,
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           node.dispatchEvent(
-            new KeyboardEvent('keypress', {
+            new KeyboardEvent("keypress", {
               charCode: 32,
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           node.dispatchEvent(
-            new KeyboardEvent('keypress', {
+            new KeyboardEvent("keypress", {
               charCode: 13,
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           expect(calls).toBe(3);
         });
       });
 
-      describe('when event is `keydown` or `keyup`', () => {
-        it('is consistent with `keyCode`', () => {
+      describe("when event is `keydown` or `keyup`", () => {
+        it("is consistent with `keyCode`", () => {
           let calls = 0;
           const node = ReactDOM.render(
             <input
@@ -369,42 +369,42 @@ describe('SyntheticKeyboardEvent', () => {
                 calls++;
               }}
             />,
-            container,
+            container
           );
           node.dispatchEvent(
-            new KeyboardEvent('keydown', {
-              key: 'Del',
+            new KeyboardEvent("keydown", {
+              key: "Del",
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           node.dispatchEvent(
-            new KeyboardEvent('keydown', {
+            new KeyboardEvent("keydown", {
               charCode: 31,
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           node.dispatchEvent(
-            new KeyboardEvent('keydown', {
+            new KeyboardEvent("keydown", {
               keyCode: 40,
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           node.dispatchEvent(
-            new KeyboardEvent('keyup', {
-              key: 'Del',
+            new KeyboardEvent("keyup", {
+              key: "Del",
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           node.dispatchEvent(
-            new KeyboardEvent('keyup', {
+            new KeyboardEvent("keyup", {
               keyCode: 40,
               bubbles: true,
-              cancelable: true,
-            }),
+              cancelable: true
+            })
           );
           expect(calls).toBe(5);
         });
@@ -412,8 +412,8 @@ describe('SyntheticKeyboardEvent', () => {
     });
   });
 
-  describe('EventInterface', () => {
-    it('normalizes properties from the Event interface', () => {
+  describe("EventInterface", () => {
+    it("normalizes properties from the Event interface", () => {
       let expectedCount = 0;
       let div;
       const eventHandler = type => event => {
@@ -423,67 +423,67 @@ describe('SyntheticKeyboardEvent', () => {
       };
       div = ReactDOM.render(
         <div
-          onKeyDown={eventHandler('keydown')}
-          onKeyPress={eventHandler('keypress')}
-          onKeyUp={eventHandler('keyup')}
+          onKeyDown={eventHandler("keydown")}
+          onKeyPress={eventHandler("keypress")}
+          onKeyUp={eventHandler("keyup")}
         />,
-        container,
+        container
       );
 
       let event;
-      event = new KeyboardEvent('keydown', {
+      event = new KeyboardEvent("keydown", {
         keyCode: 40,
         bubbles: true,
-        cancelable: true,
+        cancelable: true
       });
       // Emulate IE8
-      Object.defineProperty(event, 'target', {
-        get() {},
+      Object.defineProperty(event, "target", {
+        get() {}
       });
-      Object.defineProperty(event, 'srcElement', {
+      Object.defineProperty(event, "srcElement", {
         get() {
           return div;
-        },
+        }
       });
       div.dispatchEvent(event);
 
-      event = new KeyboardEvent('keyup', {
+      event = new KeyboardEvent("keyup", {
         keyCode: 40,
         bubbles: true,
-        cancelable: true,
+        cancelable: true
       });
       // Emulate IE8
-      Object.defineProperty(event, 'target', {
-        get() {},
+      Object.defineProperty(event, "target", {
+        get() {}
       });
-      Object.defineProperty(event, 'srcElement', {
+      Object.defineProperty(event, "srcElement", {
         get() {
           return div;
-        },
+        }
       });
       div.dispatchEvent(event);
 
-      event = new KeyboardEvent('keypress', {
+      event = new KeyboardEvent("keypress", {
         charCode: 40,
         keyCode: 40,
         bubbles: true,
-        cancelable: true,
+        cancelable: true
       });
       // Emulate IE8
-      Object.defineProperty(event, 'target', {
-        get() {},
+      Object.defineProperty(event, "target", {
+        get() {}
       });
-      Object.defineProperty(event, 'srcElement', {
+      Object.defineProperty(event, "srcElement", {
         get() {
           return div;
-        },
+        }
       });
       div.dispatchEvent(event);
 
       expect(expectedCount).toBe(3);
     });
 
-    it('is able to `preventDefault` and `stopPropagation`', () => {
+    it("is able to `preventDefault` and `stopPropagation`", () => {
       let expectedCount = 0;
       const eventHandler = event => {
         expect(event.isDefaultPrevented()).toBe(false);
@@ -501,35 +501,35 @@ describe('SyntheticKeyboardEvent', () => {
           onKeyUp={eventHandler}
           onKeyPress={eventHandler}
         />,
-        container,
+        container
       );
 
       div.dispatchEvent(
-        new KeyboardEvent('keydown', {
+        new KeyboardEvent("keydown", {
           keyCode: 40,
           bubbles: true,
-          cancelable: true,
-        }),
+          cancelable: true
+        })
       );
       div.dispatchEvent(
-        new KeyboardEvent('keyup', {
+        new KeyboardEvent("keyup", {
           keyCode: 40,
           bubbles: true,
-          cancelable: true,
-        }),
+          cancelable: true
+        })
       );
       div.dispatchEvent(
-        new KeyboardEvent('keypress', {
+        new KeyboardEvent("keypress", {
           charCode: 40,
           keyCode: 40,
           bubbles: true,
-          cancelable: true,
-        }),
+          cancelable: true
+        })
       );
       expect(expectedCount).toBe(3);
     });
 
-    it('is able to `persist`', () => {
+    it("is able to `persist`", () => {
       const persistentEvents = [];
       const eventHandler = event => {
         expect(event.isPersistent()).toBe(false);
@@ -543,35 +543,35 @@ describe('SyntheticKeyboardEvent', () => {
           onKeyUp={eventHandler}
           onKeyPress={eventHandler}
         />,
-        container,
+        container
       );
 
       div.dispatchEvent(
-        new KeyboardEvent('keydown', {
+        new KeyboardEvent("keydown", {
           keyCode: 40,
           bubbles: true,
-          cancelable: true,
-        }),
+          cancelable: true
+        })
       );
       div.dispatchEvent(
-        new KeyboardEvent('keyup', {
+        new KeyboardEvent("keyup", {
           keyCode: 40,
           bubbles: true,
-          cancelable: true,
-        }),
+          cancelable: true
+        })
       );
       div.dispatchEvent(
-        new KeyboardEvent('keypress', {
+        new KeyboardEvent("keypress", {
           charCode: 40,
           keyCode: 40,
           bubbles: true,
-          cancelable: true,
-        }),
+          cancelable: true
+        })
       );
       expect(persistentEvents.length).toBe(3);
-      expect(persistentEvents[0].type).toBe('keydown');
-      expect(persistentEvents[1].type).toBe('keyup');
-      expect(persistentEvents[2].type).toBe('keypress');
+      expect(persistentEvents[0].type).toBe("keydown");
+      expect(persistentEvents[1].type).toBe("keyup");
+      expect(persistentEvents[2].type).toBe("keypress");
     });
   });
 });

@@ -7,6 +7,6 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-module.exports = require('./src/ReactCallReturn');
+module.exports = require("./src/ReactCallReturn");

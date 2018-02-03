@@ -7,10 +7,10 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-const React = require('react');
-const ReactDOM = require('react-dom');
+const React = require("react");
+const ReactDOM = require("react-dom");
 
 const stripEmptyValues = function(obj) {
   const ret = {};
@@ -33,7 +33,7 @@ let idCounter = 123;
  * reusing existing DOM/memory resources.
  */
 class StatusDisplay extends React.Component {
-  state = {internalState: idCounter++};
+  state = { internalState: idCounter++ };
 
   getStatus() {
     return this.props.status;
@@ -121,7 +121,7 @@ class FriendsStatusDisplay extends React.Component {
             onFlush={this.verifyPreviousRefsResolved.bind(this, key)}
             status={status}
           />
-        ),
+        )
       );
     }
     const childrenToRender = this.props.prepareChildren(children);
@@ -146,14 +146,14 @@ function verifyStatuses(statusDisplays, props) {
   const nonEmptyStatusProps = stripEmptyValues(props.usernameToStatus);
   let username;
   expect(Object.keys(nonEmptyStatusDisplays).length).toEqual(
-    Object.keys(nonEmptyStatusProps).length,
+    Object.keys(nonEmptyStatusProps).length
   );
   for (username in nonEmptyStatusDisplays) {
     if (!nonEmptyStatusDisplays.hasOwnProperty(username)) {
       continue;
     }
     expect(nonEmptyStatusDisplays[username].getStatus()).toEqual(
-      nonEmptyStatusProps[username],
+      nonEmptyStatusProps[username]
     );
   }
 
@@ -163,12 +163,12 @@ function verifyStatuses(statusDisplays, props) {
       continue;
     }
     expect(nonEmptyStatusDisplays[username].getStatus()).toEqual(
-      nonEmptyStatusProps[username],
+      nonEmptyStatusProps[username]
     );
   }
 
   expect(Object.keys(nonEmptyStatusDisplays)).toEqual(
-    Object.keys(nonEmptyStatusProps),
+    Object.keys(nonEmptyStatusProps)
   );
 }
 
@@ -186,7 +186,7 @@ function verifyStatesPreserved(lastInternalStates, statusDisplays) {
     }
     if (lastInternalStates[key]) {
       expect(lastInternalStates[key]).toEqual(
-        statusDisplays[key].getInternalState(),
+        statusDisplays[key].getInternalState()
       );
     }
   }
@@ -218,10 +218,10 @@ function verifyDomOrderingAccurate(outerContainer, statusDisplays) {
 }
 
 function testPropsSequenceWithPreparedChildren(sequence, prepareChildren) {
-  const container = document.createElement('div');
+  const container = document.createElement("div");
   const parentInstance = ReactDOM.render(
     <FriendsStatusDisplay {...sequence[0]} prepareChildren={prepareChildren} />,
-    container,
+    container
   );
   let statusDisplays = parentInstance.getStatusDisplays();
   let lastInternalStates = getInternalStateByUserName(statusDisplays);
@@ -233,7 +233,7 @@ function testPropsSequenceWithPreparedChildren(sequence, prepareChildren) {
         {...sequence[i]}
         prepareChildren={prepareChildren}
       />,
-      container,
+      container
     );
     statusDisplays = parentInstance.getStatusDisplays();
     verifyStatuses(statusDisplays, sequence[i]);
@@ -250,11 +250,11 @@ function prepareChildrenArray(childrenArray) {
 
 function prepareChildrenIterable(childrenArray) {
   return {
-    '@@iterator': function*() {
+    "@@iterator": function*() {
       for (const child of childrenArray) {
         yield child;
       }
-    },
+    }
   };
 }
 
@@ -263,26 +263,26 @@ function testPropsSequence(sequence) {
   testPropsSequenceWithPreparedChildren(sequence, prepareChildrenIterable);
 }
 
-describe('ReactMultiChildReconcile', () => {
+describe("ReactMultiChildReconcile", () => {
   beforeEach(() => {
     jest.resetModules();
   });
 
-  it('should reset internal state if removed then readded in an array', () => {
+  it("should reset internal state if removed then readded in an array", () => {
     // Test basics.
     const props = {
       usernameToStatus: {
-        jcw: 'jcwStatus',
-      },
+        jcw: "jcwStatus"
+      }
     };
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const parentInstance = ReactDOM.render(
       <FriendsStatusDisplay
         {...props}
         prepareChildren={prepareChildrenArray}
       />,
-      container,
+      container
     );
     let statusDisplays = parentInstance.getStatusDisplays();
     const startingInternalState = statusDisplays.jcw.getInternalState();
@@ -290,7 +290,7 @@ describe('ReactMultiChildReconcile', () => {
     // Now remove the child.
     ReactDOM.render(
       <FriendsStatusDisplay prepareChildren={prepareChildrenArray} />,
-      container,
+      container
     );
     statusDisplays = parentInstance.getStatusDisplays();
     expect(statusDisplays.jcw).toBeFalsy();
@@ -301,30 +301,30 @@ describe('ReactMultiChildReconcile', () => {
         {...props}
         prepareChildren={prepareChildrenArray}
       />,
-      container,
+      container
     );
     statusDisplays = parentInstance.getStatusDisplays();
     expect(statusDisplays.jcw).toBeTruthy();
     expect(statusDisplays.jcw.getInternalState()).not.toBe(
-      startingInternalState,
+      startingInternalState
     );
   });
 
-  it('should reset internal state if removed then readded in an iterable', () => {
+  it("should reset internal state if removed then readded in an iterable", () => {
     // Test basics.
     const props = {
       usernameToStatus: {
-        jcw: 'jcwStatus',
-      },
+        jcw: "jcwStatus"
+      }
     };
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const parentInstance = ReactDOM.render(
       <FriendsStatusDisplay
         {...props}
         prepareChildren={prepareChildrenIterable}
       />,
-      container,
+      container
     );
     let statusDisplays = parentInstance.getStatusDisplays();
     const startingInternalState = statusDisplays.jcw.getInternalState();
@@ -332,7 +332,7 @@ describe('ReactMultiChildReconcile', () => {
     // Now remove the child.
     ReactDOM.render(
       <FriendsStatusDisplay prepareChildren={prepareChildrenIterable} />,
-      container,
+      container
     );
     statusDisplays = parentInstance.getStatusDisplays();
     expect(statusDisplays.jcw).toBeFalsy();
@@ -343,105 +343,105 @@ describe('ReactMultiChildReconcile', () => {
         {...props}
         prepareChildren={prepareChildrenIterable}
       />,
-      container,
+      container
     );
     statusDisplays = parentInstance.getStatusDisplays();
     expect(statusDisplays.jcw).toBeTruthy();
     expect(statusDisplays.jcw.getInternalState()).not.toBe(
-      startingInternalState,
+      startingInternalState
     );
   });
 
-  it('should create unique identity', () => {
+  it("should create unique identity", () => {
     // Test basics.
     const usernameToStatus = {
-      jcw: 'jcwStatus',
-      awalke: 'awalkeStatus',
-      bob: 'bobStatus',
+      jcw: "jcwStatus",
+      awalke: "awalkeStatus",
+      bob: "bobStatus"
     };
 
-    testPropsSequence([{usernameToStatus: usernameToStatus}]);
+    testPropsSequence([{ usernameToStatus: usernameToStatus }]);
   });
 
-  it('should preserve order if children order has not changed', () => {
+  it("should preserve order if children order has not changed", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          jcw: 'jcwstatus2',
-          jordanjcw: 'jordanjcwstatus2',
-        },
-      },
+          jcw: "jcwstatus2",
+          jordanjcw: "jordanjcwstatus2"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should transition from zero to one children correctly', () => {
+  it("should transition from zero to one children correctly", () => {
     const PROPS_SEQUENCE = [
-      {usernameToStatus: {}},
+      { usernameToStatus: {} },
       {
         usernameToStatus: {
-          first: 'firstStatus',
-        },
-      },
+          first: "firstStatus"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should transition from one to zero children correctly', () => {
+  it("should transition from one to zero children correctly", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          first: 'firstStatus',
-        },
+          first: "firstStatus"
+        }
       },
-      {usernameToStatus: {}},
+      { usernameToStatus: {} }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should transition from one child to null children', () => {
+  it("should transition from one child to null children", () => {
     testPropsSequence([
       {
         usernameToStatus: {
-          first: 'firstStatus',
-        },
+          first: "firstStatus"
+        }
       },
-      {},
+      {}
     ]);
   });
 
-  it('should transition from null children to one child', () => {
+  it("should transition from null children to one child", () => {
     testPropsSequence([
       {},
       {
         usernameToStatus: {
-          first: 'firstStatus',
-        },
-      },
+          first: "firstStatus"
+        }
+      }
     ]);
   });
 
-  it('should transition from zero children to null children', () => {
+  it("should transition from zero children to null children", () => {
     testPropsSequence([
       {
-        usernameToStatus: {},
+        usernameToStatus: {}
       },
-      {},
+      {}
     ]);
   });
 
-  it('should transition from null children to zero children', () => {
+  it("should transition from null children to zero children", () => {
     testPropsSequence([
       {},
       {
-        usernameToStatus: {},
-      },
+        usernameToStatus: {}
+      }
     ]);
   });
 
@@ -449,411 +449,411 @@ describe('ReactMultiChildReconcile', () => {
    * `FriendsStatusDisplay` renders nulls as empty children (it's a convention
    * of `FriendsStatusDisplay`, nothing related to React or these test cases.
    */
-  it('should remove nulled out children at the beginning', () => {
+  it("should remove nulled out children at the beginning", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
           jcw: null,
-          jordanjcw: 'jordanjcwstatus2',
-        },
-      },
+          jordanjcw: "jordanjcwstatus2"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should remove nulled out children at the end', () => {
+  it("should remove nulled out children at the end", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          jcw: 'jcwstatus2',
-          jordanjcw: null,
-        },
-      },
+          jcw: "jcwstatus2",
+          jordanjcw: null
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should reverse the order of two children', () => {
+  it("should reverse the order of two children", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          userOne: 'userOneStatus',
-          userTwo: 'userTwoStatus',
-        },
+          userOne: "userOneStatus",
+          userTwo: "userTwoStatus"
+        }
       },
       {
         usernameToStatus: {
-          userTwo: 'userTwoStatus',
-          userOne: 'userOneStatus',
-        },
-      },
+          userTwo: "userTwoStatus",
+          userOne: "userOneStatus"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should reverse the order of more than two children', () => {
+  it("should reverse the order of more than two children", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          userOne: 'userOneStatus',
-          userTwo: 'userTwoStatus',
-          userThree: 'userThreeStatus',
-        },
+          userOne: "userOneStatus",
+          userTwo: "userTwoStatus",
+          userThree: "userThreeStatus"
+        }
       },
       {
         usernameToStatus: {
-          userThree: 'userThreeStatus',
-          userTwo: 'userTwoStatus',
-          userOne: 'userOneStatus',
-        },
-      },
+          userThree: "userThreeStatus",
+          userTwo: "userTwoStatus",
+          userOne: "userOneStatus"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should cycle order correctly', () => {
+  it("should cycle order correctly", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          userOne: 'userOneStatus',
-          userTwo: 'userTwoStatus',
-          userThree: 'userThreeStatus',
-          userFour: 'userFourStatus',
-        },
+          userOne: "userOneStatus",
+          userTwo: "userTwoStatus",
+          userThree: "userThreeStatus",
+          userFour: "userFourStatus"
+        }
       },
       {
         usernameToStatus: {
-          userTwo: 'userTwoStatus',
-          userThree: 'userThreeStatus',
-          userFour: 'userFourStatus',
-          userOne: 'userOneStatus',
-        },
+          userTwo: "userTwoStatus",
+          userThree: "userThreeStatus",
+          userFour: "userFourStatus",
+          userOne: "userOneStatus"
+        }
       },
       {
         usernameToStatus: {
-          userThree: 'userThreeStatus',
-          userFour: 'userFourStatus',
-          userOne: 'userOneStatus',
-          userTwo: 'userTwoStatus',
-        },
+          userThree: "userThreeStatus",
+          userFour: "userFourStatus",
+          userOne: "userOneStatus",
+          userTwo: "userTwoStatus"
+        }
       },
       {
         usernameToStatus: {
-          userFour: 'userFourStatus',
-          userOne: 'userOneStatus',
-          userTwo: 'userTwoStatus',
-          userThree: 'userThreeStatus',
-        },
+          userFour: "userFourStatus",
+          userOne: "userOneStatus",
+          userTwo: "userTwoStatus",
+          userThree: "userThreeStatus"
+        }
       },
       {
         usernameToStatus: {
           // Full circle!
-          userOne: 'userOneStatus',
-          userTwo: 'userTwoStatus',
-          userThree: 'userThreeStatus',
-          userFour: 'userFourStatus',
-        },
-      },
+          userOne: "userOneStatus",
+          userTwo: "userTwoStatus",
+          userThree: "userThreeStatus",
+          userFour: "userFourStatus"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should cycle order correctly in the other direction', () => {
+  it("should cycle order correctly in the other direction", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          userOne: 'userOneStatus',
-          userTwo: 'userTwoStatus',
-          userThree: 'userThreeStatus',
-          userFour: 'userFourStatus',
-        },
+          userOne: "userOneStatus",
+          userTwo: "userTwoStatus",
+          userThree: "userThreeStatus",
+          userFour: "userFourStatus"
+        }
       },
       {
         usernameToStatus: {
-          userFour: 'userFourStatus',
-          userOne: 'userOneStatus',
-          userTwo: 'userTwoStatus',
-          userThree: 'userThreeStatus',
-        },
+          userFour: "userFourStatus",
+          userOne: "userOneStatus",
+          userTwo: "userTwoStatus",
+          userThree: "userThreeStatus"
+        }
       },
       {
         usernameToStatus: {
-          userThree: 'userThreeStatus',
-          userFour: 'userFourStatus',
-          userOne: 'userOneStatus',
-          userTwo: 'userTwoStatus',
-        },
+          userThree: "userThreeStatus",
+          userFour: "userFourStatus",
+          userOne: "userOneStatus",
+          userTwo: "userTwoStatus"
+        }
       },
       {
         usernameToStatus: {
-          userTwo: 'userTwoStatus',
-          userThree: 'userThreeStatus',
-          userFour: 'userFourStatus',
-          userOne: 'userOneStatus',
-        },
+          userTwo: "userTwoStatus",
+          userThree: "userThreeStatus",
+          userFour: "userFourStatus",
+          userOne: "userOneStatus"
+        }
       },
       {
         usernameToStatus: {
           // Full circle!
-          userOne: 'userOneStatus',
-          userTwo: 'userTwoStatus',
-          userThree: 'userThreeStatus',
-          userFour: 'userFourStatus',
-        },
-      },
+          userOne: "userOneStatus",
+          userTwo: "userTwoStatus",
+          userThree: "userThreeStatus",
+          userFour: "userFourStatus"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should remove nulled out children and ignore new null children', () => {
+  it("should remove nulled out children and ignore new null children", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          jordanjcw: 'jordanjcwstatus2',
+          jordanjcw: "jordanjcwstatus2",
           jcw: null,
-          another: null,
-        },
-      },
+          another: null
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should remove nulled out children and reorder remaining', () => {
+  it("should remove nulled out children and reorder remaining", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-          john: 'johnStatus', // john will go away
-          joe: 'joeStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus",
+          john: "johnStatus", // john will go away
+          joe: "joeStatus"
+        }
       },
       {
         usernameToStatus: {
-          jordanjcw: 'jordanjcwStatus',
-          joe: 'joeStatus',
-          jcw: 'jcwStatus',
-        },
-      },
+          jordanjcw: "jordanjcwStatus",
+          joe: "joeStatus",
+          jcw: "jcwStatus"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should append children to the end', () => {
+  it("should append children to the end", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-          jordanjcwnew: 'jordanjcwnewStatus',
-        },
-      },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus",
+          jordanjcwnew: "jordanjcwnewStatus"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should append multiple children to the end', () => {
+  it("should append multiple children to the end", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-          jordanjcwnew: 'jordanjcwnewStatus',
-          jordanjcwnew2: 'jordanjcwnewStatus2',
-        },
-      },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus",
+          jordanjcwnew: "jordanjcwnewStatus",
+          jordanjcwnew2: "jordanjcwnewStatus2"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should prepend children to the beginning', () => {
+  it("should prepend children to the beginning", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          newUsername: 'newUsernameStatus',
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
-      },
+          newUsername: "newUsernameStatus",
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should prepend multiple children to the beginning', () => {
+  it("should prepend multiple children to the beginning", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          newNewUsername: 'newNewUsernameStatus',
-          newUsername: 'newUsernameStatus',
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
-      },
+          newNewUsername: "newNewUsernameStatus",
+          newUsername: "newUsernameStatus",
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should not prepend an empty child to the beginning', () => {
+  it("should not prepend an empty child to the beginning", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
           emptyUsername: null,
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
-      },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should not append an empty child to the end', () => {
+  it("should not append an empty child to the end", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-          emptyUsername: null,
-        },
-      },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus",
+          emptyUsername: null
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should not insert empty children in the middle', () => {
+  it("should not insert empty children in the middle", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          jcw: 'jcwstatus2',
+          jcw: "jcwstatus2",
           skipOverMe: null,
           skipOverMeToo: null,
           definitelySkipOverMe: null,
-          jordanjcw: 'jordanjcwstatus2',
-        },
-      },
+          jordanjcw: "jordanjcwstatus2"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should insert one new child in the middle', () => {
+  it("should insert one new child in the middle", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          jcw: 'jcwstatus2',
-          insertThis: 'insertThisStatus',
-          jordanjcw: 'jordanjcwstatus2',
-        },
-      },
+          jcw: "jcwstatus2",
+          insertThis: "insertThisStatus",
+          jordanjcw: "jordanjcwstatus2"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should insert multiple new truthy children in the middle', () => {
+  it("should insert multiple new truthy children in the middle", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jcw: "jcwStatus",
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          jcw: 'jcwstatus2',
-          insertThis: 'insertThisStatus',
-          insertThisToo: 'insertThisTooStatus',
-          definitelyInsertThisToo: 'definitelyInsertThisTooStatus',
-          jordanjcw: 'jordanjcwstatus2',
-        },
-      },
+          jcw: "jcwstatus2",
+          insertThis: "insertThisStatus",
+          insertThisToo: "insertThisTooStatus",
+          definitelyInsertThisToo: "definitelyInsertThisTooStatus",
+          jordanjcw: "jordanjcwstatus2"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });
 
-  it('should insert non-empty children in middle where nulls were', () => {
+  it("should insert non-empty children in middle where nulls were", () => {
     const PROPS_SEQUENCE = [
       {
         usernameToStatus: {
-          jcw: 'jcwStatus',
+          jcw: "jcwStatus",
           insertThis: null,
           insertThisToo: null,
           definitelyInsertThisToo: null,
-          jordanjcw: 'jordanjcwStatus',
-        },
+          jordanjcw: "jordanjcwStatus"
+        }
       },
       {
         usernameToStatus: {
-          jcw: 'jcwstatus2',
-          insertThis: 'insertThisStatus',
-          insertThisToo: 'insertThisTooStatus',
-          definitelyInsertThisToo: 'definitelyInsertThisTooStatus',
-          jordanjcw: 'jordanjcwstatus2',
-        },
-      },
+          jcw: "jcwstatus2",
+          insertThis: "insertThisStatus",
+          insertThisToo: "insertThisTooStatus",
+          definitelyInsertThisToo: "definitelyInsertThisTooStatus",
+          jordanjcw: "jordanjcwstatus2"
+        }
+      }
     ];
     testPropsSequence(PROPS_SEQUENCE);
   });

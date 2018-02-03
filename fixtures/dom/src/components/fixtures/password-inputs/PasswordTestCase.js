@@ -1,11 +1,11 @@
-import Fixture from '../../Fixture';
+import Fixture from "../../Fixture";
 
 const React = window.React;
 
 class PasswordTestCase extends React.Component {
-  state = {value: ''};
+  state = { value: "" };
   onChange = event => {
-    this.setState({value: event.target.value});
+    this.setState({ value: event.target.value });
   };
   render() {
     return (
@@ -21,7 +21,7 @@ class PasswordTestCase extends React.Component {
               onChange={this.onChange}
             />
             <span className="hint">
-              {' '}
+              {" "}
               Value: {JSON.stringify(this.state.value)}
             </span>
           </fieldset>

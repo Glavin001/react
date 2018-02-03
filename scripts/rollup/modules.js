@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const path = require('path');
-const forks = require('./forks');
-const bundleTypes = require('./bundles').bundleTypes;
+const path = require("path");
+const forks = require("./forks");
+const bundleTypes = require("./bundles").bundleTypes;
 
 const UMD_DEV = bundleTypes.UMD_DEV;
 const UMD_PROD = bundleTypes.UMD_PROD;
@@ -13,18 +13,18 @@ const UMD_PROD = bundleTypes.UMD_PROD;
 const HAS_NO_SIDE_EFFECTS_ON_IMPORT = false;
 // const HAS_SIDE_EFFECTS_ON_IMPORT = true;
 const importSideEffects = Object.freeze({
-  'fbjs/lib/invariant': HAS_NO_SIDE_EFFECTS_ON_IMPORT,
-  'fbjs/lib/warning': HAS_NO_SIDE_EFFECTS_ON_IMPORT,
-  'prop-types/checkPropTypes': HAS_NO_SIDE_EFFECTS_ON_IMPORT,
-  'fbjs/lib/camelizeStyleName': HAS_NO_SIDE_EFFECTS_ON_IMPORT,
-  'fbjs/lib/hyphenateStyleName': HAS_NO_SIDE_EFFECTS_ON_IMPORT,
-  deepFreezeAndThrowOnMutationInDev: HAS_NO_SIDE_EFFECTS_ON_IMPORT,
+  "fbjs/lib/invariant": HAS_NO_SIDE_EFFECTS_ON_IMPORT,
+  "fbjs/lib/warning": HAS_NO_SIDE_EFFECTS_ON_IMPORT,
+  "prop-types/checkPropTypes": HAS_NO_SIDE_EFFECTS_ON_IMPORT,
+  "fbjs/lib/camelizeStyleName": HAS_NO_SIDE_EFFECTS_ON_IMPORT,
+  "fbjs/lib/hyphenateStyleName": HAS_NO_SIDE_EFFECTS_ON_IMPORT,
+  deepFreezeAndThrowOnMutationInDev: HAS_NO_SIDE_EFFECTS_ON_IMPORT
 });
 
 // Bundles exporting globals that other modules rely on.
 const knownGlobals = Object.freeze({
-  react: 'React',
-  'react-dom': 'ReactDOM',
+  react: "React",
+  "react-dom": "ReactDOM"
 });
 
 // Given ['react'] in bundle externals, returns { 'react': 'React' }.
@@ -35,7 +35,7 @@ function getPeerGlobals(externals, moduleType) {
       !knownGlobals[name] &&
       (moduleType === UMD_DEV || moduleType === UMD_PROD)
     ) {
-      throw new Error('Cannot build UMD without a global name for: ' + name);
+      throw new Error("Cannot build UMD without a global name for: " + name);
     }
     peerGlobals[name] = knownGlobals[name];
   });
@@ -46,12 +46,12 @@ function getPeerGlobals(externals, moduleType) {
 function getDependencies(bundleType, entry) {
   const packageJson = require(path.basename(
     path.dirname(require.resolve(entry))
-  ) + '/package.json');
+  ) + "/package.json");
   // Both deps and peerDeps are assumed as accessible.
   return Array.from(
     new Set([
       ...Object.keys(packageJson.dependencies || {}),
-      ...Object.keys(packageJson.peerDependencies || {}),
+      ...Object.keys(packageJson.peerDependencies || {})
     ])
   );
 }
@@ -78,5 +78,5 @@ module.exports = {
   getImportSideEffects,
   getPeerGlobals,
   getDependencies,
-  getForks,
+  getForks
 };

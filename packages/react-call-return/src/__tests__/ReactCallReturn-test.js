@@ -7,56 +7,56 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactNoop;
 let ReactCallReturn;
 
-describe('ReactCallReturn', () => {
+describe("ReactCallReturn", () => {
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
-    ReactNoop = require('react-noop-renderer');
-    ReactCallReturn = require('react-call-return');
+    React = require("react");
+    ReactNoop = require("react-noop-renderer");
+    ReactCallReturn = require("react-call-return");
   });
 
   function div(...children) {
-    children = children.map(c => (typeof c === 'string' ? {text: c} : c));
-    return {type: 'div', children, prop: undefined};
+    children = children.map(c => (typeof c === "string" ? { text: c } : c));
+    return { type: "div", children, prop: undefined };
   }
 
   function span(prop) {
-    return {type: 'span', children: [], prop};
+    return { type: "span", children: [], prop };
   }
 
-  it('should render a call', () => {
+  it("should render a call", () => {
     const ops = [];
 
-    function Continuation({isSame}) {
-      ops.push(['Continuation', isSame]);
-      return <span prop={isSame ? 'foo==bar' : 'foo!=bar'} />;
+    function Continuation({ isSame }) {
+      ops.push(["Continuation", isSame]);
+      return <span prop={isSame ? "foo==bar" : "foo!=bar"} />;
     }
 
     // An alternative API could mark Continuation as something that needs
     // returning. E.g. Continuation.returnType = 123;
-    function Child({bar}) {
-      ops.push(['Child', bar]);
+    function Child({ bar }) {
+      ops.push(["Child", bar]);
       return ReactCallReturn.unstable_createReturn({
         props: {
-          bar: bar,
+          bar: bar
         },
-        continuation: Continuation,
+        continuation: Continuation
       });
     }
 
     function Indirection() {
-      ops.push('Indirection');
+      ops.push("Indirection");
       return [<Child key="a" bar={true} />, <Child key="b" bar={false} />];
     }
 
     function HandleReturns(props, returns) {
-      ops.push('HandleReturns');
+      ops.push("HandleReturns");
       return returns.map((y, i) => (
         <y.continuation key={i} isSame={props.foo === y.props.bar} />
       ));
@@ -65,11 +65,11 @@ describe('ReactCallReturn', () => {
     // An alternative API could mark Parent as something that needs
     // returning. E.g. Parent.handler = HandleReturns;
     function Parent(props) {
-      ops.push('Parent');
+      ops.push("Parent");
       return ReactCallReturn.unstable_createCall(
         props.children,
         HandleReturns,
-        props,
+        props
       );
     }
 
@@ -87,33 +87,33 @@ describe('ReactCallReturn', () => {
     ReactNoop.flush();
 
     expect(ops).toEqual([
-      'Parent',
-      'Indirection',
-      ['Child', true],
+      "Parent",
+      "Indirection",
+      ["Child", true],
       // Return
-      ['Child', false],
+      ["Child", false],
       // Return
-      'HandleReturns',
+      "HandleReturns",
       // Call continuations
-      ['Continuation', true],
-      ['Continuation', false],
+      ["Continuation", true],
+      ["Continuation", false]
     ]);
     expect(ReactNoop.getChildren()).toEqual([
-      div(span('foo==bar'), span('foo!=bar')),
+      div(span("foo==bar"), span("foo!=bar"))
     ]);
   });
 
-  it('should update a call', () => {
-    function Continuation({isSame}) {
-      return <span prop={isSame ? 'foo==bar' : 'foo!=bar'} />;
+  it("should update a call", () => {
+    function Continuation({ isSame }) {
+      return <span prop={isSame ? "foo==bar" : "foo!=bar"} />;
     }
 
-    function Child({bar}) {
+    function Child({ bar }) {
       return ReactCallReturn.unstable_createReturn({
         props: {
-          bar: bar,
+          bar: bar
         },
-        continuation: Continuation,
+        continuation: Continuation
       });
     }
 
@@ -131,7 +131,7 @@ describe('ReactCallReturn', () => {
       return ReactCallReturn.unstable_createCall(
         props.children,
         HandleReturns,
-        props,
+        props
       );
     }
 
@@ -148,41 +148,41 @@ describe('ReactCallReturn', () => {
     ReactNoop.render(<App foo={true} />);
     ReactNoop.flush();
     expect(ReactNoop.getChildren()).toEqual([
-      div(span('foo==bar'), span('foo!=bar')),
+      div(span("foo==bar"), span("foo!=bar"))
     ]);
 
     ReactNoop.render(<App foo={false} />);
     ReactNoop.flush();
     expect(ReactNoop.getChildren()).toEqual([
-      div(span('foo!=bar'), span('foo==bar')),
+      div(span("foo!=bar"), span("foo==bar"))
     ]);
   });
 
-  it('should unmount a composite in a call', () => {
+  it("should unmount a composite in a call", () => {
     let ops = [];
 
     class Continuation extends React.Component {
       render() {
-        ops.push('Continuation');
+        ops.push("Continuation");
         return <div />;
       }
       componentWillUnmount() {
-        ops.push('Unmount Continuation');
+        ops.push("Unmount Continuation");
       }
     }
 
     class Child extends React.Component {
       render() {
-        ops.push('Child');
+        ops.push("Child");
         return ReactCallReturn.unstable_createReturn(Continuation);
       }
       componentWillUnmount() {
-        ops.push('Unmount Child');
+        ops.push("Unmount Child");
       }
     }
 
     function HandleReturns(props, returns) {
-      ops.push('HandleReturns');
+      ops.push("HandleReturns");
       return returns.map((ContinuationComponent, i) => (
         <ContinuationComponent key={i} />
       ));
@@ -190,26 +190,26 @@ describe('ReactCallReturn', () => {
 
     class Parent extends React.Component {
       render() {
-        ops.push('Parent');
+        ops.push("Parent");
         return ReactCallReturn.unstable_createCall(
           this.props.children,
           HandleReturns,
-          this.props,
+          this.props
         );
       }
       componentWillUnmount() {
-        ops.push('Unmount Parent');
+        ops.push("Unmount Parent");
       }
     }
 
     ReactNoop.render(
       <Parent>
         <Child />
-      </Parent>,
+      </Parent>
     );
     ReactNoop.flush();
 
-    expect(ops).toEqual(['Parent', 'Child', 'HandleReturns', 'Continuation']);
+    expect(ops).toEqual(["Parent", "Child", "HandleReturns", "Continuation"]);
 
     ops = [];
 
@@ -217,17 +217,17 @@ describe('ReactCallReturn', () => {
     ReactNoop.flush();
 
     expect(ops).toEqual([
-      'Unmount Parent',
-      'Unmount Child',
-      'Unmount Continuation',
+      "Unmount Parent",
+      "Unmount Child",
+      "Unmount Continuation"
     ]);
   });
 
-  it('should handle deep updates in call', () => {
+  it("should handle deep updates in call", () => {
     let instances = {};
 
     class Counter extends React.Component {
-      state = {value: 5};
+      state = { value: 5 };
       render() {
         instances[this.props.id] = this;
         return ReactCallReturn.unstable_createReturn(this.state.value);
@@ -239,10 +239,10 @@ describe('ReactCallReturn', () => {
         [
           <Counter key="a" id="a" />,
           <Counter key="b" id="b" />,
-          <Counter key="c" id="c" />,
+          <Counter key="c" id="c" />
         ],
         (p, returns) => returns.map((y, i) => <span key={i} prop={y * 100} />),
-        {},
+        {}
       );
     }
 
@@ -250,8 +250,8 @@ describe('ReactCallReturn', () => {
     ReactNoop.flush();
     expect(ReactNoop.getChildren()).toEqual([span(500), span(500), span(500)]);
 
-    instances.a.setState({value: 1});
-    instances.b.setState({value: 2});
+    instances.a.setState({ value: 1 });
+    instances.b.setState({ value: 2 });
     ReactNoop.flush();
     expect(ReactNoop.getChildren()).toEqual([span(100), span(200), span(500)]);
   });

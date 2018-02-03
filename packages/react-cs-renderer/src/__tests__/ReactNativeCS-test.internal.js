@@ -7,28 +7,28 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactNativeCS;
 
-jest.mock('shared/ReactFeatureFlags', () =>
-  require('shared/forks/ReactFeatureFlags.native-cs'),
+jest.mock("shared/ReactFeatureFlags", () =>
+  require("shared/forks/ReactFeatureFlags.native-cs")
 );
 
-describe('ReactNativeCS', () => {
+describe("ReactNativeCS", () => {
   beforeEach(() => {
     jest.resetModules();
 
-    React = require('react');
-    ReactNativeCS = require('react-cs-renderer');
+    React = require("react");
+    ReactNativeCS = require("react-cs-renderer");
   });
 
-  it('should be able to create and render a native component', () => {
-    const CSView = 'View';
+  it("should be able to create and render a native component", () => {
+    const CSView = "View";
     const props = <CSView foo="test" />;
     const state = ReactNativeCS.getInitialState({});
     const stateUpdater = function() {};
-    ReactNativeCS.render({props, state, stateUpdater});
+    ReactNativeCS.render({ props, state, stateUpdater });
   });
 });

@@ -1,6 +1,6 @@
-import FixtureSet from '../../FixtureSet';
-import MouseMove from './mouse-move';
-import Persistence from './persistence';
+import FixtureSet from "../../FixtureSet";
+import MouseMove from "./mouse-move";
+import Persistence from "./persistence";
 
 const React = window.React;
 

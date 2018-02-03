@@ -7,11 +7,11 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-describe('ReactDOMOption', () => {
+describe("ReactDOMOption", () => {
   function normalizeCodeLocInfo(str) {
-    return str && str.replace(/\(at .+?:\d+\)/g, '(at **)');
+    return str && str.replace(/\(at .+?:\d+\)/g, "(at **)");
   }
 
   let React;
@@ -19,45 +19,45 @@ describe('ReactDOMOption', () => {
   let ReactTestUtils;
 
   beforeEach(() => {
-    React = require('react');
-    ReactDOM = require('react-dom');
-    ReactTestUtils = require('react-dom/test-utils');
+    React = require("react");
+    ReactDOM = require("react-dom");
+    ReactTestUtils = require("react-dom/test-utils");
   });
 
-  it('should flatten children to a string', () => {
+  it("should flatten children to a string", () => {
     let stub = (
       <option>
-        {1} {'foo'}
+        {1} {"foo"}
       </option>
     );
     stub = ReactTestUtils.renderIntoDocument(stub);
     const node = ReactDOM.findDOMNode(stub);
 
-    expect(node.innerHTML).toBe('1 foo');
+    expect(node.innerHTML).toBe("1 foo");
   });
 
-  it('should ignore and warn invalid children types', () => {
-    spyOnDev(console, 'error');
+  it("should ignore and warn invalid children types", () => {
+    spyOnDev(console, "error");
     const el = (
       <option>
         {1} <div /> {2}
       </option>
     );
     const node = ReactTestUtils.renderIntoDocument(el);
-    expect(node.innerHTML).toBe('1  2');
+    expect(node.innerHTML).toBe("1  2");
     ReactTestUtils.renderIntoDocument(el);
     if (__DEV__) {
       // only warn once
       expect(console.error.calls.count()).toBe(1);
       expect(normalizeCodeLocInfo(console.error.calls.argsFor(0)[0])).toContain(
-        '<div> cannot appear as a child of <option>.\n' +
-          '    in div (at **)\n' +
-          '    in option (at **)',
+        "<div> cannot appear as a child of <option>.\n" +
+          "    in div (at **)\n" +
+          "    in option (at **)"
       );
     }
   });
 
-  it('should ignore null/undefined/false children without warning', () => {
+  it("should ignore null/undefined/false children without warning", () => {
     let stub = (
       <option>
         {1} {false}
@@ -66,7 +66,7 @@ describe('ReactDOMOption', () => {
         {undefined} {2}
       </option>
     );
-    spyOnDev(console, 'error');
+    spyOnDev(console, "error");
     stub = ReactTestUtils.renderIntoDocument(stub);
 
     const node = ReactDOM.findDOMNode(stub);
@@ -74,30 +74,30 @@ describe('ReactDOMOption', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(0);
     }
-    expect(node.innerHTML).toBe('1  2');
+    expect(node.innerHTML).toBe("1  2");
   });
 
-  it('should be able to use dangerouslySetInnerHTML on option', () => {
-    let stub = <option dangerouslySetInnerHTML={{__html: 'foobar'}} />;
+  it("should be able to use dangerouslySetInnerHTML on option", () => {
+    let stub = <option dangerouslySetInnerHTML={{ __html: "foobar" }} />;
     stub = ReactTestUtils.renderIntoDocument(stub);
 
     const node = ReactDOM.findDOMNode(stub);
-    expect(node.innerHTML).toBe('foobar');
+    expect(node.innerHTML).toBe("foobar");
   });
 
-  it('should set attribute for empty value', () => {
-    const container = document.createElement('div');
+  it("should set attribute for empty value", () => {
+    const container = document.createElement("div");
     const option = ReactDOM.render(<option value="" />, container);
-    expect(option.hasAttribute('value')).toBe(true);
-    expect(option.getAttribute('value')).toBe('');
+    expect(option.hasAttribute("value")).toBe(true);
+    expect(option.getAttribute("value")).toBe("");
 
     ReactDOM.render(<option value="lava" />, container);
-    expect(option.hasAttribute('value')).toBe(true);
-    expect(option.getAttribute('value')).toBe('lava');
+    expect(option.hasAttribute("value")).toBe(true);
+    expect(option.getAttribute("value")).toBe("lava");
   });
 
-  it('should allow ignoring `value` on option', () => {
-    const a = 'a';
+  it("should allow ignoring `value` on option", () => {
+    const a = "a";
     let stub = (
       <select value="giraffe" onChange={() => {}}>
         <option>monkey</option>
@@ -106,7 +106,7 @@ describe('ReactDOMOption', () => {
       </select>
     );
     const options = stub.props.children;
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     stub = ReactDOM.render(stub, container);
     const node = ReactDOM.findDOMNode(stub);
 

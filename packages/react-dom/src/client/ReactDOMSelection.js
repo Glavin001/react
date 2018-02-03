@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import getNodeForCharacterOffset from './getNodeForCharacterOffset';
-import getTextContentAccessor from './getTextContentAccessor';
-import {TEXT_NODE} from '../shared/HTMLNodeType';
+import getNodeForCharacterOffset from "./getNodeForCharacterOffset";
+import getTextContentAccessor from "./getTextContentAccessor";
+import { TEXT_NODE } from "../shared/HTMLNodeType";
 
 /**
  * @param {DOMElement} outerNode
@@ -20,7 +20,7 @@ export function getOffsets(outerNode) {
     return null;
   }
 
-  const {anchorNode, anchorOffset, focusNode, focusOffset} = selection;
+  const { anchorNode, anchorOffset, focusNode, focusOffset } = selection;
 
   // In Firefox, anchorNode and focusNode can be "anonymous divs", e.g. the
   // up/down buttons on an <input type="number">. Anonymous divs do not seem to
@@ -43,7 +43,7 @@ export function getOffsets(outerNode) {
     anchorNode,
     anchorOffset,
     focusNode,
-    focusOffset,
+    focusOffset
   );
 }
 
@@ -61,7 +61,7 @@ export function getModernOffsetsFromPoints(
   anchorNode,
   anchorOffset,
   focusNode,
-  focusOffset,
+  focusOffset
 ) {
   let length = 0;
   let start = -1;
@@ -133,7 +133,7 @@ export function getModernOffsetsFromPoints(
 
   return {
     start: start,
-    end: end,
+    end: end
   };
 }
 

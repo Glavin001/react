@@ -13,10 +13,10 @@ import {
   shouldRemoveAttribute,
   isAttributeNameSafe,
   BOOLEAN,
-  OVERLOADED_BOOLEAN,
-} from '../shared/DOMProperty';
+  OVERLOADED_BOOLEAN
+} from "../shared/DOMProperty";
 
-import type {PropertyInfo} from '../shared/DOMProperty';
+import type { PropertyInfo } from "../shared/DOMProperty";
 
 /**
  * Get the value for a property on a node. Only used in DEV for SSR validation.
@@ -27,11 +27,11 @@ export function getValueForProperty(
   node: Element,
   name: string,
   expected: mixed,
-  propertyInfo: PropertyInfo,
+  propertyInfo: PropertyInfo
 ): mixed {
   if (__DEV__) {
     if (propertyInfo.mustUseProperty) {
-      const {propertyName} = propertyInfo;
+      const { propertyName } = propertyInfo;
       return (node: any)[propertyName];
     } else {
       const attributeName = propertyInfo.attributeName;
@@ -41,13 +41,13 @@ export function getValueForProperty(
       if (propertyInfo.type === OVERLOADED_BOOLEAN) {
         if (node.hasAttribute(attributeName)) {
           const value = node.getAttribute(attributeName);
-          if (value === '') {
+          if (value === "") {
             return true;
           }
           if (shouldRemoveAttribute(name, expected, propertyInfo, false)) {
             return value;
           }
-          if (value === '' + (expected: any)) {
+          if (value === "" + (expected: any)) {
             return expected;
           }
           return value;
@@ -72,7 +72,7 @@ export function getValueForProperty(
 
       if (shouldRemoveAttribute(name, expected, propertyInfo, false)) {
         return stringValue === null ? expected : stringValue;
-      } else if (stringValue === '' + (expected: any)) {
+      } else if (stringValue === "" + (expected: any)) {
         return expected;
       } else {
         return stringValue;
@@ -89,7 +89,7 @@ export function getValueForProperty(
 export function getValueForAttribute(
   node: Element,
   name: string,
-  expected: mixed,
+  expected: mixed
 ): mixed {
   if (__DEV__) {
     if (!isAttributeNameSafe(name)) {
@@ -99,7 +99,7 @@ export function getValueForAttribute(
       return expected === undefined ? undefined : null;
     }
     const value = node.getAttribute(name);
-    if (value === '' + (expected: any)) {
+    if (value === "" + (expected: any)) {
       return expected;
     }
     return value;
@@ -117,7 +117,7 @@ export function setValueForProperty(
   node: Element,
   name: string,
   value: mixed,
-  isCustomComponentTag: boolean,
+  isCustomComponentTag: boolean
 ) {
   const propertyInfo = getPropertyInfo(name);
   if (shouldIgnoreAttribute(name, propertyInfo, isCustomComponentTag)) {
@@ -133,17 +133,17 @@ export function setValueForProperty(
       if (value === null) {
         node.removeAttribute(attributeName);
       } else {
-        node.setAttribute(attributeName, '' + (value: any));
+        node.setAttribute(attributeName, "" + (value: any));
       }
     }
     return;
   }
-  const {mustUseProperty} = propertyInfo;
+  const { mustUseProperty } = propertyInfo;
   if (mustUseProperty) {
-    const {propertyName} = propertyInfo;
+    const { propertyName } = propertyInfo;
     if (value === null) {
-      const {type} = propertyInfo;
-      (node: any)[propertyName] = type === BOOLEAN ? false : '';
+      const { type } = propertyInfo;
+      (node: any)[propertyName] = type === BOOLEAN ? false : "";
     } else {
       // Contrary to `setAttribute`, object properties are properly
       // `toString`ed by IE8/9.
@@ -152,18 +152,18 @@ export function setValueForProperty(
     return;
   }
   // The rest are treated as attributes with special cases.
-  const {attributeName, attributeNamespace} = propertyInfo;
+  const { attributeName, attributeNamespace } = propertyInfo;
   if (value === null) {
     node.removeAttribute(attributeName);
   } else {
-    const {type} = propertyInfo;
+    const { type } = propertyInfo;
     let attributeValue;
     if (type === BOOLEAN || (type === OVERLOADED_BOOLEAN && value === true)) {
-      attributeValue = '';
+      attributeValue = "";
     } else {
       // `setAttribute` with objects becomes only `[object]` in IE8/9,
       // ('' + value) makes it output the correct toString()-value.
-      attributeValue = '' + (value: any);
+      attributeValue = "" + (value: any);
     }
     if (attributeNamespace) {
       node.setAttributeNS(attributeNamespace, attributeName, attributeValue);

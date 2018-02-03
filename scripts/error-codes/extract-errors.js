@@ -4,34 +4,34 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
+"use strict";
 
-const babylon = require('babylon');
-const fs = require('fs');
-const path = require('path');
-const traverse = require('babel-traverse').default;
-const evalToString = require('../shared/evalToString');
-const invertObject = require('./invertObject');
+const babylon = require("babylon");
+const fs = require("fs");
+const path = require("path");
+const traverse = require("babel-traverse").default;
+const evalToString = require("../shared/evalToString");
+const invertObject = require("./invertObject");
 
 const babylonOptions = {
-  sourceType: 'module',
+  sourceType: "module",
   // As a parser, babylon has its own options and we can't directly
   // import/require a babel preset. It should be kept **the same** as
   // the `babel-plugin-syntax-*` ones specified in
   // https://github.com/facebook/fbjs/blob/master/babel-preset/configure.js
   plugins: [
-    'classProperties',
-    'flow',
-    'jsx',
-    'trailingFunctionCommas',
-    'objectRestSpread',
-  ],
+    "classProperties",
+    "flow",
+    "jsx",
+    "trailingFunctionCommas",
+    "objectRestSpread"
+  ]
 };
 
 module.exports = function(opts) {
-  if (!opts || !('errorMapFilePath' in opts)) {
+  if (!opts || !("errorMapFilePath" in opts)) {
     throw new Error(
-      'Missing options. Ensure you pass an object with `errorMapFilePath`.'
+      "Missing options. Ensure you pass an object with `errorMapFilePath`."
     );
   }
 
@@ -44,7 +44,7 @@ module.exports = function(opts) {
     existingErrorMap = JSON.parse(
       fs.readFileSync(
         path.join(__dirname, path.basename(errorMapFilePath)),
-        'utf8'
+        "utf8"
       )
     );
   } catch (e) {
@@ -70,7 +70,7 @@ module.exports = function(opts) {
     traverse(ast, {
       CallExpression: {
         exit(astPath) {
-          if (astPath.get('callee').isIdentifier({name: 'invariant'})) {
+          if (astPath.get("callee").isIdentifier({ name: "invariant" })) {
             const node = astPath.node;
 
             // error messages can be concatenated (`+`) at runtime, so here's a
@@ -80,18 +80,18 @@ module.exports = function(opts) {
               return;
             }
 
-            existingErrorMap[errorMsgLiteral] = '' + currentID++;
+            existingErrorMap[errorMsgLiteral] = "" + currentID++;
           }
-        },
-      },
+        }
+      }
     });
   }
 
   function flush(cb) {
     fs.writeFileSync(
       errorMapFilePath,
-      JSON.stringify(invertObject(existingErrorMap), null, 2) + '\n',
-      'utf-8'
+      JSON.stringify(invertObject(existingErrorMap), null, 2) + "\n",
+      "utf-8"
     );
   }
 

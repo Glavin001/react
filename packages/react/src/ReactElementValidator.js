@@ -12,16 +12,16 @@
  * that support it.
  */
 
-import lowPriorityWarning from 'shared/lowPriorityWarning';
-import describeComponentFrame from 'shared/describeComponentFrame';
-import getComponentName from 'shared/getComponentName';
-import {getIteratorFn, REACT_FRAGMENT_TYPE} from 'shared/ReactSymbols';
-import checkPropTypes from 'prop-types/checkPropTypes';
-import warning from 'fbjs/lib/warning';
+import lowPriorityWarning from "shared/lowPriorityWarning";
+import describeComponentFrame from "shared/describeComponentFrame";
+import getComponentName from "shared/getComponentName";
+import { getIteratorFn, REACT_FRAGMENT_TYPE } from "shared/ReactSymbols";
+import checkPropTypes from "prop-types/checkPropTypes";
+import warning from "fbjs/lib/warning";
 
-import ReactCurrentOwner from './ReactCurrentOwner';
-import {isValidElement, createElement, cloneElement} from './ReactElement';
-import ReactDebugCurrentFrame from './ReactDebugCurrentFrame';
+import ReactCurrentOwner from "./ReactCurrentOwner";
+import { isValidElement, createElement, cloneElement } from "./ReactElement";
+import ReactDebugCurrentFrame from "./ReactDebugCurrentFrame";
 
 let currentlyValidatingElement;
 let propTypesMisspellWarningShown;
@@ -38,44 +38,44 @@ if (__DEV__) {
 
   getDisplayName = function(element): string {
     if (element == null) {
-      return '#empty';
-    } else if (typeof element === 'string' || typeof element === 'number') {
-      return '#text';
-    } else if (typeof element.type === 'string') {
+      return "#empty";
+    } else if (typeof element === "string" || typeof element === "number") {
+      return "#text";
+    } else if (typeof element.type === "string") {
       return element.type;
     } else if (element.type === REACT_FRAGMENT_TYPE) {
-      return 'React.Fragment';
+      return "React.Fragment";
     } else {
-      return element.type.displayName || element.type.name || 'Unknown';
+      return element.type.displayName || element.type.name || "Unknown";
     }
   };
 
   getStackAddendum = function(): string {
-    let stack = '';
+    let stack = "";
     if (currentlyValidatingElement) {
       const name = getDisplayName(currentlyValidatingElement);
       const owner = currentlyValidatingElement._owner;
       stack += describeComponentFrame(
         name,
         currentlyValidatingElement._source,
-        owner && getComponentName(owner),
+        owner && getComponentName(owner)
       );
     }
-    stack += ReactDebugCurrentFrame.getStackAddendum() || '';
+    stack += ReactDebugCurrentFrame.getStackAddendum() || "";
     return stack;
   };
 
-  VALID_FRAGMENT_PROPS = new Map([['children', true], ['key', true]]);
+  VALID_FRAGMENT_PROPS = new Map([["children", true], ["key", true]]);
 }
 
 function getDeclarationErrorAddendum() {
   if (ReactCurrentOwner.current) {
     const name = getComponentName(ReactCurrentOwner.current);
     if (name) {
-      return '\n\nCheck the render method of `' + name + '`.';
+      return "\n\nCheck the render method of `" + name + "`.";
     }
   }
-  return '';
+  return "";
 }
 
 function getSourceInfoErrorAddendum(elementProps) {
@@ -85,11 +85,11 @@ function getSourceInfoErrorAddendum(elementProps) {
     elementProps.__source !== undefined
   ) {
     const source = elementProps.__source;
-    const fileName = source.fileName.replace(/^.*[\\\/]/, '');
+    const fileName = source.fileName.replace(/^.*[\\\/]/, "");
     const lineNumber = source.lineNumber;
-    return '\n\nCheck your code at ' + fileName + ':' + lineNumber + '.';
+    return "\n\nCheck your code at " + fileName + ":" + lineNumber + ".";
   }
-  return '';
+  return "";
 }
 
 /**
@@ -104,7 +104,7 @@ function getCurrentComponentErrorInfo(parentType) {
 
   if (!info) {
     const parentName =
-      typeof parentType === 'string'
+      typeof parentType === "string"
         ? parentType
         : parentType.displayName || parentType.name;
     if (parentName) {
@@ -140,7 +140,7 @@ function validateExplicitKey(element, parentType) {
   // Usually the current owner is the offender, but if it accepts children as a
   // property, it may be the creator of the child that's responsible for
   // assigning it a key.
-  let childOwner = '';
+  let childOwner = "";
   if (
     element &&
     element._owner &&
@@ -148,7 +148,7 @@ function validateExplicitKey(element, parentType) {
   ) {
     // Give the component that originally created this child.
     childOwner = ` It was passed a child from ${getComponentName(
-      element._owner,
+      element._owner
     )}.`;
   }
 
@@ -157,10 +157,10 @@ function validateExplicitKey(element, parentType) {
     warning(
       false,
       'Each child in an array or iterator should have a unique "key" prop.' +
-        '%s%s See https://fb.me/react-warning-keys for more information.%s',
+        "%s%s See https://fb.me/react-warning-keys for more information.%s",
       currentComponentErrorInfo,
       childOwner,
-      getStackAddendum(),
+      getStackAddendum()
     );
   }
   currentlyValidatingElement = null;
@@ -176,7 +176,7 @@ function validateExplicitKey(element, parentType) {
  * @param {*} parentType node's parent's type.
  */
 function validateChildKeys(node, parentType) {
-  if (typeof node !== 'object') {
+  if (typeof node !== "object") {
     return;
   }
   if (Array.isArray(node)) {
@@ -193,7 +193,7 @@ function validateChildKeys(node, parentType) {
     }
   } else if (node) {
     const iteratorFn = getIteratorFn(node);
-    if (typeof iteratorFn === 'function') {
+    if (typeof iteratorFn === "function") {
       // Entry iterators used to provide implicit keys,
       // but now we print a separate warning for them later.
       if (iteratorFn !== node.entries) {
@@ -217,14 +217,14 @@ function validateChildKeys(node, parentType) {
  */
 function validatePropTypes(element) {
   const componentClass = element.type;
-  if (typeof componentClass !== 'function') {
+  if (typeof componentClass !== "function") {
     return;
   }
   const name = componentClass.displayName || componentClass.name;
   const propTypes = componentClass.propTypes;
   if (propTypes) {
     currentlyValidatingElement = element;
-    checkPropTypes(propTypes, element.props, 'prop', name, getStackAddendum);
+    checkPropTypes(propTypes, element.props, "prop", name, getStackAddendum);
     currentlyValidatingElement = null;
   } else if (
     componentClass.PropTypes !== undefined &&
@@ -233,15 +233,15 @@ function validatePropTypes(element) {
     propTypesMisspellWarningShown = true;
     warning(
       false,
-      'Component %s declared `PropTypes` instead of `propTypes`. Did you misspell the property assignment?',
-      name || 'Unknown',
+      "Component %s declared `PropTypes` instead of `propTypes`. Did you misspell the property assignment?",
+      name || "Unknown"
     );
   }
-  if (typeof componentClass.getDefaultProps === 'function') {
+  if (typeof componentClass.getDefaultProps === "function") {
     warning(
       componentClass.getDefaultProps.isReactClassApproved,
-      'getDefaultProps is only used on classic React.createClass ' +
-        'definitions. Use a static property named `defaultProps` instead.',
+      "getDefaultProps is only used on classic React.createClass " +
+        "definitions. Use a static property named `defaultProps` instead."
     );
   }
 }
@@ -257,10 +257,10 @@ function validateFragmentProps(fragment) {
     if (!VALID_FRAGMENT_PROPS.has(key)) {
       warning(
         false,
-        'Invalid prop `%s` supplied to `React.Fragment`. ' +
-          'React.Fragment can only have `key` and `children` props.%s',
+        "Invalid prop `%s` supplied to `React.Fragment`. " +
+          "React.Fragment can only have `key` and `children` props.%s",
         key,
-        getStackAddendum(),
+        getStackAddendum()
       );
       break;
     }
@@ -269,8 +269,8 @@ function validateFragmentProps(fragment) {
   if (fragment.ref !== null) {
     warning(
       false,
-      'Invalid attribute `ref` supplied to `React.Fragment`.%s',
-      getStackAddendum(),
+      "Invalid attribute `ref` supplied to `React.Fragment`.%s",
+      getStackAddendum()
     );
   }
 
@@ -279,23 +279,23 @@ function validateFragmentProps(fragment) {
 
 export function createElementWithValidation(type, props, children) {
   const validType =
-    typeof type === 'string' ||
-    typeof type === 'function' ||
+    typeof type === "string" ||
+    typeof type === "function" ||
     // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
     type === REACT_FRAGMENT_TYPE;
 
   // We warn in this case but don't throw. We expect the element creation to
   // succeed and there will likely be errors in render.
   if (!validType) {
-    let info = '';
+    let info = "";
     if (
       type === undefined ||
-      (typeof type === 'object' &&
+      (typeof type === "object" &&
         type !== null &&
         Object.keys(type).length === 0)
     ) {
       info +=
-        ' You likely forgot to export your component from the file ' +
+        " You likely forgot to export your component from the file " +
         "it's defined in, or you might have mixed up default and named imports.";
     }
 
@@ -306,15 +306,15 @@ export function createElementWithValidation(type, props, children) {
       info += getDeclarationErrorAddendum();
     }
 
-    info += getStackAddendum() || '';
+    info += getStackAddendum() || "";
 
     warning(
       false,
-      'React.createElement: type is invalid -- expected a string (for ' +
-        'built-in components) or a class/function (for composite ' +
-        'components) but got: %s.%s',
+      "React.createElement: type is invalid -- expected a string (for " +
+        "built-in components) or a class/function (for composite " +
+        "components) but got: %s.%s",
       type == null ? type : typeof type,
-      info,
+      info
     );
   }
 
@@ -352,19 +352,19 @@ export function createFactoryWithValidation(type) {
   validatedFactory.type = type;
 
   if (__DEV__) {
-    Object.defineProperty(validatedFactory, 'type', {
+    Object.defineProperty(validatedFactory, "type", {
       enumerable: false,
       get: function() {
         lowPriorityWarning(
           false,
-          'Factory.type is deprecated. Access the class directly ' +
-            'before passing it to createFactory.',
+          "Factory.type is deprecated. Access the class directly " +
+            "before passing it to createFactory."
         );
-        Object.defineProperty(this, 'type', {
-          value: type,
+        Object.defineProperty(this, "type", {
+          value: type
         });
         return type;
-      },
+      }
     });
   }
 

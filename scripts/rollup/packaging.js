@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-const {existsSync, readdirSync, unlinkSync} = require('fs');
-const Bundles = require('./bundles');
+const { existsSync, readdirSync, unlinkSync } = require("fs");
+const Bundles = require("./bundles");
 const {
   asyncCopyTo,
   asyncExecuteCommand,
   asyncExtractTar,
-  asyncRimRaf,
-} = require('./utils');
+  asyncRimRaf
+} = require("./utils");
 
 const {
   UMD_DEV,
@@ -17,12 +17,12 @@ const {
   FB_DEV,
   FB_PROD,
   RN_DEV,
-  RN_PROD,
+  RN_PROD
 } = Bundles.bundleTypes;
 
 function getPackageName(name) {
-  if (name.indexOf('/') !== -1) {
-    return name.split('/')[0];
+  if (name.indexOf("/") !== -1) {
+    return name.split("/")[0];
   }
   return name;
 }
@@ -36,7 +36,7 @@ function getBundleOutputPaths(bundleType, filename, packageName) {
     case UMD_PROD:
       return [
         `build/packages/${packageName}/umd/${filename}`,
-        `build/dist/${filename}`,
+        `build/dist/${filename}`
       ];
     case FB_DEV:
     case FB_PROD:
@@ -44,49 +44,49 @@ function getBundleOutputPaths(bundleType, filename, packageName) {
     case RN_DEV:
     case RN_PROD:
       switch (packageName) {
-        case 'react-rt-renderer':
+        case "react-rt-renderer":
           return [`build/react-rt/${filename}`];
-        case 'react-cs-renderer':
+        case "react-cs-renderer":
           return [`build/react-cs/${filename}`];
-        case 'react-native-renderer':
+        case "react-native-renderer":
           return [`build/react-native/${filename}`];
         default:
-          throw new Error('Unknown RN package.');
+          throw new Error("Unknown RN package.");
       }
     default:
-      throw new Error('Unknown bundle type.');
+      throw new Error("Unknown bundle type.");
   }
 }
 
 async function copyWWWShims() {
   await asyncCopyTo(
     `${__dirname}/shims/facebook-www`,
-    'build/facebook-www/shims'
+    "build/facebook-www/shims"
   );
 }
 
 async function copyRNShims() {
   await Promise.all([
     // React Native
-    asyncCopyTo(`${__dirname}/shims/react-native`, 'build/react-native/shims'),
+    asyncCopyTo(`${__dirname}/shims/react-native`, "build/react-native/shims"),
     asyncCopyTo(
-      require.resolve('shared/ReactTypes.js'),
-      'build/react-native/shims/ReactTypes.js'
+      require.resolve("shared/ReactTypes.js"),
+      "build/react-native/shims/ReactTypes.js"
     ),
     asyncCopyTo(
-      require.resolve('react-native-renderer/src/ReactNativeTypes.js'),
-      'build/react-native/shims/ReactNativeTypes.js'
+      require.resolve("react-native-renderer/src/ReactNativeTypes.js"),
+      "build/react-native/shims/ReactNativeTypes.js"
     ),
     // React Native CS
     asyncCopyTo(
-      require.resolve('react-cs-renderer/src/ReactNativeCSTypes.js'),
-      'build/react-cs/shims/ReactNativeCSTypes.js'
+      require.resolve("react-cs-renderer/src/ReactNativeCSTypes.js"),
+      "build/react-cs/shims/ReactNativeCSTypes.js"
     ),
     // React Native RT
     asyncCopyTo(
-      require.resolve('react-rt-renderer/src/ReactNativeRTTypes.js'),
-      'build/react-rt/shims/ReactNativeRTTypes.js'
-    ),
+      require.resolve("react-rt-renderer/src/ReactNativeRTTypes.js"),
+      "build/react-rt/shims/ReactNativeRTTypes.js"
+    )
   ]);
 }
 
@@ -98,24 +98,24 @@ function getTarOptions(tgzName, packageName) {
   // Files inside the `npm pack`ed archive start
   // with "package/" in their paths. We'll undo
   // this during extraction.
-  const CONTENTS_FOLDER = 'package';
+  const CONTENTS_FOLDER = "package";
   return {
     src: tgzName,
     dest: `build/packages/${packageName}`,
     tar: {
       entries: [CONTENTS_FOLDER],
       map(header) {
-        if (header.name.indexOf(CONTENTS_FOLDER + '/') === 0) {
+        if (header.name.indexOf(CONTENTS_FOLDER + "/") === 0) {
           header.name = header.name.substring(CONTENTS_FOLDER.length + 1);
         }
-      },
-    },
+      }
+    }
   };
 }
 
 async function prepareNpmPackage(name) {
   await Promise.all([
-    asyncCopyTo('LICENSE', `build/packages/${name}/LICENSE`),
+    asyncCopyTo("LICENSE", `build/packages/${name}/LICENSE`),
     asyncCopyTo(
       `packages/${name}/package.json`,
       `build/packages/${name}/package.json`
@@ -124,7 +124,7 @@ async function prepareNpmPackage(name) {
       `packages/${name}/README.md`,
       `build/packages/${name}/README.md`
     ),
-    asyncCopyTo(`packages/${name}/npm`, `build/packages/${name}`),
+    asyncCopyTo(`packages/${name}/npm`, `build/packages/${name}`)
   ]);
   const tgzName = (await asyncExecuteCommand(
     `npm pack build/packages/${name}`
@@ -135,12 +135,12 @@ async function prepareNpmPackage(name) {
 }
 
 async function prepareNpmPackages() {
-  if (!existsSync('build/packages')) {
+  if (!existsSync("build/packages")) {
     // We didn't build any npm packages.
     return;
   }
-  const builtPackageFolders = readdirSync('build/packages').filter(
-    dir => dir.charAt(0) !== '.'
+  const builtPackageFolders = readdirSync("build/packages").filter(
+    dir => dir.charAt(0) !== "."
   );
   await Promise.all(builtPackageFolders.map(prepareNpmPackage));
 }
@@ -149,5 +149,5 @@ module.exports = {
   copyAllShims,
   getPackageName,
   getBundleOutputPaths,
-  prepareNpmPackages,
+  prepareNpmPackages
 };

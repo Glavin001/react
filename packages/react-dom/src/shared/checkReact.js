@@ -7,11 +7,11 @@
  * @flow
  */
 
-import React from 'react';
-import invariant from 'fbjs/lib/invariant';
+import React from "react";
+import invariant from "fbjs/lib/invariant";
 
 invariant(
   React,
-  'ReactDOM was loaded before React. Make sure you load ' +
-    'the React package before loading ReactDOM.',
+  "ReactDOM was loaded before React. Make sure you load " +
+    "the React package before loading ReactDOM."
 );

@@ -1,37 +1,37 @@
-import TestCase from '../../TestCase';
-import HitBox from './hit-box';
+import TestCase from "../../TestCase";
+import HitBox from "./hit-box";
 
 const React = window.React;
 
 class Persistence extends React.Component {
   state = {
     persisted: 0,
-    pooled: [],
+    pooled: []
   };
 
   addPersisted = event => {
-    let {persisted, pooled} = this.state;
+    let { persisted, pooled } = this.state;
 
     event.persist();
 
-    if (event.type === 'mousemove') {
+    if (event.type === "mousemove") {
       this.setState({
         persisted: persisted + 1,
-        pooled: pooled.filter(e => e !== event),
+        pooled: pooled.filter(e => e !== event)
       });
     }
   };
 
   addPooled = event => {
-    let {pooled} = this.state;
+    let { pooled } = this.state;
 
-    if (event.type === 'mousemove' && pooled.indexOf(event) === -1) {
-      this.setState({pooled: pooled.concat(event)});
+    if (event.type === "mousemove" && pooled.indexOf(event) === -1) {
+      this.setState({ pooled: pooled.concat(event) });
     }
   };
 
   render() {
-    const {pooled, persisted} = this.state;
+    const { pooled, persisted } = this.state;
 
     return (
       <TestCase title="Persistence" description="">

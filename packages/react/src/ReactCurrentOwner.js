@@ -7,7 +7,7 @@
  * @flow
  */
 
-import type {Fiber} from 'react-reconciler/src/ReactFiber';
+import type { Fiber } from "react-reconciler/src/ReactFiber";
 
 /**
  * Keeps track of the current owner.
@@ -20,7 +20,7 @@ const ReactCurrentOwner = {
    * @internal
    * @type {ReactComponent}
    */
-  current: (null: null | Fiber),
+  current: (null: null | Fiber)
 };
 
 export default ReactCurrentOwner;

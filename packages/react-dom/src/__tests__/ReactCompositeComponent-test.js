@@ -7,7 +7,7 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let ChildUpdates;
 let MorphingComponent;
@@ -20,17 +20,17 @@ let PropTypes;
 let shallowEqual;
 let shallowCompare;
 
-describe('ReactCompositeComponent', () => {
+describe("ReactCompositeComponent", () => {
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
-    ReactDOM = require('react-dom');
-    ReactDOMServer = require('react-dom/server');
-    ReactCurrentOwner = require('react')
+    React = require("react");
+    ReactDOM = require("react-dom");
+    ReactDOMServer = require("react-dom/server");
+    ReactCurrentOwner = require("react")
       .__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner;
-    ReactTestUtils = require('react-dom/test-utils');
-    PropTypes = require('prop-types');
-    shallowEqual = require('fbjs/lib/shallowEqual');
+    ReactTestUtils = require("react-dom/test-utils");
+    PropTypes = require("prop-types");
+    shallowEqual = require("fbjs/lib/shallowEqual");
 
     shallowCompare = function(instance, nextProps, nextState) {
       return (
@@ -40,10 +40,10 @@ describe('ReactCompositeComponent', () => {
     };
 
     MorphingComponent = class extends React.Component {
-      state = {activated: false};
+      state = { activated: false };
 
       _toggleActivatedState = () => {
-        this.setState({activated: !this.state.activated});
+        this.setState({ activated: !this.state.activated });
       };
 
       render() {
@@ -66,7 +66,7 @@ describe('ReactCompositeComponent', () => {
       };
 
       render() {
-        const className = this.props.anchorClassOn ? 'anchorClass' : '';
+        const className = this.props.anchorClassOn ? "anchorClass" : "";
         return this.props.renderAnchor ? (
           <a ref="anch" className={className} />
         ) : (
@@ -76,36 +76,36 @@ describe('ReactCompositeComponent', () => {
     };
   });
 
-  it('should support module pattern components', () => {
-    function Child({test}) {
+  it("should support module pattern components", () => {
+    function Child({ test }) {
       return {
         render() {
           return <div>{test}</div>;
-        },
+        }
       };
     }
 
-    const el = document.createElement('div');
+    const el = document.createElement("div");
     ReactDOM.render(<Child test="test" />, el);
 
-    expect(el.textContent).toBe('test');
+    expect(el.textContent).toBe("test");
   });
 
-  it('should support rendering to different child types over time', () => {
+  it("should support rendering to different child types over time", () => {
     const instance = ReactTestUtils.renderIntoDocument(<MorphingComponent />);
     let el = ReactDOM.findDOMNode(instance);
-    expect(el.tagName).toBe('A');
+    expect(el.tagName).toBe("A");
 
     instance._toggleActivatedState();
     el = ReactDOM.findDOMNode(instance);
-    expect(el.tagName).toBe('B');
+    expect(el.tagName).toBe("B");
 
     instance._toggleActivatedState();
     el = ReactDOM.findDOMNode(instance);
-    expect(el.tagName).toBe('A');
+    expect(el.tagName).toBe("A");
   });
 
-  it('should not thrash a server rendered layout with client side one', () => {
+  it("should not thrash a server rendered layout with client side one", () => {
     class Child extends React.Component {
       render() {
         return null;
@@ -122,24 +122,24 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    spyOnDev(console, 'warn');
+    spyOnDev(console, "warn");
     const markup = ReactDOMServer.renderToString(<Parent />);
 
     // Old API based on heuristic
-    let container = document.createElement('div');
+    let container = document.createElement("div");
     container.innerHTML = markup;
     ReactDOM.render(<Parent />, container);
     if (__DEV__) {
       expect(console.warn.calls.count()).toBe(1);
       expect(console.warn.calls.argsFor(0)[0]).toContain(
-        'render(): Calling ReactDOM.render() to hydrate server-rendered markup ' +
-          'will stop working in React v17. Replace the ReactDOM.render() call ' +
-          'with ReactDOM.hydrate() if you want React to attach to the server HTML.',
+        "render(): Calling ReactDOM.render() to hydrate server-rendered markup " +
+          "will stop working in React v17. Replace the ReactDOM.render() call " +
+          "with ReactDOM.hydrate() if you want React to attach to the server HTML."
       );
       console.warn.calls.reset();
     }
     // New explicit API
-    container = document.createElement('div');
+    container = document.createElement("div");
     container.innerHTML = markup;
     ReactDOM.hydrate(<Parent />, container);
     if (__DEV__) {
@@ -147,53 +147,53 @@ describe('ReactCompositeComponent', () => {
     }
   });
 
-  it('should react to state changes from callbacks', () => {
+  it("should react to state changes from callbacks", () => {
     const instance = ReactTestUtils.renderIntoDocument(<MorphingComponent />);
     let el = ReactDOM.findDOMNode(instance);
-    expect(el.tagName).toBe('A');
+    expect(el.tagName).toBe("A");
 
     ReactTestUtils.Simulate.click(el);
     el = ReactDOM.findDOMNode(instance);
-    expect(el.tagName).toBe('B');
+    expect(el.tagName).toBe("B");
   });
 
-  it('should rewire refs when rendering to different child types', () => {
+  it("should rewire refs when rendering to different child types", () => {
     const instance = ReactTestUtils.renderIntoDocument(<MorphingComponent />);
 
-    expect(ReactDOM.findDOMNode(instance.refs.x).tagName).toBe('A');
+    expect(ReactDOM.findDOMNode(instance.refs.x).tagName).toBe("A");
     instance._toggleActivatedState();
-    expect(ReactDOM.findDOMNode(instance.refs.x).tagName).toBe('B');
+    expect(ReactDOM.findDOMNode(instance.refs.x).tagName).toBe("B");
     instance._toggleActivatedState();
-    expect(ReactDOM.findDOMNode(instance.refs.x).tagName).toBe('A');
+    expect(ReactDOM.findDOMNode(instance.refs.x).tagName).toBe("A");
   });
 
-  it('should not cache old DOM nodes when switching constructors', () => {
-    const container = document.createElement('div');
+  it("should not cache old DOM nodes when switching constructors", () => {
+    const container = document.createElement("div");
     const instance = ReactDOM.render(
       <ChildUpdates renderAnchor={true} anchorClassOn={false} />,
-      container,
+      container
     );
     ReactDOM.render(
       // Warm any cache
       <ChildUpdates renderAnchor={true} anchorClassOn={true} />,
-      container,
+      container
     );
     ReactDOM.render(
       // Clear out the anchor
       <ChildUpdates renderAnchor={false} anchorClassOn={true} />,
-      container,
+      container
     );
     ReactDOM.render(
       // rerender
       <ChildUpdates renderAnchor={true} anchorClassOn={false} />,
-      container,
+      container
     );
-    expect(instance.getAnchor().className).toBe('');
+    expect(instance.getAnchor().className).toBe("");
   });
 
-  it('should use default values for undefined props', () => {
+  it("should use default values for undefined props", () => {
     class Component extends React.Component {
-      static defaultProps = {prop: 'testKey'};
+      static defaultProps = { prop: "testKey" };
 
       render() {
         return <span />;
@@ -201,22 +201,22 @@ describe('ReactCompositeComponent', () => {
     }
 
     const instance1 = ReactTestUtils.renderIntoDocument(<Component />);
-    expect(instance1.props).toEqual({prop: 'testKey'});
+    expect(instance1.props).toEqual({ prop: "testKey" });
 
     const instance2 = ReactTestUtils.renderIntoDocument(
-      <Component prop={undefined} />,
+      <Component prop={undefined} />
     );
-    expect(instance2.props).toEqual({prop: 'testKey'});
+    expect(instance2.props).toEqual({ prop: "testKey" });
 
     const instance3 = ReactTestUtils.renderIntoDocument(
-      <Component prop={null} />,
+      <Component prop={null} />
     );
-    expect(instance3.props).toEqual({prop: null});
+    expect(instance3.props).toEqual({ prop: null });
   });
 
-  it('should not mutate passed-in props object', () => {
+  it("should not mutate passed-in props object", () => {
     class Component extends React.Component {
-      static defaultProps = {prop: 'testKey'};
+      static defaultProps = { prop: "testKey" };
 
       render() {
         return <span />;
@@ -226,17 +226,17 @@ describe('ReactCompositeComponent', () => {
     const inputProps = {};
     let instance1 = <Component {...inputProps} />;
     instance1 = ReactTestUtils.renderIntoDocument(instance1);
-    expect(instance1.props.prop).toBe('testKey');
+    expect(instance1.props.prop).toBe("testKey");
 
     // We don't mutate the input, just in case the caller wants to do something
     // with it after using it to instantiate a component
     expect(inputProps.prop).not.toBeDefined();
   });
 
-  it('should warn about `forceUpdate` on unmounted components', () => {
-    spyOnDev(console, 'error');
+  it("should warn about `forceUpdate` on unmounted components", () => {
+    spyOnDev(console, "error");
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     document.body.appendChild(container);
 
     class Component extends React.Component {
@@ -261,10 +261,10 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Can only update a mounted or mounting component. This usually means ' +
-          'you called setState, replaceState, or forceUpdate on an unmounted ' +
-          'component. This is a no-op.\n\nPlease check the code for the ' +
-          'Component component.',
+        "Can only update a mounted or mounting component. This usually means " +
+          "you called setState, replaceState, or forceUpdate on an unmounted " +
+          "component. This is a no-op.\n\nPlease check the code for the " +
+          "Component component."
       );
     }
 
@@ -274,16 +274,16 @@ describe('ReactCompositeComponent', () => {
     }
   });
 
-  it('should warn about `setState` on unmounted components', () => {
-    spyOnDev(console, 'error');
+  it("should warn about `setState` on unmounted components", () => {
+    spyOnDev(console, "error");
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     document.body.appendChild(container);
 
     let renders = 0;
 
     class Component extends React.Component {
-      state = {value: 0};
+      state = { value: 0 };
 
       render() {
         renders++;
@@ -298,7 +298,7 @@ describe('ReactCompositeComponent', () => {
 
     expect(renders).toBe(1);
 
-    instance.setState({value: 1});
+    instance.setState({ value: 1 });
 
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(0);
@@ -307,32 +307,32 @@ describe('ReactCompositeComponent', () => {
     expect(renders).toBe(2);
 
     ReactDOM.unmountComponentAtNode(container);
-    instance.setState({value: 2});
+    instance.setState({ value: 2 });
 
     expect(renders).toBe(2);
 
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Can only update a mounted or mounting component. This usually means ' +
-          'you called setState, replaceState, or forceUpdate on an unmounted ' +
-          'component. This is a no-op.\n\nPlease check the code for the ' +
-          'Component component.',
+        "Can only update a mounted or mounting component. This usually means " +
+          "you called setState, replaceState, or forceUpdate on an unmounted " +
+          "component. This is a no-op.\n\nPlease check the code for the " +
+          "Component component."
       );
     }
   });
 
-  it('should silently allow `setState`, not call cb on unmounting components', () => {
+  it("should silently allow `setState`, not call cb on unmounting components", () => {
     let cbCalled = false;
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     document.body.appendChild(container);
 
     class Component extends React.Component {
-      state = {value: 0};
+      state = { value: 0 };
 
       componentWillUnmount() {
         expect(() => {
-          this.setState({value: 2}, function() {
+          this.setState({ value: 2 }, function() {
             cbCalled = true;
           });
         }).not.toThrow();
@@ -344,15 +344,15 @@ describe('ReactCompositeComponent', () => {
     }
 
     const instance = ReactDOM.render(<Component />, container);
-    instance.setState({value: 1});
+    instance.setState({ value: 1 });
 
     ReactDOM.unmountComponentAtNode(container);
     expect(cbCalled).toBe(false);
   });
 
-  it('should warn when rendering a class with a render method that does not extend React.Component', () => {
-    spyOnDev(console, 'error');
-    const container = document.createElement('div');
+  it("should warn when rendering a class with a render method that does not extend React.Component", () => {
+    spyOnDev(console, "error");
+    const container = document.createElement("div");
     class ClassWithRenderNotExtended {
       render() {
         return <div />;
@@ -367,29 +367,29 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Warning: The <ClassWithRenderNotExtended /> component appears to have a render method, ' +
+        "Warning: The <ClassWithRenderNotExtended /> component appears to have a render method, " +
           "but doesn't extend React.Component. This is likely to cause errors. " +
-          'Change ClassWithRenderNotExtended to extend React.Component instead.',
+          "Change ClassWithRenderNotExtended to extend React.Component instead."
       );
     }
   });
 
-  it('should warn about `setState` in render', () => {
-    spyOnDev(console, 'error');
+  it("should warn about `setState` in render", () => {
+    spyOnDev(console, "error");
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
 
     let renderedState = -1;
     let renderPasses = 0;
 
     class Component extends React.Component {
-      state = {value: 0};
+      state = { value: 0 };
 
       render() {
         renderPasses++;
         renderedState = this.state.value;
         if (this.state.value === 0) {
-          this.setState({value: 1});
+          this.setState({ value: 1 });
         }
         return <div />;
       }
@@ -404,10 +404,10 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Cannot update during an existing state transition (such as within ' +
+        "Cannot update during an existing state transition (such as within " +
           "`render` or another component's constructor). Render methods should " +
-          'be a pure function of props and state; constructor side-effects are ' +
-          'an anti-pattern, but can be moved to `componentWillMount`.',
+          "be a pure function of props and state; constructor side-effects are " +
+          "an anti-pattern, but can be moved to `componentWillMount`."
       );
     }
 
@@ -432,19 +432,19 @@ describe('ReactCompositeComponent', () => {
     }
   });
 
-  it('should warn about `setState` in getChildContext', () => {
-    spyOnDev(console, 'error');
+  it("should warn about `setState` in getChildContext", () => {
+    spyOnDev(console, "error");
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
 
     let renderPasses = 0;
 
     class Component extends React.Component {
-      state = {value: 0};
+      state = { value: 0 };
 
       getChildContext() {
         if (this.state.value === 0) {
-          this.setState({value: 1});
+          this.setState({ value: 1 });
         }
       }
 
@@ -464,7 +464,7 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toBe(
-        'Warning: setState(...): Cannot call setState() inside getChildContext()',
+        "Warning: setState(...): Cannot call setState() inside getChildContext()"
       );
     }
 
@@ -476,7 +476,7 @@ describe('ReactCompositeComponent', () => {
     }
   });
 
-  it('should cleanup even if render() fatals', () => {
+  it("should cleanup even if render() fatals", () => {
     class BadComponent extends React.Component {
       render() {
         throw new Error();
@@ -494,8 +494,8 @@ describe('ReactCompositeComponent', () => {
     expect(ReactCurrentOwner.current).toBe(null);
   });
 
-  it('should call componentWillUnmount before unmounting', () => {
-    const container = document.createElement('div');
+  it("should call componentWillUnmount before unmounting", () => {
+    const container = document.createElement("div");
     let innerUnmounted = false;
 
     class Component extends React.Component {
@@ -524,11 +524,11 @@ describe('ReactCompositeComponent', () => {
     expect(innerUnmounted).toBe(true);
   });
 
-  it('should warn when shouldComponentUpdate() returns undefined', () => {
-    spyOnDev(console, 'error');
+  it("should warn when shouldComponentUpdate() returns undefined", () => {
+    spyOnDev(console, "error");
 
     class Component extends React.Component {
-      state = {bogus: false};
+      state = { bogus: false };
 
       shouldComponentUpdate() {
         return undefined;
@@ -540,19 +540,19 @@ describe('ReactCompositeComponent', () => {
     }
 
     const instance = ReactTestUtils.renderIntoDocument(<Component />);
-    instance.setState({bogus: true});
+    instance.setState({ bogus: true });
 
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toBe(
-        'Warning: Component.shouldComponentUpdate(): Returned undefined instead of a ' +
-          'boolean value. Make sure to return true or false.',
+        "Warning: Component.shouldComponentUpdate(): Returned undefined instead of a " +
+          "boolean value. Make sure to return true or false."
       );
     }
   });
 
-  it('should warn when componentDidUnmount method is defined', () => {
-    spyOnDev(console, 'error');
+  it("should warn when componentDidUnmount method is defined", () => {
+    spyOnDev(console, "error");
 
     class Component extends React.Component {
       componentDidUnmount = () => {};
@@ -567,15 +567,15 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toBe(
-        'Warning: Component has a method called ' +
-          'componentDidUnmount(). But there is no such lifecycle method. ' +
-          'Did you mean componentWillUnmount()?',
+        "Warning: Component has a method called " +
+          "componentDidUnmount(). But there is no such lifecycle method. " +
+          "Did you mean componentWillUnmount()?"
       );
     }
   });
 
-  it('should warn when componentDidReceiveProps method is defined', () => {
-    spyOnDev(console, 'error');
+  it("should warn when componentDidReceiveProps method is defined", () => {
+    spyOnDev(console, "error");
 
     class Component extends React.Component {
       componentDidReceiveProps = () => {};
@@ -590,22 +590,22 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toBe(
-        'Warning: Component has a method called ' +
-          'componentDidReceiveProps(). But there is no such lifecycle method. ' +
-          'If you meant to update the state in response to changing props, ' +
-          'use componentWillReceiveProps(). If you meant to fetch data or ' +
-          'run side-effects or mutations after React has updated the UI, use componentDidUpdate().',
+        "Warning: Component has a method called " +
+          "componentDidReceiveProps(). But there is no such lifecycle method. " +
+          "If you meant to update the state in response to changing props, " +
+          "use componentWillReceiveProps(). If you meant to fetch data or " +
+          "run side-effects or mutations after React has updated the UI, use componentDidUpdate()."
       );
     }
   });
 
-  it('should warn when defaultProps was defined as an instance property', () => {
-    spyOnDev(console, 'error');
+  it("should warn when defaultProps was defined as an instance property", () => {
+    spyOnDev(console, "error");
 
     class Component extends React.Component {
       constructor(props) {
         super(props);
-        this.defaultProps = {name: 'Abhay'};
+        this.defaultProps = { name: "Abhay" };
       }
 
       render() {
@@ -618,13 +618,13 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toBe(
-        'Warning: Setting defaultProps as an instance property on Component is not supported ' +
-          'and will be ignored. Instead, define defaultProps as a static property on Component.',
+        "Warning: Setting defaultProps as an instance property on Component is not supported " +
+          "and will be ignored. Instead, define defaultProps as a static property on Component."
       );
     }
   });
 
-  it('should pass context to children when not owner', () => {
+  it("should pass context to children when not owner", () => {
     class Parent extends React.Component {
       render() {
         return (
@@ -637,12 +637,12 @@ describe('ReactCompositeComponent', () => {
 
     class Child extends React.Component {
       static childContextTypes = {
-        foo: PropTypes.string,
+        foo: PropTypes.string
       };
 
       getChildContext() {
         return {
-          foo: 'bar',
+          foo: "bar"
         };
       }
 
@@ -653,7 +653,7 @@ describe('ReactCompositeComponent', () => {
 
     class Grandchild extends React.Component {
       static contextTypes = {
-        foo: PropTypes.string,
+        foo: PropTypes.string
       };
 
       render() {
@@ -662,10 +662,10 @@ describe('ReactCompositeComponent', () => {
     }
 
     const component = ReactTestUtils.renderIntoDocument(<Parent />);
-    expect(ReactDOM.findDOMNode(component).innerHTML).toBe('bar');
+    expect(ReactDOM.findDOMNode(component).innerHTML).toBe("bar");
   });
 
-  it('should skip update when rerendering element in container', () => {
+  it("should skip update when rerendering element in container", () => {
     class Parent extends React.Component {
       render() {
         return <div>{this.props.children}</div>;
@@ -681,7 +681,7 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const child = <Child />;
 
     ReactDOM.render(<Parent>{child}</Parent>, container);
@@ -689,24 +689,24 @@ describe('ReactCompositeComponent', () => {
     expect(childRenders).toBe(1);
   });
 
-  it('should pass context when re-rendered for static child', () => {
+  it("should pass context when re-rendered for static child", () => {
     let parentInstance = null;
     let childInstance = null;
 
     class Parent extends React.Component {
       static childContextTypes = {
         foo: PropTypes.string,
-        flag: PropTypes.bool,
+        flag: PropTypes.bool
       };
 
       state = {
-        flag: false,
+        flag: false
       };
 
       getChildContext() {
         return {
-          foo: 'bar',
-          flag: this.state.flag,
+          foo: "bar",
+          flag: this.state.flag
         };
       }
 
@@ -724,7 +724,7 @@ describe('ReactCompositeComponent', () => {
     class Child extends React.Component {
       static contextTypes = {
         foo: PropTypes.string,
-        flag: PropTypes.bool,
+        flag: PropTypes.bool
       };
 
       render() {
@@ -738,30 +738,30 @@ describe('ReactCompositeComponent', () => {
         <Middle>
           <Child />
         </Middle>
-      </Parent>,
+      </Parent>
     );
 
     expect(parentInstance.state.flag).toBe(false);
-    expect(childInstance.context).toEqual({foo: 'bar', flag: false});
+    expect(childInstance.context).toEqual({ foo: "bar", flag: false });
 
-    parentInstance.setState({flag: true});
+    parentInstance.setState({ flag: true });
     expect(parentInstance.state.flag).toBe(true);
-    expect(childInstance.context).toEqual({foo: 'bar', flag: true});
+    expect(childInstance.context).toEqual({ foo: "bar", flag: true });
   });
 
-  it('should pass context when re-rendered for static child within a composite component', () => {
+  it("should pass context when re-rendered for static child within a composite component", () => {
     class Parent extends React.Component {
       static childContextTypes = {
-        flag: PropTypes.bool,
+        flag: PropTypes.bool
       };
 
       state = {
-        flag: true,
+        flag: true
       };
 
       getChildContext() {
         return {
-          flag: this.state.flag,
+          flag: this.state.flag
         };
       }
 
@@ -772,7 +772,7 @@ describe('ReactCompositeComponent', () => {
 
     class Child extends React.Component {
       static contextTypes = {
-        flag: PropTypes.bool,
+        flag: PropTypes.bool
       };
 
       render() {
@@ -793,29 +793,29 @@ describe('ReactCompositeComponent', () => {
     const wrapper = ReactTestUtils.renderIntoDocument(<Wrapper />);
 
     expect(wrapper.refs.parent.state.flag).toEqual(true);
-    expect(wrapper.refs.child.context).toEqual({flag: true});
+    expect(wrapper.refs.child.context).toEqual({ flag: true });
 
     // We update <Parent /> while <Child /> is still a static prop relative to this update
-    wrapper.refs.parent.setState({flag: false});
+    wrapper.refs.parent.setState({ flag: false });
 
     expect(wrapper.refs.parent.state.flag).toEqual(false);
-    expect(wrapper.refs.child.context).toEqual({flag: false});
+    expect(wrapper.refs.child.context).toEqual({ flag: false });
   });
 
-  it('should pass context transitively', () => {
+  it("should pass context transitively", () => {
     let childInstance = null;
     let grandchildInstance = null;
 
     class Parent extends React.Component {
       static childContextTypes = {
         foo: PropTypes.string,
-        depth: PropTypes.number,
+        depth: PropTypes.number
       };
 
       getChildContext() {
         return {
-          foo: 'bar',
-          depth: 0,
+          foo: "bar",
+          depth: 0
         };
       }
 
@@ -827,16 +827,16 @@ describe('ReactCompositeComponent', () => {
     class Child extends React.Component {
       static contextTypes = {
         foo: PropTypes.string,
-        depth: PropTypes.number,
+        depth: PropTypes.number
       };
 
       static childContextTypes = {
-        depth: PropTypes.number,
+        depth: PropTypes.number
       };
 
       getChildContext() {
         return {
-          depth: this.context.depth + 1,
+          depth: this.context.depth + 1
         };
       }
 
@@ -849,7 +849,7 @@ describe('ReactCompositeComponent', () => {
     class Grandchild extends React.Component {
       static contextTypes = {
         foo: PropTypes.string,
-        depth: PropTypes.number,
+        depth: PropTypes.number
       };
 
       render() {
@@ -859,28 +859,28 @@ describe('ReactCompositeComponent', () => {
     }
 
     ReactTestUtils.renderIntoDocument(<Parent />);
-    expect(childInstance.context).toEqual({foo: 'bar', depth: 0});
-    expect(grandchildInstance.context).toEqual({foo: 'bar', depth: 1});
+    expect(childInstance.context).toEqual({ foo: "bar", depth: 0 });
+    expect(grandchildInstance.context).toEqual({ foo: "bar", depth: 1 });
   });
 
-  it('should pass context when re-rendered', () => {
+  it("should pass context when re-rendered", () => {
     let parentInstance = null;
     let childInstance = null;
 
     class Parent extends React.Component {
       static childContextTypes = {
         foo: PropTypes.string,
-        depth: PropTypes.number,
+        depth: PropTypes.number
       };
 
       state = {
-        flag: false,
+        flag: false
       };
 
       getChildContext() {
         return {
-          foo: 'bar',
-          depth: 0,
+          foo: "bar",
+          depth: 0
         };
       }
 
@@ -896,7 +896,7 @@ describe('ReactCompositeComponent', () => {
     class Child extends React.Component {
       static contextTypes = {
         foo: PropTypes.string,
-        depth: PropTypes.number,
+        depth: PropTypes.number
       };
 
       render() {
@@ -910,25 +910,25 @@ describe('ReactCompositeComponent', () => {
 
     expect(parentInstance.state.flag).toBe(false);
     ReactDOM.unstable_batchedUpdates(function() {
-      parentInstance.setState({flag: true});
+      parentInstance.setState({ flag: true });
     });
     expect(parentInstance.state.flag).toBe(true);
 
-    expect(childInstance.context).toEqual({foo: 'bar', depth: 0});
+    expect(childInstance.context).toEqual({ foo: "bar", depth: 0 });
   });
 
-  it('unmasked context propagates through updates', () => {
+  it("unmasked context propagates through updates", () => {
     class Leaf extends React.Component {
       static contextTypes = {
-        foo: PropTypes.string.isRequired,
+        foo: PropTypes.string.isRequired
       };
 
       componentWillReceiveProps(nextProps, nextContext) {
-        expect('foo' in nextContext).toBe(true);
+        expect("foo" in nextContext).toBe(true);
       }
 
       shouldComponentUpdate(nextProps, nextState, nextContext) {
-        expect('foo' in nextContext).toBe(true);
+        expect("foo" in nextContext).toBe(true);
         return true;
       }
 
@@ -939,11 +939,11 @@ describe('ReactCompositeComponent', () => {
 
     class Intermediary extends React.Component {
       componentWillReceiveProps(nextProps, nextContext) {
-        expect('foo' in nextContext).toBe(false);
+        expect("foo" in nextContext).toBe(false);
       }
 
       shouldComponentUpdate(nextProps, nextState, nextContext) {
-        expect('foo' in nextContext).toBe(false);
+        expect("foo" in nextContext).toBe(false);
         return true;
       }
 
@@ -954,12 +954,12 @@ describe('ReactCompositeComponent', () => {
 
     class Parent extends React.Component {
       static childContextTypes = {
-        foo: PropTypes.string,
+        foo: PropTypes.string
       };
 
       getChildContext() {
         return {
-          foo: this.props.cntxt,
+          foo: this.props.cntxt
         };
       }
 
@@ -968,29 +968,29 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     ReactDOM.render(<Parent cntxt="noise" />, div);
-    expect(div.children[0].innerHTML).toBe('noise');
-    div.children[0].innerHTML = 'aliens';
-    div.children[0].id = 'aliens';
-    expect(div.children[0].innerHTML).toBe('aliens');
-    expect(div.children[0].id).toBe('aliens');
+    expect(div.children[0].innerHTML).toBe("noise");
+    div.children[0].innerHTML = "aliens";
+    div.children[0].id = "aliens";
+    expect(div.children[0].innerHTML).toBe("aliens");
+    expect(div.children[0].id).toBe("aliens");
     ReactDOM.render(<Parent cntxt="bar" />, div);
-    expect(div.children[0].innerHTML).toBe('bar');
-    expect(div.children[0].id).toBe('aliens');
+    expect(div.children[0].innerHTML).toBe("bar");
+    expect(div.children[0].id).toBe("aliens");
   });
 
-  it('should trigger componentWillReceiveProps for context changes', () => {
+  it("should trigger componentWillReceiveProps for context changes", () => {
     let contextChanges = 0;
     let propChanges = 0;
 
     class GrandChild extends React.Component {
       static contextTypes = {
-        foo: PropTypes.string.isRequired,
+        foo: PropTypes.string.isRequired
       };
 
       componentWillReceiveProps(nextProps, nextContext) {
-        expect('foo' in nextContext).toBe(true);
+        expect("foo" in nextContext).toBe(true);
 
         if (nextProps !== this.props) {
           propChanges++;
@@ -1008,11 +1008,11 @@ describe('ReactCompositeComponent', () => {
 
     class ChildWithContext extends React.Component {
       static contextTypes = {
-        foo: PropTypes.string.isRequired,
+        foo: PropTypes.string.isRequired
       };
 
       componentWillReceiveProps(nextProps, nextContext) {
-        expect('foo' in nextContext).toBe(true);
+        expect("foo" in nextContext).toBe(true);
 
         if (nextProps !== this.props) {
           propChanges++;
@@ -1030,7 +1030,7 @@ describe('ReactCompositeComponent', () => {
 
     class ChildWithoutContext extends React.Component {
       componentWillReceiveProps(nextProps, nextContext) {
-        expect('foo' in nextContext).toBe(false);
+        expect("foo" in nextContext).toBe(false);
 
         if (nextProps !== this.props) {
           propChanges++;
@@ -1048,16 +1048,16 @@ describe('ReactCompositeComponent', () => {
 
     class Parent extends React.Component {
       static childContextTypes = {
-        foo: PropTypes.string,
+        foo: PropTypes.string
       };
 
       state = {
-        foo: 'abc',
+        foo: "abc"
       };
 
       getChildContext() {
         return {
-          foo: this.state.foo,
+          foo: this.state.foo
         };
       }
 
@@ -1066,7 +1066,7 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const div = document.createElement('div');
+    const div = document.createElement("div");
 
     let parentInstance = null;
     ReactDOM.render(
@@ -1081,19 +1081,19 @@ describe('ReactCompositeComponent', () => {
           <GrandChild>B2</GrandChild>
         </ChildWithContext>
       </Parent>,
-      div,
+      div
     );
 
     parentInstance.setState({
-      foo: 'def',
+      foo: "def"
     });
 
     expect(propChanges).toBe(0);
     expect(contextChanges).toBe(3); // ChildWithContext, GrandChild x 2
   });
 
-  it('should disallow nested render calls', () => {
-    spyOnDev(console, 'error');
+  it("should disallow nested render calls", () => {
+    spyOnDev(console, "error");
 
     class Inner extends React.Component {
       render() {
@@ -1112,24 +1112,24 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toMatch(
-        'Render methods should be a pure function of props and state; ' +
-          'triggering nested component updates from render is not allowed. If ' +
-          'necessary, trigger nested updates in componentDidUpdate.\n\nCheck the ' +
-          'render method of Outer.',
+        "Render methods should be a pure function of props and state; " +
+          "triggering nested component updates from render is not allowed. If " +
+          "necessary, trigger nested updates in componentDidUpdate.\n\nCheck the " +
+          "render method of Outer."
       );
     }
   });
 
-  it('only renders once if updated in componentWillReceiveProps', () => {
+  it("only renders once if updated in componentWillReceiveProps", () => {
     let renders = 0;
 
     class Component extends React.Component {
-      state = {updated: false};
+      state = { updated: false };
 
       componentWillReceiveProps(props) {
         expect(props.update).toBe(1);
         expect(renders).toBe(1);
-        this.setState({updated: true});
+        this.setState({ updated: true });
         expect(renders).toBe(1);
       }
 
@@ -1139,7 +1139,7 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const instance = ReactDOM.render(<Component update={0} />, container);
     expect(renders).toBe(1);
     expect(instance.state.updated).toBe(false);
@@ -1148,16 +1148,16 @@ describe('ReactCompositeComponent', () => {
     expect(instance.state.updated).toBe(true);
   });
 
-  it('only renders once if updated in componentWillReceiveProps when batching', () => {
+  it("only renders once if updated in componentWillReceiveProps when batching", () => {
     let renders = 0;
 
     class Component extends React.Component {
-      state = {updated: false};
+      state = { updated: false };
 
       componentWillReceiveProps(props) {
         expect(props.update).toBe(1);
         expect(renders).toBe(1);
-        this.setState({updated: true});
+        this.setState({ updated: true });
         expect(renders).toBe(1);
       }
 
@@ -1167,7 +1167,7 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const instance = ReactDOM.render(<Component update={0} />, container);
     expect(renders).toBe(1);
     expect(instance.state.updated).toBe(false);
@@ -1178,7 +1178,7 @@ describe('ReactCompositeComponent', () => {
     expect(instance.state.updated).toBe(true);
   });
 
-  it('should update refs if shouldComponentUpdate gives false', () => {
+  it("should update refs if shouldComponentUpdate gives false", () => {
     class Static extends React.Component {
       shouldComponentUpdate() {
         return false;
@@ -1217,19 +1217,19 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const comp = ReactDOM.render(<Component flipped={false} />, container);
-    expect(ReactDOM.findDOMNode(comp.refs.static0).textContent).toBe('A');
-    expect(ReactDOM.findDOMNode(comp.refs.static1).textContent).toBe('B');
+    expect(ReactDOM.findDOMNode(comp.refs.static0).textContent).toBe("A");
+    expect(ReactDOM.findDOMNode(comp.refs.static1).textContent).toBe("B");
 
     // When flipping the order, the refs should update even though the actual
     // contents do not
     ReactDOM.render(<Component flipped={true} />, container);
-    expect(ReactDOM.findDOMNode(comp.refs.static0).textContent).toBe('B');
-    expect(ReactDOM.findDOMNode(comp.refs.static1).textContent).toBe('A');
+    expect(ReactDOM.findDOMNode(comp.refs.static0).textContent).toBe("B");
+    expect(ReactDOM.findDOMNode(comp.refs.static1).textContent).toBe("A");
   });
 
-  it('should allow access to findDOMNode in componentWillUnmount', () => {
+  it("should allow access to findDOMNode in componentWillUnmount", () => {
     let a = null;
     let b = null;
 
@@ -1249,22 +1249,22 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     expect(a).toBe(container.firstChild);
     ReactDOM.render(<Component />, container);
     ReactDOM.unmountComponentAtNode(container);
     expect(a).toBe(b);
   });
 
-  it('context should be passed down from the parent', () => {
+  it("context should be passed down from the parent", () => {
     class Parent extends React.Component {
       static childContextTypes = {
-        foo: PropTypes.string,
+        foo: PropTypes.string
       };
 
       getChildContext() {
         return {
-          foo: 'bar',
+          foo: "bar"
         };
       }
 
@@ -1275,7 +1275,7 @@ describe('ReactCompositeComponent', () => {
 
     class Component extends React.Component {
       static contextTypes = {
-        foo: PropTypes.string.isRequired,
+        foo: PropTypes.string.isRequired
       };
 
       render() {
@@ -1283,18 +1283,18 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     ReactDOM.render(
       <Parent>
         <Component />
       </Parent>,
-      div,
+      div
     );
   });
 
-  it('should replace state', () => {
+  it("should replace state", () => {
     class Moo extends React.Component {
-      state = {x: 1};
+      state = { x: 1 };
       render() {
         return <div />;
       }
@@ -1303,12 +1303,12 @@ describe('ReactCompositeComponent', () => {
     const moo = ReactTestUtils.renderIntoDocument(<Moo />);
     // No longer a public API, but we can test that it works internally by
     // reaching into the updater.
-    moo.updater.enqueueReplaceState(moo, {y: 2});
-    expect('x' in moo.state).toBe(false);
+    moo.updater.enqueueReplaceState(moo, { y: 2 });
+    expect("x" in moo.state).toBe(false);
     expect(moo.state.y).toBe(2);
   });
 
-  it('should support objects with prototypes as state', () => {
+  it("should support objects with prototypes as state", () => {
     const NotActuallyImmutable = function(str) {
       this.str = str;
     };
@@ -1316,7 +1316,7 @@ describe('ReactCompositeComponent', () => {
       return true;
     };
     class Moo extends React.Component {
-      state = new NotActuallyImmutable('first');
+      state = new NotActuallyImmutable("first");
       // No longer a public API, but we can test that it works internally by
       // reaching into the updater.
       _replaceState = update => this.updater.enqueueReplaceState(this, update);
@@ -1326,41 +1326,41 @@ describe('ReactCompositeComponent', () => {
     }
 
     const moo = ReactTestUtils.renderIntoDocument(<Moo />);
-    expect(moo.state.str).toBe('first');
+    expect(moo.state.str).toBe("first");
     expect(moo.state.amIImmutable()).toBe(true);
 
-    const secondState = new NotActuallyImmutable('second');
+    const secondState = new NotActuallyImmutable("second");
     moo._replaceState(secondState);
-    expect(moo.state.str).toBe('second');
+    expect(moo.state.str).toBe("second");
     expect(moo.state.amIImmutable()).toBe(true);
     expect(moo.state).toBe(secondState);
 
-    moo.setState({str: 'third'});
-    expect(moo.state.str).toBe('third');
+    moo.setState({ str: "third" });
+    expect(moo.state.str).toBe("third");
     // Here we lose the prototype.
     expect(moo.state.amIImmutable).toBe(undefined);
 
     // When more than one state update is enqueued, we have the same behavior
-    const fifthState = new NotActuallyImmutable('fifth');
+    const fifthState = new NotActuallyImmutable("fifth");
     ReactDOM.unstable_batchedUpdates(function() {
-      moo.setState({str: 'fourth'});
+      moo.setState({ str: "fourth" });
       moo._replaceState(fifthState);
     });
     expect(moo.state).toBe(fifthState);
 
     // When more than one state update is enqueued, we have the same behavior
-    const sixthState = new NotActuallyImmutable('sixth');
+    const sixthState = new NotActuallyImmutable("sixth");
     ReactDOM.unstable_batchedUpdates(function() {
       moo._replaceState(sixthState);
-      moo.setState({str: 'seventh'});
+      moo.setState({ str: "seventh" });
     });
-    expect(moo.state.str).toBe('seventh');
+    expect(moo.state.str).toBe("seventh");
     expect(moo.state.amIImmutable).toBe(undefined);
   });
 
-  it('should not warn about unmounting during unmounting', () => {
-    const container = document.createElement('div');
-    const layer = document.createElement('div');
+  it("should not warn about unmounting during unmounting", () => {
+    const container = document.createElement("div");
+    const layer = document.createElement("div");
 
     class Component extends React.Component {
       componentDidMount() {
@@ -1386,19 +1386,19 @@ describe('ReactCompositeComponent', () => {
       <Outer>
         <Component />
       </Outer>,
-      container,
+      container
     );
     ReactDOM.render(<Outer />, container);
   });
 
-  it('should warn when mutated props are passed', () => {
-    spyOnDev(console, 'error');
+  it("should warn when mutated props are passed", () => {
+    spyOnDev(console, "error");
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
 
     class Foo extends React.Component {
       constructor(props) {
-        const _props = {idx: props.idx + '!'};
+        const _props = { idx: props.idx + "!" };
         super(_props);
       }
 
@@ -1416,13 +1416,13 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.argsFor(0)[0]).toContain(
-        'Foo(...): When calling super() in `Foo`, make sure to pass ' +
-          "up the same props that your component's constructor was passed.",
+        "Foo(...): When calling super() in `Foo`, make sure to pass " +
+          "up the same props that your component's constructor was passed."
       );
     }
   });
 
-  it('should only call componentWillUnmount once', () => {
+  it("should only call componentWillUnmount once", () => {
     let app;
     let count = 0;
 
@@ -1440,7 +1440,7 @@ describe('ReactCompositeComponent', () => {
       componentWillUnmount() {
         app.setState({});
         count++;
-        throw Error('always fails');
+        throw Error("always fails");
       }
 
       render() {
@@ -1448,7 +1448,7 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
 
     const setRef = ref => {
       if (ref) {
@@ -1463,22 +1463,22 @@ describe('ReactCompositeComponent', () => {
     expect(count).toBe(1);
   });
 
-  it('prepares new child before unmounting old', () => {
+  it("prepares new child before unmounting old", () => {
     const log = [];
 
     class Spy extends React.Component {
       componentWillMount() {
-        log.push(this.props.name + ' componentWillMount');
+        log.push(this.props.name + " componentWillMount");
       }
       render() {
-        log.push(this.props.name + ' render');
+        log.push(this.props.name + " render");
         return <div />;
       }
       componentDidMount() {
-        log.push(this.props.name + ' componentDidMount');
+        log.push(this.props.name + " componentDidMount");
       }
       componentWillUnmount() {
-        log.push(this.props.name + ' componentWillUnmount');
+        log.push(this.props.name + " componentWillUnmount");
       }
     }
 
@@ -1488,29 +1488,29 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     ReactDOM.render(<Wrapper name="A" />, container);
     ReactDOM.render(<Wrapper name="B" />, container);
 
     expect(log).toEqual([
-      'A componentWillMount',
-      'A render',
-      'A componentDidMount',
+      "A componentWillMount",
+      "A render",
+      "A componentDidMount",
 
-      'B componentWillMount',
-      'B render',
-      'A componentWillUnmount',
-      'B componentDidMount',
+      "B componentWillMount",
+      "B render",
+      "A componentWillUnmount",
+      "B componentDidMount"
     ]);
   });
 
-  it('respects a shallow shouldComponentUpdate implementation', () => {
+  it("respects a shallow shouldComponentUpdate implementation", () => {
     let renderCalls = 0;
     class PlasticWrap extends React.Component {
       constructor(props, context) {
         super(props, context);
         this.state = {
-          color: 'green',
+          color: "green"
         };
       }
 
@@ -1522,7 +1522,7 @@ describe('ReactCompositeComponent', () => {
     class Apple extends React.Component {
       state = {
         cut: false,
-        slices: 1,
+        slices: 1
       };
 
       shouldComponentUpdate(nextProps, nextState) {
@@ -1532,13 +1532,13 @@ describe('ReactCompositeComponent', () => {
       cut() {
         this.setState({
           cut: true,
-          slices: 10,
+          slices: 10
         });
       }
 
       eatSlice() {
         this.setState({
-          slices: this.state.slices - 1,
+          slices: this.state.slices - 1
         });
       }
 
@@ -1548,16 +1548,16 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const instance = ReactDOM.render(<PlasticWrap />, container);
     expect(renderCalls).toBe(1);
 
     // Do not re-render based on props
-    instance.setState({color: 'green'});
+    instance.setState({ color: "green" });
     expect(renderCalls).toBe(1);
 
     // Re-render based on props
-    instance.setState({color: 'red'});
+    instance.setState({ color: "red" });
     expect(renderCalls).toBe(2);
 
     // Re-render base on state
@@ -1573,11 +1573,11 @@ describe('ReactCompositeComponent', () => {
     expect(renderCalls).toBe(4);
   });
 
-  it('does not do a deep comparison for a shallow shouldComponentUpdate implementation', () => {
+  it("does not do a deep comparison for a shallow shouldComponentUpdate implementation", () => {
     function getInitialState() {
       return {
         foo: [1, 2, 3],
-        bar: {a: 4, b: 5, c: 6},
+        bar: { a: 4, b: 5, c: 6 }
       };
     }
 
@@ -1597,14 +1597,14 @@ describe('ReactCompositeComponent', () => {
       }
     }
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     const instance = ReactDOM.render(<Component />, container);
     expect(renderCalls).toBe(1);
 
     // Do not re-render if state is equal
     const settings = {
       foo: initialSettings.foo,
-      bar: initialSettings.bar,
+      bar: initialSettings.bar
     };
     instance.setState(settings);
     expect(renderCalls).toBe(1);
@@ -1619,7 +1619,7 @@ describe('ReactCompositeComponent', () => {
     expect(renderCalls).toBe(3);
   });
 
-  it('should call setState callback with no arguments', () => {
+  it("should call setState callback with no arguments", () => {
     let mockArgs;
     class Component extends React.Component {
       componentDidMount() {
@@ -1634,22 +1634,22 @@ describe('ReactCompositeComponent', () => {
     expect(mockArgs.length).toEqual(0);
   });
 
-  it('this.state should be updated on setState callback inside componentWillMount', () => {
-    const div = document.createElement('div');
+  it("this.state should be updated on setState callback inside componentWillMount", () => {
+    const div = document.createElement("div");
     let stateSuccessfullyUpdated = false;
 
     class Component extends React.Component {
       constructor(props, context) {
         super(props, context);
         this.state = {
-          hasUpdatedState: false,
+          hasUpdatedState: false
         };
       }
 
       componentWillMount() {
         this.setState(
-          {hasUpdatedState: true},
-          () => (stateSuccessfullyUpdated = this.state.hasUpdatedState),
+          { hasUpdatedState: true },
+          () => (stateSuccessfullyUpdated = this.state.hasUpdatedState)
         );
       }
 
@@ -1662,9 +1662,9 @@ describe('ReactCompositeComponent', () => {
     expect(stateSuccessfullyUpdated).toBe(true);
   });
 
-  it('should call the setState callback even if shouldComponentUpdate = false', done => {
+  it("should call the setState callback even if shouldComponentUpdate = false", done => {
     const mockFn = jest.fn().mockReturnValue(false);
-    const div = document.createElement('div');
+    const div = document.createElement("div");
 
     let instance;
 
@@ -1672,7 +1672,7 @@ describe('ReactCompositeComponent', () => {
       constructor(props, context) {
         super(props, context);
         this.state = {
-          hasUpdatedState: false,
+          hasUpdatedState: false
         };
       }
 
@@ -1694,19 +1694,19 @@ describe('ReactCompositeComponent', () => {
     expect(instance).toBeDefined();
     expect(mockFn).not.toBeCalled();
 
-    instance.setState({hasUpdatedState: true}, () => {
+    instance.setState({ hasUpdatedState: true }, () => {
       expect(mockFn).toBeCalled();
       expect(instance.state.hasUpdatedState).toBe(true);
       done();
     });
   });
 
-  it('should return a meaningful warning when constructor is returned', () => {
-    spyOnDev(console, 'error');
+  it("should return a meaningful warning when constructor is returned", () => {
+    spyOnDev(console, "error");
     class RenderTextInvalidConstructor extends React.Component {
       constructor(props) {
         super(props);
-        return {something: false};
+        return { something: false };
       }
 
       render() {
@@ -1721,14 +1721,14 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.mostRecent().args[0]).toBe(
-        'Warning: RenderTextInvalidConstructor(...): No `render` method found on the returned component instance: ' +
-          'did you accidentally return an object from the constructor?',
+        "Warning: RenderTextInvalidConstructor(...): No `render` method found on the returned component instance: " +
+          "did you accidentally return an object from the constructor?"
       );
     }
   });
 
-  it('should return error if render is not defined', () => {
-    spyOnDev(console, 'error');
+  it("should return error if render is not defined", () => {
+    spyOnDev(console, "error");
     class RenderTestUndefinedRender extends React.Component {}
 
     expect(function() {
@@ -1738,8 +1738,8 @@ describe('ReactCompositeComponent', () => {
     if (__DEV__) {
       expect(console.error.calls.count()).toBe(1);
       expect(console.error.calls.mostRecent().args[0]).toBe(
-        'Warning: RenderTestUndefinedRender(...): No `render` method found on the returned ' +
-          'component instance: you may have forgotten to define `render`.',
+        "Warning: RenderTestUndefinedRender(...): No `render` method found on the returned " +
+          "component instance: you may have forgotten to define `render`."
       );
     }
   });

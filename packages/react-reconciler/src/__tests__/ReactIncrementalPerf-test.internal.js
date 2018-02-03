@@ -7,9 +7,9 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-describe('ReactDebugFiberPerf', () => {
+describe("ReactDebugFiberPerf", () => {
   let React;
   let ReactCallReturn;
   let ReactNoop;
@@ -29,8 +29,8 @@ describe('ReactDebugFiberPerf', () => {
       label: null,
       parent: null,
       toString() {
-        return this.children.map(c => c.toString()).join('\n');
-      },
+        return this.children.map(c => c.toString()).join("\n");
+      }
     };
     activeMeasure = root;
     knownMarks = new Set();
@@ -70,14 +70,14 @@ describe('ReactDebugFiberPerf', () => {
           toString() {
             return (
               [
-                ...this.comments.map(c => '  '.repeat(this.indent) + '// ' + c),
-                '  '.repeat(this.indent) + this.label,
-                ...this.children.map(c => c.toString()),
-              ].join('\n') +
+                ...this.comments.map(c => "  ".repeat(this.indent) + "// " + c),
+                "  ".repeat(this.indent) + this.label,
+                ...this.children.map(c => c.toString())
+              ].join("\n") +
               // Extra newline after each root reconciliation
-              (this.indent === 0 ? '\n' : '')
+              (this.indent === 0 ? "\n" : "")
             );
-          },
+          }
         };
         comments = [];
         // Step one level deeper
@@ -88,7 +88,7 @@ describe('ReactDebugFiberPerf', () => {
       // We don't use the overload with three arguments.
       measure(label, markName) {
         if (markName !== activeMeasure.markName) {
-          throw new Error('Unexpected measure() call.');
+          throw new Error("Unexpected measure() call.");
         }
         // Step one level up
         activeMeasure.label = label;
@@ -105,7 +105,7 @@ describe('ReactDebugFiberPerf', () => {
       },
       clearMeasures(label) {
         knownMeasures.delete(label);
-      },
+      }
     };
   }
 
@@ -114,13 +114,13 @@ describe('ReactDebugFiberPerf', () => {
     resetFlamechart();
     global.performance = createUserTimingPolyfill();
 
-    require('shared/ReactFeatureFlags').enableUserTimingAPI = true;
+    require("shared/ReactFeatureFlags").enableUserTimingAPI = true;
 
     // Import after the polyfill is set up:
-    React = require('react');
-    ReactNoop = require('react-noop-renderer');
-    ReactCallReturn = require('react-call-return');
-    PropTypes = require('prop-types');
+    React = require("react");
+    ReactNoop = require("react-noop-renderer");
+    ReactCallReturn = require("react-call-return");
+    PropTypes = require("prop-types");
   });
 
   afterEach(() => {
@@ -135,31 +135,31 @@ describe('ReactDebugFiberPerf', () => {
     return <div>{props.children}</div>;
   }
 
-  it('measures a simple reconciliation', () => {
+  it("measures a simple reconciliation", () => {
     ReactNoop.render(
       <Parent>
         <Child />
-      </Parent>,
+      </Parent>
     );
-    addComment('Mount');
+    addComment("Mount");
     ReactNoop.flush();
 
     ReactNoop.render(
       <Parent>
         <Child />
-      </Parent>,
+      </Parent>
     );
-    addComment('Update');
+    addComment("Update");
     ReactNoop.flush();
 
     ReactNoop.render(null);
-    addComment('Unmount');
+    addComment("Unmount");
     ReactNoop.flush();
 
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('skips parents during setState', () => {
+  it("skips parents during setState", () => {
     class A extends React.Component {
       render() {
         return <div>{this.props.children}</div>;
@@ -184,19 +184,19 @@ describe('ReactDebugFiberPerf', () => {
         <Parent>
           <B ref={inst => (b = inst)} />
         </Parent>
-      </Parent>,
+      </Parent>
     );
     ReactNoop.flush();
     resetFlamechart();
 
     a.setState({});
     b.setState({});
-    addComment('Should include just A and B, no Parents');
+    addComment("Should include just A and B, no Parents");
     ReactNoop.flush();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('warns on cascading renders from setState', () => {
+  it("warns on cascading renders from setState", () => {
     class Cascading extends React.Component {
       componentDidMount() {
         this.setState({});
@@ -209,18 +209,18 @@ describe('ReactDebugFiberPerf', () => {
     ReactNoop.render(
       <Parent>
         <Cascading />
-      </Parent>,
+      </Parent>
     );
-    addComment('Should print a warning');
+    addComment("Should print a warning");
     ReactNoop.flush();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('warns on cascading renders from top-level render', () => {
+  it("warns on cascading renders from top-level render", () => {
     class Cascading extends React.Component {
       componentDidMount() {
-        ReactNoop.renderToRootWithID(<Child />, 'b');
-        addComment('Scheduling another root from componentDidMount');
+        ReactNoop.renderToRootWithID(<Child />, "b");
+        addComment("Scheduling another root from componentDidMount");
         ReactNoop.flush();
       }
       render() {
@@ -228,13 +228,13 @@ describe('ReactDebugFiberPerf', () => {
       }
     }
 
-    ReactNoop.renderToRootWithID(<Cascading />, 'a');
-    addComment('Rendering the first root');
+    ReactNoop.renderToRootWithID(<Cascading />, "a");
+    addComment("Rendering the first root");
     ReactNoop.flush();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('does not treat setState from cWM or cWRP as cascading', () => {
+  it("does not treat setState from cWM or cWRP as cascading", () => {
     class NotCascading extends React.Component {
       componentWillMount() {
         this.setState({});
@@ -250,30 +250,30 @@ describe('ReactDebugFiberPerf', () => {
     ReactNoop.render(
       <Parent>
         <NotCascading />
-      </Parent>,
+      </Parent>
     );
-    addComment('Should not print a warning');
+    addComment("Should not print a warning");
     ReactNoop.flush();
     ReactNoop.render(
       <Parent>
         <NotCascading />
-      </Parent>,
+      </Parent>
     );
-    addComment('Should not print a warning');
+    addComment("Should not print a warning");
     ReactNoop.flush();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('captures all lifecycles', () => {
+  it("captures all lifecycles", () => {
     class AllLifecycles extends React.Component {
       static childContextTypes = {
-        foo: PropTypes.any,
+        foo: PropTypes.any
       };
       shouldComponentUpdate() {
         return true;
       }
       getChildContext() {
-        return {foo: 42};
+        return { foo: 42 };
       }
       componentWillMount() {}
       componentDidMount() {}
@@ -286,34 +286,34 @@ describe('ReactDebugFiberPerf', () => {
       }
     }
     ReactNoop.render(<AllLifecycles />);
-    addComment('Mount');
+    addComment("Mount");
     ReactNoop.flush();
     ReactNoop.render(<AllLifecycles />);
-    addComment('Update');
+    addComment("Update");
     ReactNoop.flush();
     ReactNoop.render(null);
-    addComment('Unmount');
+    addComment("Unmount");
     ReactNoop.flush();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('measures deprioritized work', () => {
-    addComment('Flush the parent');
+  it("measures deprioritized work", () => {
+    addComment("Flush the parent");
     ReactNoop.flushSync(() => {
       ReactNoop.render(
         <Parent>
           <div hidden={true}>
             <Child />
           </div>
-        </Parent>,
+        </Parent>
       );
     });
-    addComment('Flush the child');
+    addComment("Flush the child");
     ReactNoop.flush();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('measures deferred work in chunks', () => {
+  it("measures deferred work in chunks", () => {
     class A extends React.Component {
       render() {
         return <div>{this.props.children}</div>;
@@ -334,46 +334,46 @@ describe('ReactDebugFiberPerf', () => {
         <B>
           <Child />
         </B>
-      </Parent>,
+      </Parent>
     );
-    addComment('Start mounting Parent and A');
+    addComment("Start mounting Parent and A");
     ReactNoop.flushDeferredPri(40);
-    addComment('Mount B just a little (but not enough to memoize)');
+    addComment("Mount B just a little (but not enough to memoize)");
     ReactNoop.flushDeferredPri(10);
-    addComment('Complete B and Parent');
+    addComment("Complete B and Parent");
     ReactNoop.flushDeferredPri();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('recovers from fatal errors', () => {
+  it("recovers from fatal errors", () => {
     function Baddie() {
-      throw new Error('Game over');
+      throw new Error("Game over");
     }
 
     ReactNoop.render(
       <Parent>
         <Baddie />
-      </Parent>,
+      </Parent>
     );
     try {
-      addComment('Will fatal');
+      addComment("Will fatal");
       ReactNoop.flush();
     } catch (err) {
-      expect(err.message).toBe('Game over');
+      expect(err.message).toBe("Game over");
     }
     ReactNoop.render(
       <Parent>
         <Child />
-      </Parent>,
+      </Parent>
     );
-    addComment('Will reconcile from a clean state');
+    addComment("Will reconcile from a clean state");
     ReactNoop.flush();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('recovers from caught errors', () => {
+  it("recovers from caught errors", () => {
     function Baddie() {
-      throw new Error('Game over');
+      throw new Error("Game over");
     }
 
     function ErrorReport() {
@@ -381,9 +381,9 @@ describe('ReactDebugFiberPerf', () => {
     }
 
     class Boundary extends React.Component {
-      state = {error: null};
+      state = { error: null };
       componentDidCatch(error) {
-        this.setState({error});
+        this.setState({ error });
       }
       render() {
         if (this.state.error) {
@@ -400,14 +400,14 @@ describe('ReactDebugFiberPerf', () => {
             <Baddie />
           </Parent>
         </Boundary>
-      </Parent>,
+      </Parent>
     );
-    addComment('Stop on Baddie and restart from Boundary');
+    addComment("Stop on Baddie and restart from Boundary");
     ReactNoop.flush();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('deduplicates lifecycle names during commit to reduce overhead', () => {
+  it("deduplicates lifecycle names during commit to reduce overhead", () => {
     class A extends React.Component {
       componentDidUpdate() {}
       render() {
@@ -432,7 +432,7 @@ describe('ReactDebugFiberPerf', () => {
         <B />
         <A />
         <B />
-      </Parent>,
+      </Parent>
     );
     ReactNoop.flush();
     resetFlamechart();
@@ -443,9 +443,9 @@ describe('ReactDebugFiberPerf', () => {
         <B />
         <A />
         <B />
-      </Parent>,
+      </Parent>
     );
-    addComment('The commit phase should mention A and B just once');
+    addComment("The commit phase should mention A and B just once");
     ReactNoop.flush();
     ReactNoop.render(
       <Parent>
@@ -453,25 +453,25 @@ describe('ReactDebugFiberPerf', () => {
         <B />
         <A />
         <B cascade={true} />
-      </Parent>,
+      </Parent>
     );
     addComment("Because of deduplication, we don't know B was cascading,");
-    addComment('but we should still see the warning for the commit phase.');
+    addComment("but we should still see the warning for the commit phase.");
     ReactNoop.flush();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('supports returns', () => {
-    function Continuation({isSame}) {
-      return <span prop={isSame ? 'foo==bar' : 'foo!=bar'} />;
+  it("supports returns", () => {
+    function Continuation({ isSame }) {
+      return <span prop={isSame ? "foo==bar" : "foo!=bar"} />;
     }
 
-    function CoChild({bar}) {
+    function CoChild({ bar }) {
       return ReactCallReturn.unstable_createReturn({
         props: {
-          bar: bar,
+          bar: bar
         },
-        continuation: Continuation,
+        continuation: Continuation
       });
     }
 
@@ -489,7 +489,7 @@ describe('ReactDebugFiberPerf', () => {
       return ReactCallReturn.unstable_createCall(
         props.children,
         HandleReturns,
-        props,
+        props
       );
     }
 
@@ -508,20 +508,20 @@ describe('ReactDebugFiberPerf', () => {
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('supports portals', () => {
-    const noopContainer = {children: []};
+  it("supports portals", () => {
+    const noopContainer = { children: [] };
     ReactNoop.render(
-      <Parent>{ReactNoop.createPortal(<Child />, noopContainer, null)}</Parent>,
+      <Parent>{ReactNoop.createPortal(<Child />, noopContainer, null)}</Parent>
     );
     ReactNoop.flush();
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('does not schedule an extra callback if setState is called during a synchronous commit phase', () => {
+  it("does not schedule an extra callback if setState is called during a synchronous commit phase", () => {
     class Component extends React.Component {
-      state = {step: 1};
+      state = { step: 1 };
       componentDidMount() {
-        this.setState({step: 2});
+        this.setState({ step: 2 });
       }
       render() {
         return <span prop={this.state.step} />;
@@ -533,7 +533,7 @@ describe('ReactDebugFiberPerf', () => {
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('warns if an in-progress update is interrupted', () => {
+  it("warns if an in-progress update is interrupted", () => {
     function Foo() {
       return <span />;
     }
@@ -547,7 +547,7 @@ describe('ReactDebugFiberPerf', () => {
     expect(getFlameChart()).toMatchSnapshot();
   });
 
-  it('warns if async work expires (starvation)', () => {
+  it("warns if async work expires (starvation)", () => {
     function Foo() {
       return <span />;
     }

@@ -2,11 +2,11 @@ const React = global.React;
 const ReactDOM = global.ReactDOM;
 
 class Counter extends React.unstable_AsyncComponent {
-  state = {counter: 0};
+  state = { counter: 0 };
   onCommit() {
     setImmediate(() => {
       this.setState(state => ({
-        counter: state.counter + 1,
+        counter: state.counter + 1
       }));
     });
   }
@@ -30,5 +30,5 @@ setInterval(block, interval);
 
 // Should render a counter that increments approximately every second (the
 // expiration time of a low priority update).
-ReactDOM.render(<Counter />, document.getElementById('root'));
+ReactDOM.render(<Counter />, document.getElementById("root"));
 block();

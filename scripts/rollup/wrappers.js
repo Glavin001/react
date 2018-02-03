@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const Bundles = require('./bundles');
-const reactVersion = require('../../package.json').version;
+const Bundles = require("./bundles");
+const reactVersion = require("../../package.json").version;
 
 const UMD_DEV = Bundles.bundleTypes.UMD_DEV;
 const UMD_PROD = Bundles.bundleTypes.UMD_PROD;
@@ -54,7 +54,7 @@ ${license}
 'use strict';
 
 ${
-      globalName === 'ReactNoopRenderer'
+      globalName === "ReactNoopRenderer"
         ? // React Noop needs regenerator runtime because it uses
           // generators but GCC doesn't handle them in the output.
           // So we use Babel for them.
@@ -77,7 +77,7 @@ ${source}
 ${license}
  */
 ${
-      globalName === 'ReactNoopRenderer'
+      globalName === "ReactNoopRenderer"
         ? // React Noop needs regenerator runtime because it uses
           // generators but GCC doesn't handle them in the output.
           // So we use Babel for them.
@@ -149,7 +149,7 @@ ${license}
  */
 
 ${source}`;
-  },
+  }
 };
 
 const reconcilerWrappers = {
@@ -188,7 +188,7 @@ module.exports = function(config) {
 ${source}
   return ($$$reconciler || ($$$reconciler = module.exports))(config);
 };`;
-  },
+  }
 };
 
 function wrapBundle(source, bundleType, globalName, filename, moduleType) {
@@ -196,7 +196,7 @@ function wrapBundle(source, bundleType, globalName, filename, moduleType) {
     // Standalone reconciler is only used by third-party renderers.
     // It is handled separately.
     const wrapper = reconcilerWrappers[bundleType];
-    if (typeof wrapper !== 'function') {
+    if (typeof wrapper !== "function") {
       throw new Error(
         `Unsupported build type for the reconciler package: ${bundleType}.`
       );
@@ -205,12 +205,12 @@ function wrapBundle(source, bundleType, globalName, filename, moduleType) {
   }
   // All the other packages.
   const wrapper = wrappers[bundleType];
-  if (typeof wrapper !== 'function') {
+  if (typeof wrapper !== "function") {
     throw new Error(`Unsupported build type: ${bundleType}.`);
   }
   return wrapper(source, globalName, filename, moduleType);
 }
 
 module.exports = {
-  wrapBundle,
+  wrapBundle
 };

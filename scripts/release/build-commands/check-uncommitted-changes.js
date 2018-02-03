@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
-const chalk = require('chalk');
-const {execRead} = require('../utils');
+const chalk = require("chalk");
+const { execRead } = require("../utils");
 
-module.exports = async ({cwd}) => {
-  const status = await execRead('git diff HEAD', {cwd});
+module.exports = async ({ cwd }) => {
+  const status = await execRead("git diff HEAD", { cwd });
 
   if (status) {
     throw Error(

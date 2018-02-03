@@ -7,7 +7,7 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 /**
  * The warning() and invariant() functions take format strings as their second
@@ -17,9 +17,9 @@
 module.exports = function(context) {
   // we also allow literal strings and concatenated literal strings
   function getLiteralString(node) {
-    if (node.type === 'Literal' && typeof node.value === 'string') {
+    if (node.type === "Literal" && typeof node.value === "string") {
       return node.value;
-    } else if (node.type === 'BinaryExpression' && node.operator === '+') {
+    } else if (node.type === "BinaryExpression" && node.operator === "+") {
       const l = getLiteralString(node.left);
       const r = getLiteralString(node.right);
       if (l !== null && r !== null) {
@@ -34,14 +34,14 @@ module.exports = function(context) {
       // This could be a little smarter by checking context.getScope() to see
       // how warning/invariant was defined.
       const isWarningOrInvariant =
-        node.callee.type === 'Identifier' &&
-        (node.callee.name === 'warning' || node.callee.name === 'invariant');
+        node.callee.type === "Identifier" &&
+        (node.callee.name === "warning" || node.callee.name === "invariant");
       if (!isWarningOrInvariant) {
         return;
       }
       if (node.arguments.length < 2) {
-        context.report(node, '{{name}} takes at least two arguments', {
-          name: node.callee.name,
+        context.report(node, "{{name}} takes at least two arguments", {
+          name: node.callee.name
         });
         return;
       }
@@ -49,17 +49,17 @@ module.exports = function(context) {
       if (format === null) {
         context.report(
           node,
-          'The second argument to {{name}} must be a string literal',
-          {name: node.callee.name}
+          "The second argument to {{name}} must be a string literal",
+          { name: node.callee.name }
         );
         return;
       }
       if (format.length < 10 || /^[s\W]*$/.test(format)) {
         context.report(
           node,
-          'The {{name}} format should be able to uniquely identify this ' +
-            '{{name}}. Please, use a more descriptive format than: {{format}}',
-          {name: node.callee.name, format: format}
+          "The {{name}} format should be able to uniquely identify this " +
+            "{{name}}. Please, use a more descriptive format than: {{format}}",
+          { name: node.callee.name, format: format }
         );
         return;
       }
@@ -68,16 +68,16 @@ module.exports = function(context) {
       if (node.arguments.length !== expectedNArgs) {
         context.report(
           node,
-          'Expected {{expectedNArgs}} arguments in call to {{name}} based on ' +
+          "Expected {{expectedNArgs}} arguments in call to {{name}} based on " +
             'the number of "%s" substitutions, but got {{length}}',
           {
             expectedNArgs: expectedNArgs,
             name: node.callee.name,
-            length: node.arguments.length,
+            length: node.arguments.length
           }
         );
       }
-    },
+    }
   };
 };
 

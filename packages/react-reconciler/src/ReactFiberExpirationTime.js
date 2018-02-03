@@ -34,10 +34,10 @@ function ceiling(num: number, precision: number): number {
 export function computeExpirationBucket(
   currentTime: ExpirationTime,
   expirationInMs: number,
-  bucketSizeMs: number,
+  bucketSizeMs: number
 ): ExpirationTime {
   return ceiling(
     currentTime + expirationInMs / UNIT_SIZE,
-    bucketSizeMs / UNIT_SIZE,
+    bucketSizeMs / UNIT_SIZE
   );
 }

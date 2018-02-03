@@ -7,36 +7,34 @@
  * @flow
  */
 
-import type {CapturedError} from '../ReactFiberScheduler';
+import type { CapturedError } from "../ReactFiberScheduler";
 
 // Module provided by RN:
-import ExceptionsManager from 'ExceptionsManager';
+import ExceptionsManager from "ExceptionsManager";
 
 /**
  * Intercept lifecycle errors and ensure they are shown with the correct stack
  * trace within the native redbox component.
  */
 export function showErrorDialog(capturedError: CapturedError): boolean {
-  const {componentStack, error} = capturedError;
+  const { componentStack, error } = capturedError;
 
   let errorToHandle: Error;
 
   // Typically Errors are thrown but eg strings or null can be thrown as well.
   if (error instanceof Error) {
-    const {message, name} = error;
+    const { message, name } = error;
 
     const summary = message ? `${name}: ${message}` : name;
 
     errorToHandle = error;
 
     try {
-      errorToHandle.message = `${summary}\n\nThis error is located at:${
-        componentStack
-      }`;
+      errorToHandle.message = `${summary}\n\nThis error is located at:${componentStack}`;
     } catch (e) {}
-  } else if (typeof error === 'string') {
+  } else if (typeof error === "string") {
     errorToHandle = new Error(
-      `${error}\n\nThis error is located at:${componentStack}`,
+      `${error}\n\nThis error is located at:${componentStack}`
     );
   } else {
     errorToHandle = new Error(`Unspecified error at:${componentStack}`);

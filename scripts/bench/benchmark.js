@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-const Lighthouse = require('lighthouse');
-const ChromeLauncher = require('lighthouse/lighthouse-cli/chrome-launcher.js')
+const Lighthouse = require("lighthouse");
+const ChromeLauncher = require("lighthouse/lighthouse-cli/chrome-launcher.js")
   .ChromeLauncher;
-const stats = require('stats-analysis');
-const config = require('lighthouse/lighthouse-core/config/perf.json');
-const spawn = require('child_process').spawn;
-const os = require('os');
+const stats = require("stats-analysis");
+const config = require("lighthouse/lighthouse-core/config/perf.json");
+const spawn = require("child_process").spawn;
+const os = require("os");
 
 const timesToRun = 10;
 
@@ -18,22 +18,22 @@ async function runScenario(benchmark, launcher) {
   const results = await Lighthouse(
     `http://localhost:8080/${benchmark}/`,
     {
-      output: 'json',
+      output: "json",
       disableCpuThrottling: false,
-      disableNetworkThrottling: false,
+      disableNetworkThrottling: false
     },
     config
   );
-  const perfMarkings = results.audits['user-timings'].extendedInfo.value;
+  const perfMarkings = results.audits["user-timings"].extendedInfo.value;
   const entries = perfMarkings
     .filter(marker => !marker.isMark)
-    .map(({duration, name}) => ({
+    .map(({ duration, name }) => ({
       entry: name,
-      time: duration,
+      time: duration
     }));
   entries.push({
-    entry: 'First Meaningful Paint',
-    time: results.audits['first-meaningful-paint'].rawValue,
+    entry: "First Meaningful Paint",
+    time: results.audits["first-meaningful-paint"].rawValue
   });
   return entries;
 }
@@ -60,13 +60,13 @@ function calculateAverages(runs) {
   const averages = [];
 
   runs.forEach((entries, x) => {
-    entries.forEach(({entry, time}, i) => {
+    entries.forEach(({ entry, time }, i) => {
       if (i >= averages.length) {
         data.push([time]);
         averages.push({
           entry,
           mean: 0,
-          sem: 0,
+          sem: 0
         });
       } else {
         data[i].push(time);
@@ -85,10 +85,10 @@ function calculateAverages(runs) {
 async function initChrome() {
   const platform = os.platform();
 
-  if (platform === 'linux') {
-    process.env.XVFBARGS = '-screen 0, 1024x768x16';
-    process.env.LIGHTHOUSE_CHROMIUM_PATH = 'chromium-browser';
-    const child = spawn('xvfb start', [{detached: true, stdio: ['ignore']}]);
+  if (platform === "linux") {
+    process.env.XVFBARGS = "-screen 0, 1024x768x16";
+    process.env.LIGHTHOUSE_CHROMIUM_PATH = "chromium-browser";
+    const child = spawn("xvfb start", [{ detached: true, stdio: ["ignore"] }]);
     child.unref();
     // wait for chrome to load then continue
     await wait(3000);
@@ -100,7 +100,7 @@ async function launchChrome(headless) {
   let launcher;
   try {
     launcher = new ChromeLauncher({
-      additionalFlags: [headless ? '--headless' : ''],
+      additionalFlags: [headless ? "--headless" : ""]
     });
     await launcher.isDebuggerReady();
   } catch (e) {
@@ -112,7 +112,7 @@ async function launchChrome(headless) {
 async function runBenchmark(benchmark, headless) {
   const results = {
     runs: [],
-    averages: [],
+    averages: []
   };
 
   await initChrome();

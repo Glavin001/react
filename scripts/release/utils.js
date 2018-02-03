@@ -1,35 +1,35 @@
-'use strict';
+"use strict";
 
-const chalk = require('chalk');
-const {dots} = require('cli-spinners');
-const {exec} = require('child-process-promise');
-const {readdirSync, readFileSync, statSync} = require('fs');
-const logUpdate = require('log-update');
-const {join} = require('path');
+const chalk = require("chalk");
+const { dots } = require("cli-spinners");
+const { exec } = require("child-process-promise");
+const { readdirSync, readFileSync, statSync } = require("fs");
+const logUpdate = require("log-update");
+const { join } = require("path");
 
 const execRead = async (command, options) => {
-  const {stdout} = await exec(command, options);
+  const { stdout } = await exec(command, options);
 
   return stdout.trim();
 };
 
 const unexecutedCommands = [];
 
-const execUnlessDry = async (command, {cwd, dry}) => {
+const execUnlessDry = async (command, { cwd, dry }) => {
   if (dry) {
     unexecutedCommands.push(`${command} # {cwd: ${cwd}}`);
   } else {
-    await exec(command, {cwd});
+    await exec(command, { cwd });
   }
 };
 
 const getPublicPackages = () => {
-  const packagesRoot = join(__dirname, '..', '..', 'packages');
+  const packagesRoot = join(__dirname, "..", "..", "packages");
 
   return readdirSync(packagesRoot).filter(dir => {
-    const packagePath = join(packagesRoot, dir, 'package.json');
+    const packagePath = join(packagesRoot, dir, "package.json");
 
-    if (dir.charAt(0) !== '.' && statSync(packagePath).isFile()) {
+    if (dir.charAt(0) !== "." && statSync(packagePath).isFile()) {
       const packageJSON = JSON.parse(readFileSync(packagePath));
 
       return packageJSON.private !== true;
@@ -43,20 +43,20 @@ const getUnexecutedCommands = () => {
   if (unexecutedCommands.length > 0) {
     return chalk`
       The following commands were not executed because of the {bold --dry} flag:
-      {gray ${unexecutedCommands.join('\n')}}
+      {gray ${unexecutedCommands.join("\n")}}
     `;
   } else {
-    return '';
+    return "";
   }
 };
 
 const logPromise = async (promise, text, isLongRunningTask = false) => {
-  const {frames, interval} = dots;
+  const { frames, interval } = dots;
 
   let index = 0;
 
   const inProgressMessage = `- this may take a few ${
-    isLongRunningTask ? 'minutes' : 'seconds'
+    isLongRunningTask ? "minutes" : "seconds"
   }`;
 
   const id = setInterval(() => {
@@ -71,7 +71,7 @@ const logPromise = async (promise, text, isLongRunningTask = false) => {
 
     clearInterval(id);
 
-    logUpdate(`${chalk.green('✓')} ${text}`);
+    logUpdate(`${chalk.green("✓")} ${text}`);
     logUpdate.done();
 
     return returnValue;
@@ -84,7 +84,7 @@ const logPromise = async (promise, text, isLongRunningTask = false) => {
 
 const runYarnTask = async (cwd, task, errorMessage) => {
   try {
-    await exec(`yarn ${task}`, {cwd});
+    await exec(`yarn ${task}`, { cwd });
   } catch (error) {
     throw Error(
       chalk`
@@ -102,5 +102,5 @@ module.exports = {
   getPublicPackages,
   getUnexecutedCommands,
   logPromise,
-  runYarnTask,
+  runYarnTask
 };

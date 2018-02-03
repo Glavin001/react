@@ -4,30 +4,30 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
+"use strict";
 
-const fs = require('fs');
-const evalToString = require('../shared/evalToString');
-const invertObject = require('./invertObject');
+const fs = require("fs");
+const evalToString = require("../shared/evalToString");
+const invertObject = require("./invertObject");
 
 module.exports = function(babel) {
   const t = babel.types;
 
-  const SEEN_SYMBOL = Symbol('replace-invariant-error-codes.seen');
+  const SEEN_SYMBOL = Symbol("replace-invariant-error-codes.seen");
 
   // Generate a hygienic identifier
   function getProdInvariantIdentifier(path, file, localState) {
     if (!localState.prodInvariantIdentifier) {
       localState.prodInvariantIdentifier = file.addImport(
-        'shared/reactProdInvariant',
-        'default',
-        'prodInvariant'
+        "shared/reactProdInvariant",
+        "default",
+        "prodInvariant"
       );
     }
     return localState.prodInvariantIdentifier;
   }
 
-  const DEV_EXPRESSION = t.identifier('__DEV__');
+  const DEV_EXPRESSION = t.identifier("__DEV__");
 
   return {
     pre() {
@@ -44,7 +44,7 @@ module.exports = function(babel) {
           }
           // Insert `import PROD_INVARIANT from 'reactProdInvariant';`
           // before all `invariant()` calls.
-          if (path.get('callee').isIdentifier({name: 'invariant'})) {
+          if (path.get("callee").isIdentifier({ name: "invariant" })) {
             // Turns this code:
             //
             // invariant(condition, argument, 'foo', 'bar');
@@ -81,7 +81,7 @@ module.exports = function(babel) {
               node.callee,
               [
                 t.booleanLiteral(false),
-                t.stringLiteral(errorMsgLiteral),
+                t.stringLiteral(errorMsgLiteral)
               ].concat(node.arguments.slice(2))
             );
 
@@ -89,7 +89,7 @@ module.exports = function(babel) {
 
             // Avoid caching because we write it as we go.
             const existingErrorMap = JSON.parse(
-              fs.readFileSync(__dirname + '/codes.json', 'utf-8')
+              fs.readFileSync(__dirname + "/codes.json", "utf-8")
             );
             const errorMap = invertObject(existingErrorMap);
 
@@ -123,13 +123,13 @@ module.exports = function(babel) {
 
             path.replaceWith(
               t.ifStatement(
-                t.unaryExpression('!', condition),
+                t.unaryExpression("!", condition),
                 t.blockStatement([body])
               )
             );
           }
-        },
-      },
-    },
+        }
+      }
+    }
   };
 };

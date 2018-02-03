@@ -7,39 +7,39 @@
  * @flow
  */
 
-import type {Fiber} from 'react-reconciler/src/ReactFiber';
-import type {FiberRoot} from 'react-reconciler/src/ReactFiberRoot';
+import type { Fiber } from "react-reconciler/src/ReactFiber";
+import type { FiberRoot } from "react-reconciler/src/ReactFiberRoot";
 
-import ReactFiberReconciler from 'react-reconciler';
-import {batchedUpdates} from 'events/ReactGenericBatching';
-import {findCurrentFiberUsingSlowPath} from 'react-reconciler/reflection';
-import emptyObject from 'fbjs/lib/emptyObject';
+import ReactFiberReconciler from "react-reconciler";
+import { batchedUpdates } from "events/ReactGenericBatching";
+import { findCurrentFiberUsingSlowPath } from "react-reconciler/reflection";
+import emptyObject from "fbjs/lib/emptyObject";
 import {
   Fragment,
   FunctionalComponent,
   ClassComponent,
   HostComponent,
   HostText,
-  HostRoot,
-} from 'shared/ReactTypeOfWork';
-import invariant from 'fbjs/lib/invariant';
+  HostRoot
+} from "shared/ReactTypeOfWork";
+import invariant from "fbjs/lib/invariant";
 
 type TestRendererOptions = {
-  createNodeMock: (element: React$Element<any>) => any,
+  createNodeMock: (element: React$Element<any>) => any
 };
 
 type ReactTestRendererJSON = {|
   type: string,
-  props: {[propName: string]: any},
+  props: { [propName: string]: any },
   children: null | Array<ReactTestRendererNode>,
-  $$typeof?: Symbol, // Optional because we add it with defineProperty().
+  $$typeof?: Symbol // Optional because we add it with defineProperty().
 |};
 type ReactTestRendererNode = ReactTestRendererJSON | string;
 
 type Container = {|
   children: Array<Instance | TextInstance>,
   createNodeMock: Function,
-  tag: 'CONTAINER',
+  tag: "CONTAINER"
 |};
 
 type Props = Object;
@@ -48,18 +48,18 @@ type Instance = {|
   props: Object,
   children: Array<Instance | TextInstance>,
   rootContainerInstance: Container,
-  tag: 'INSTANCE',
+  tag: "INSTANCE"
 |};
 
 type TextInstance = {|
   text: string,
-  tag: 'TEXT',
+  tag: "TEXT"
 |};
 
 type FindOptions = $Shape<{
   // performs a "greedy" search: if a matching node is found, will continue
   // to search within the matching node's children. (default: true)
-  deep: boolean,
+  deep: boolean
 }>;
 
 export type Predicate = (node: ReactTestInstance) => ?boolean;
@@ -68,11 +68,11 @@ const UPDATE_SIGNAL = {};
 
 function getPublicInstance(inst: Instance | TextInstance): * {
   switch (inst.tag) {
-    case 'INSTANCE':
+    case "INSTANCE":
       const createNodeMock = inst.rootContainerInstance.createNodeMock;
       return createNodeMock({
         type: inst.type,
-        props: inst.props,
+        props: inst.props
       });
     default:
       return inst;
@@ -81,7 +81,7 @@ function getPublicInstance(inst: Instance | TextInstance): * {
 
 function appendChild(
   parentInstance: Instance | Container,
-  child: Instance | TextInstance,
+  child: Instance | TextInstance
 ): void {
   const index = parentInstance.children.indexOf(child);
   if (index !== -1) {
@@ -93,7 +93,7 @@ function appendChild(
 function insertBefore(
   parentInstance: Instance | Container,
   child: Instance | TextInstance,
-  beforeChild: Instance | TextInstance,
+  beforeChild: Instance | TextInstance
 ): void {
   const index = parentInstance.children.indexOf(child);
   if (index !== -1) {
@@ -105,7 +105,7 @@ function insertBefore(
 
 function removeChild(
   parentInstance: Instance | Container,
-  child: Instance | TextInstance,
+  child: Instance | TextInstance
 ): void {
   const index = parentInstance.children.indexOf(child);
   parentInstance.children.splice(index, 1);
@@ -133,20 +133,20 @@ const TestRenderer = ReactFiberReconciler({
     props: Props,
     rootContainerInstance: Container,
     hostContext: Object,
-    internalInstanceHandle: Object,
+    internalInstanceHandle: Object
   ): Instance {
     return {
       type,
       props,
       children: [],
       rootContainerInstance,
-      tag: 'INSTANCE',
+      tag: "INSTANCE"
     };
   },
 
   appendInitialChild(
     parentInstance: Instance,
-    child: Instance | TextInstance,
+    child: Instance | TextInstance
   ): void {
     const index = parentInstance.children.indexOf(child);
     if (index !== -1) {
@@ -159,7 +159,7 @@ const TestRenderer = ReactFiberReconciler({
     testElement: Instance,
     type: string,
     props: Props,
-    rootContainerInstance: Container,
+    rootContainerInstance: Container
   ): boolean {
     return false;
   },
@@ -170,7 +170,7 @@ const TestRenderer = ReactFiberReconciler({
     oldProps: Props,
     newProps: Props,
     rootContainerInstance: Container,
-    hostContext: Object,
+    hostContext: Object
   ): null | {} {
     return UPDATE_SIGNAL;
   },
@@ -187,16 +187,16 @@ const TestRenderer = ReactFiberReconciler({
     text: string,
     rootContainerInstance: Container,
     hostContext: Object,
-    internalInstanceHandle: Object,
+    internalInstanceHandle: Object
   ): TextInstance {
     return {
       text,
-      tag: 'TEXT',
+      tag: "TEXT"
     };
   },
 
   scheduleDeferredCallback(fn: Function): number {
-    return setTimeout(fn, 0, {timeRemaining: Infinity});
+    return setTimeout(fn, 0, { timeRemaining: Infinity });
   },
 
   cancelDeferredCallback(timeoutID: number): void {
@@ -219,7 +219,7 @@ const TestRenderer = ReactFiberReconciler({
       type: string,
       oldProps: Props,
       newProps: Props,
-      internalInstanceHandle: Object,
+      internalInstanceHandle: Object
     ): void {
       instance.type = type;
       instance.props = newProps;
@@ -229,7 +229,7 @@ const TestRenderer = ReactFiberReconciler({
       instance: Instance,
       type: string,
       newProps: Props,
-      internalInstanceHandle: Object,
+      internalInstanceHandle: Object
     ): void {
       // noop
     },
@@ -237,7 +237,7 @@ const TestRenderer = ReactFiberReconciler({
     commitTextUpdate(
       textInstance: TextInstance,
       oldText: string,
-      newText: string,
+      newText: string
     ): void {
       textInstance.text = newText;
     },
@@ -250,25 +250,25 @@ const TestRenderer = ReactFiberReconciler({
     insertBefore: insertBefore,
     insertInContainerBefore: insertBefore,
     removeChild: removeChild,
-    removeChildFromContainer: removeChild,
-  },
+    removeChildFromContainer: removeChild
+  }
 });
 
 const defaultTestOptions = {
   createNodeMock: function() {
     return null;
-  },
+  }
 };
 
 function toJSON(inst: Instance | TextInstance): ReactTestRendererNode {
   switch (inst.tag) {
-    case 'TEXT':
+    case "TEXT":
       return inst.text;
-    case 'INSTANCE':
+    case "INSTANCE":
       /* eslint-disable no-unused-vars */
       // We don't include the `children` prop in JSON.
       // Instead, we will include the actual rendered children.
-      const {children, ...props} = inst.props;
+      const { children, ...props } = inst.props;
       /* eslint-enable */
       let renderedChildren = null;
       if (inst.children && inst.children.length) {
@@ -277,10 +277,10 @@ function toJSON(inst: Instance | TextInstance): ReactTestRendererNode {
       const json: ReactTestRendererJSON = {
         type: inst.type,
         props: props,
-        children: renderedChildren,
+        children: renderedChildren
       };
-      Object.defineProperty(json, '$$typeof', {
-        value: Symbol.for('react.test.json'),
+      Object.defineProperty(json, "$$typeof", {
+        value: Symbol.for("react.test.json")
       });
       return json;
     default:
@@ -312,39 +312,39 @@ function toTree(node: ?Fiber) {
       return toTree(node.child);
     case ClassComponent:
       return {
-        nodeType: 'component',
+        nodeType: "component",
         type: node.type,
-        props: {...node.memoizedProps},
+        props: { ...node.memoizedProps },
         instance: node.stateNode,
         rendered: hasSiblings(node.child)
           ? nodeAndSiblingsTrees(node.child)
-          : toTree(node.child),
+          : toTree(node.child)
       };
     case FunctionalComponent: // 1
       return {
-        nodeType: 'component',
+        nodeType: "component",
         type: node.type,
-        props: {...node.memoizedProps},
+        props: { ...node.memoizedProps },
         instance: null,
         rendered: hasSiblings(node.child)
           ? nodeAndSiblingsTrees(node.child)
-          : toTree(node.child),
+          : toTree(node.child)
       };
     case HostComponent: // 5
       return {
-        nodeType: 'host',
+        nodeType: "host",
         type: node.type,
-        props: {...node.memoizedProps},
+        props: { ...node.memoizedProps },
         instance: null, // TODO: use createNodeMock here somehow?
-        rendered: nodeAndSiblingsTrees(node.child),
+        rendered: nodeAndSiblingsTrees(node.child)
       };
     case HostText: // 6
       return node.stateNode.text;
     default:
       invariant(
         false,
-        'toTree() does not yet know how to handle nodes with tag=%s',
-        node.tag,
+        "toTree() does not yet know how to handle nodes with tag=%s",
+        node.tag
       );
   }
 }
@@ -365,7 +365,7 @@ function wrapFiber(fiber: Fiber): ReactTestInstance {
 const validWrapperTypes = new Set([
   FunctionalComponent,
   ClassComponent,
-  HostComponent,
+  HostComponent
 ]);
 
 class ReactTestInstance {
@@ -377,7 +377,7 @@ class ReactTestInstance {
     invariant(
       fiber !== null,
       "Can't read from currently-mounting component. This error is likely " +
-        'caused by a bug in React. Please file an issue.',
+        "caused by a bug in React. Please file an issue."
     );
     return fiber;
   }
@@ -385,9 +385,9 @@ class ReactTestInstance {
   constructor(fiber: Fiber) {
     invariant(
       validWrapperTypes.has(fiber.tag),
-      'Unexpected object passed to ReactTestInstance constructor (tag: %s). ' +
-        'This is probably a bug in React.',
-      fiber.tag,
+      "Unexpected object passed to ReactTestInstance constructor (tag: %s). " +
+        "This is probably a bug in React.",
+      fiber.tag
     );
     this._fiber = fiber;
   }
@@ -433,7 +433,7 @@ class ReactTestInstance {
           children.push(wrapFiber(node));
           break;
         case HostText:
-          children.push('' + node.memoizedProps);
+          children.push("" + node.memoizedProps);
           break;
         case Fragment:
           descend = true;
@@ -441,9 +441,9 @@ class ReactTestInstance {
         default:
           invariant(
             false,
-            'Unsupported component type %s in test renderer. ' +
-              'This is probably a bug in React.',
-            node.tag,
+            "Unsupported component type %s in test renderer. " +
+              "This is probably a bug in React.",
+            node.tag
           );
       }
       if (descend && node.child !== null) {
@@ -466,47 +466,47 @@ class ReactTestInstance {
   // Custom search functions
   find(predicate: Predicate): ReactTestInstance {
     return expectOne(
-      this.findAll(predicate, {deep: false}),
-      `matching custom predicate: ${predicate.toString()}`,
+      this.findAll(predicate, { deep: false }),
+      `matching custom predicate: ${predicate.toString()}`
     );
   }
 
   findByType(type: any): ReactTestInstance {
     return expectOne(
-      this.findAllByType(type, {deep: false}),
-      `with node type: "${type.displayName || type.name}"`,
+      this.findAllByType(type, { deep: false }),
+      `with node type: "${type.displayName || type.name}"`
     );
   }
 
   findByProps(props: Object): ReactTestInstance {
     return expectOne(
-      this.findAllByProps(props, {deep: false}),
-      `with props: ${JSON.stringify(props)}`,
+      this.findAllByProps(props, { deep: false }),
+      `with props: ${JSON.stringify(props)}`
     );
   }
 
   findAll(
     predicate: Predicate,
-    options: ?FindOptions = null,
+    options: ?FindOptions = null
   ): Array<ReactTestInstance> {
     return findAll(this, predicate, options);
   }
 
   findAllByType(
     type: any,
-    options: ?FindOptions = null,
+    options: ?FindOptions = null
   ): Array<ReactTestInstance> {
     return findAll(this, node => node.type === type, options);
   }
 
   findAllByProps(
     props: Object,
-    options: ?FindOptions = null,
+    options: ?FindOptions = null
   ): Array<ReactTestInstance> {
     return findAll(
       this,
       node => node.props && propsMatch(node.props, props),
-      options,
+      options
     );
   }
 }
@@ -514,7 +514,7 @@ class ReactTestInstance {
 function findAll(
   root: ReactTestInstance,
   predicate: Predicate,
-  options: ?FindOptions,
+  options: ?FindOptions
 ): Array<ReactTestInstance> {
   const deep = options ? options.deep : true;
   const results = [];
@@ -527,7 +527,7 @@ function findAll(
   }
 
   for (const child of root.children) {
-    if (typeof child === 'string') {
+    if (typeof child === "string") {
       continue;
     }
     results.push(...findAll(child, predicate, options));
@@ -538,7 +538,7 @@ function findAll(
 
 function expectOne(
   all: Array<ReactTestInstance>,
-  message: string,
+  message: string
 ): ReactTestInstance {
   if (all.length === 1) {
     return all[0];
@@ -546,7 +546,7 @@ function expectOne(
 
   const prefix =
     all.length === 0
-      ? 'No instances found '
+      ? "No instances found "
       : `Expected 1 but found ${all.length} instances `;
 
   throw new Error(prefix + message);
@@ -564,20 +564,20 @@ function propsMatch(props: Object, filter: Object): boolean {
 const ReactTestRendererFiber = {
   create(element: React$Element<any>, options: TestRendererOptions) {
     let createNodeMock = defaultTestOptions.createNodeMock;
-    if (options && typeof options.createNodeMock === 'function') {
+    if (options && typeof options.createNodeMock === "function") {
       createNodeMock = options.createNodeMock;
     }
     let container = {
       children: [],
       createNodeMock,
-      tag: 'CONTAINER',
+      tag: "CONTAINER"
     };
     let root: FiberRoot | null = TestRenderer.createContainer(
       container,
       false,
-      false,
+      false
     );
-    invariant(root != null, 'something went wrong');
+    invariant(root != null, "something went wrong");
     TestRenderer.updateContainer(element, root, null, null);
 
     const entry = {
@@ -620,12 +620,12 @@ const ReactTestRendererFiber = {
           return null;
         }
         return TestRenderer.getPublicRootInstance(root);
-      },
+      }
     };
 
     Object.defineProperty(
       entry,
-      'root',
+      "root",
       ({
         configurable: true,
         enumerable: true,
@@ -634,15 +634,15 @@ const ReactTestRendererFiber = {
             throw new Error("Can't access .root on unmounted test renderer");
           }
           return wrapFiber(root.current.child);
-        },
-      }: Object),
+        }
+      }: Object)
     );
 
     return entry;
   },
 
   /* eslint-disable camelcase */
-  unstable_batchedUpdates: batchedUpdates,
+  unstable_batchedUpdates: batchedUpdates
   /* eslint-enable camelcase */
 };
 

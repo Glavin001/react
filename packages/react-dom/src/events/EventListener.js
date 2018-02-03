@@ -10,7 +10,7 @@
 export function addEventBubbleListener(
   element: Element,
   eventType: string,
-  listener: Function,
+  listener: Function
 ): void {
   element.addEventListener(eventType, listener, false);
 }
@@ -18,7 +18,7 @@ export function addEventBubbleListener(
 export function addEventCaptureListener(
   element: Element,
   eventType: string,
-  listener: Function,
+  listener: Function
 ): void {
   element.addEventListener(eventType, listener, true);
 }

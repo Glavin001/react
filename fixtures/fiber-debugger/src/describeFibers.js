@@ -11,47 +11,47 @@ function getFiberUniqueID(fiber) {
 function getFriendlyTag(tag) {
   switch (tag) {
     case 0:
-      return '[indeterminate]';
+      return "[indeterminate]";
     case 1:
-      return '[fn]';
+      return "[fn]";
     case 2:
-      return '[class]';
+      return "[class]";
     case 3:
-      return '[root]';
+      return "[root]";
     case 4:
-      return '[portal]';
+      return "[portal]";
     case 5:
-      return '[host]';
+      return "[host]";
     case 6:
-      return '[text]';
+      return "[text]";
     case 7:
-      return '[coroutine]';
+      return "[coroutine]";
     case 8:
-      return '[handler]';
+      return "[handler]";
     case 9:
-      return '[yield]';
+      return "[yield]";
     case 10:
-      return '[frag]';
+      return "[frag]";
     default:
-      throw new Error('Unknown tag.');
+      throw new Error("Unknown tag.");
   }
 }
 
 function getFriendlyEffect(effectTag) {
   const effects = {
-    1: 'Performed Work',
-    2: 'Placement',
-    4: 'Update',
-    8: 'Deletion',
-    16: 'Content reset',
-    32: 'Callback',
-    64: 'Err',
-    128: 'Ref',
+    1: "Performed Work",
+    2: "Placement",
+    4: "Update",
+    8: "Deletion",
+    16: "Content reset",
+    32: "Callback",
+    64: "Err",
+    128: "Ref"
   };
   return Object.keys(effects)
     .filter(flag => flag & effectTag)
     .map(flag => effects[flag])
-    .join(' & ');
+    .join(" & ");
 }
 
 export default function describeFibers(rootFiber, workInProgress) {
@@ -73,7 +73,7 @@ export default function describeFibers(rootFiber, workInProgress) {
       id: id,
       tag: getFriendlyTag(fiber.tag),
       effectTag: getFriendlyEffect(fiber.effectTag),
-      type: fiber.type && '<' + (fiber.type.name || fiber.type) + '>',
+      type: fiber.type && "<" + (fiber.type.name || fiber.type) + ">",
       stateNode: `[${typeof fiber.stateNode}]`,
       return: acknowledgeFiber(fiber.return),
       child: acknowledgeFiber(fiber.child),
@@ -81,7 +81,7 @@ export default function describeFibers(rootFiber, workInProgress) {
       nextEffect: acknowledgeFiber(fiber.nextEffect),
       firstEffect: acknowledgeFiber(fiber.firstEffect),
       lastEffect: acknowledgeFiber(fiber.lastEffect),
-      alternate: acknowledgeFiber(fiber.alternate),
+      alternate: acknowledgeFiber(fiber.alternate)
     });
     return id;
   }
@@ -106,6 +106,6 @@ export default function describeFibers(rootFiber, workInProgress) {
     descriptions,
     rootID,
     currentIDs: Array.from(currentIDs),
-    workInProgressID,
+    workInProgressID
   };
 }

@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
-const ReactDOMFB = require('./src/client/ReactDOMFB');
+const ReactDOMFB = require("./src/client/ReactDOMFB");
 
 // TODO: decide on the top-level export form.
 // This is hacky but makes it work with both Rollup and Jest.

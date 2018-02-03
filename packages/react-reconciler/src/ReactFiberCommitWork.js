@@ -7,44 +7,44 @@
  * @flow
  */
 
-import type {HostConfig} from 'react-reconciler';
-import type {Fiber} from './ReactFiber';
+import type { HostConfig } from "react-reconciler";
+import type { Fiber } from "./ReactFiber";
 
 import {
   enableMutatingReconciler,
   enableNoopReconciler,
-  enablePersistentReconciler,
-} from 'shared/ReactFeatureFlags';
+  enablePersistentReconciler
+} from "shared/ReactFeatureFlags";
 import {
   ClassComponent,
   HostRoot,
   HostComponent,
   HostText,
   HostPortal,
-  CallComponent,
-} from 'shared/ReactTypeOfWork';
-import ReactErrorUtils from 'shared/ReactErrorUtils';
-import {Placement, Update, ContentReset} from 'shared/ReactTypeOfSideEffect';
-import invariant from 'fbjs/lib/invariant';
+  CallComponent
+} from "shared/ReactTypeOfWork";
+import ReactErrorUtils from "shared/ReactErrorUtils";
+import { Placement, Update, ContentReset } from "shared/ReactTypeOfSideEffect";
+import invariant from "fbjs/lib/invariant";
 
-import {commitCallbacks} from './ReactFiberUpdateQueue';
-import {onCommitUnmount} from './ReactFiberDevToolsHook';
-import {startPhaseTimer, stopPhaseTimer} from './ReactDebugFiberPerf';
+import { commitCallbacks } from "./ReactFiberUpdateQueue";
+import { onCommitUnmount } from "./ReactFiberDevToolsHook";
+import { startPhaseTimer, stopPhaseTimer } from "./ReactDebugFiberPerf";
 
 const {
   invokeGuardedCallback,
   hasCaughtError,
-  clearCaughtError,
+  clearCaughtError
 } = ReactErrorUtils;
 
 export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   config: HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL>,
-  captureError: (failedFiber: Fiber, error: mixed) => Fiber | null,
+  captureError: (failedFiber: Fiber, error: mixed) => Fiber | null
 ) {
-  const {getPublicInstance, mutation, persistence} = config;
+  const { getPublicInstance, mutation, persistence } = config;
 
   const callComponentWillUnmountWithTimer = function(current, instance) {
-    startPhaseTimer(current, 'componentWillUnmount');
+    startPhaseTimer(current, "componentWillUnmount");
     instance.props = current.memoizedProps;
     instance.state = current.memoizedState;
     instance.componentWillUnmount();
@@ -59,7 +59,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         callComponentWillUnmountWithTimer,
         null,
         current,
-        instance,
+        instance
       );
       if (hasCaughtError()) {
         const unmountError = clearCaughtError();
@@ -99,7 +99,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         const instance = finishedWork.stateNode;
         if (finishedWork.effectTag & Update) {
           if (current === null) {
-            startPhaseTimer(finishedWork, 'componentDidMount');
+            startPhaseTimer(finishedWork, "componentDidMount");
             instance.props = finishedWork.memoizedProps;
             instance.state = finishedWork.memoizedState;
             instance.componentDidMount();
@@ -107,7 +107,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
           } else {
             const prevProps = current.memoizedProps;
             const prevState = current.memoizedState;
-            startPhaseTimer(finishedWork, 'componentDidUpdate');
+            startPhaseTimer(finishedWork, "componentDidUpdate");
             instance.props = finishedWork.memoizedProps;
             instance.state = finishedWork.memoizedState;
             instance.componentDidUpdate(prevProps, prevState);
@@ -155,8 +155,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       default: {
         invariant(
           false,
-          'This unit of work tag should not have side-effects. This error is ' +
-            'likely caused by a bug in React. Please file an issue.',
+          "This unit of work tag should not have side-effects. This error is " +
+            "likely caused by a bug in React. Please file an issue."
         );
       }
     }
@@ -187,7 +187,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   // deletion, so don't let them throw. Host-originating errors should
   // interrupt deletion, so it's okay
   function commitUnmount(current: Fiber): void {
-    if (typeof onCommitUnmount === 'function') {
+    if (typeof onCommitUnmount === "function") {
       onCommitUnmount(current);
     }
 
@@ -195,7 +195,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       case ClassComponent: {
         safelyDetachRef(current);
         const instance = current.stateNode;
-        if (typeof instance.componentWillUnmount === 'function') {
+        if (typeof instance.componentWillUnmount === "function") {
           safelyCallComponentWillUnmount(current, instance);
         }
         return;
@@ -276,11 +276,11 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   if (!mutation) {
     let commitContainer;
     if (persistence) {
-      const {replaceContainerChildren, createContainerChildSet} = persistence;
+      const { replaceContainerChildren, createContainerChildSet } = persistence;
       emptyPortalContainer = function(current: Fiber) {
-        const portal: {containerInfo: C, pendingChildren: CC} =
+        const portal: { containerInfo: C, pendingChildren: CC } =
           current.stateNode;
-        const {containerInfo} = portal;
+        const { containerInfo } = portal;
         const emptyChildSet = createContainerChildSet(containerInfo);
         replaceContainerChildren(containerInfo, emptyChildSet);
       };
@@ -297,17 +297,17 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
           }
           case HostRoot:
           case HostPortal: {
-            const portalOrRoot: {containerInfo: C, pendingChildren: CC} =
+            const portalOrRoot: { containerInfo: C, pendingChildren: CC } =
               finishedWork.stateNode;
-            const {containerInfo, pendingChildren} = portalOrRoot;
+            const { containerInfo, pendingChildren } = portalOrRoot;
             replaceContainerChildren(containerInfo, pendingChildren);
             return;
           }
           default: {
             invariant(
               false,
-              'This unit of work tag should not have side-effects. This error is ' +
-                'likely caused by a bug in React. Please file an issue.',
+              "This unit of work tag should not have side-effects. This error is " +
+                "likely caused by a bug in React. Please file an issue."
             );
           }
         }
@@ -331,12 +331,12 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         },
         commitLifeCycles,
         commitAttachRef,
-        commitDetachRef,
+        commitDetachRef
       };
     } else if (persistence) {
-      invariant(false, 'Persistent reconciler is disabled.');
+      invariant(false, "Persistent reconciler is disabled.");
     } else {
-      invariant(false, 'Noop reconciler is disabled.');
+      invariant(false, "Noop reconciler is disabled.");
     }
   }
   const {
@@ -349,7 +349,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     insertBefore,
     insertInContainerBefore,
     removeChild,
-    removeChildFromContainer,
+    removeChildFromContainer
   } = mutation;
 
   function getHostParentFiber(fiber: Fiber): Fiber {
@@ -362,8 +362,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     }
     invariant(
       false,
-      'Expected to find a host parent. This error is likely caused by a bug ' +
-        'in React. Please file an issue.',
+      "Expected to find a host parent. This error is likely caused by a bug " +
+        "in React. Please file an issue."
     );
   }
 
@@ -438,8 +438,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       default:
         invariant(
           false,
-          'Invalid host parent fiber. This error is likely caused by a bug ' +
-            'in React. Please file an issue.',
+          "Invalid host parent fiber. This error is likely caused by a bug " +
+            "in React. Please file an issue."
         );
     }
     if (parentFiber.effectTag & ContentReset) {
@@ -508,8 +508,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         findParent: while (true) {
           invariant(
             parent !== null,
-            'Expected to find a host parent. This error is likely caused by ' +
-              'a bug in React. Please file an issue.',
+            "Expected to find a host parent. This error is likely caused by " +
+              "a bug in React. Please file an issue."
           );
           switch (parent.tag) {
             case HostComponent:
@@ -610,7 +610,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
               type,
               oldProps,
               newProps,
-              finishedWork,
+              finishedWork
             );
           }
         }
@@ -619,8 +619,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       case HostText: {
         invariant(
           finishedWork.stateNode !== null,
-          'This should have a text node initialized. This error is likely ' +
-            'caused by a bug in React. Please file an issue.',
+          "This should have a text node initialized. This error is likely " +
+            "caused by a bug in React. Please file an issue."
         );
         const textInstance: TI = finishedWork.stateNode;
         const newText: string = finishedWork.memoizedProps;
@@ -638,8 +638,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       default: {
         invariant(
           false,
-          'This unit of work tag should not have side-effects. This error is ' +
-            'likely caused by a bug in React. Please file an issue.',
+          "This unit of work tag should not have side-effects. This error is " +
+            "likely caused by a bug in React. Please file an issue."
         );
       }
     }
@@ -657,9 +657,9 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       commitWork,
       commitLifeCycles,
       commitAttachRef,
-      commitDetachRef,
+      commitDetachRef
     };
   } else {
-    invariant(false, 'Mutating reconciler is disabled.');
+    invariant(false, "Mutating reconciler is disabled.");
   }
 }

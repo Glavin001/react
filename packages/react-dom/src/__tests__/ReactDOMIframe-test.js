@@ -7,26 +7,26 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-describe('ReactDOMIframe', () => {
+describe("ReactDOMIframe", () => {
   let React;
   let ReactDOM;
   let ReactTestUtils;
 
   beforeEach(() => {
-    React = require('react');
-    ReactDOM = require('react-dom');
-    ReactTestUtils = require('react-dom/test-utils');
+    React = require("react");
+    ReactDOM = require("react-dom");
+    ReactTestUtils = require("react-dom/test-utils");
   });
 
-  it('should trigger load events', () => {
+  it("should trigger load events", () => {
     const onLoadSpy = jasmine.createSpy();
-    let iframe = React.createElement('iframe', {onLoad: onLoadSpy});
+    let iframe = React.createElement("iframe", { onLoad: onLoadSpy });
     iframe = ReactTestUtils.renderIntoDocument(iframe);
 
-    const loadEvent = document.createEvent('Event');
-    loadEvent.initEvent('load', false, false);
+    const loadEvent = document.createEvent("Event");
+    loadEvent.initEvent("load", false, false);
 
     ReactDOM.findDOMNode(iframe).dispatchEvent(loadEvent);
 

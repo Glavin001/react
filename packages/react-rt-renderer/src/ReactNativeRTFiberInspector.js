@@ -9,14 +9,14 @@
 
 import {
   findCurrentFiberUsingSlowPath,
-  findCurrentHostFiber,
-} from 'react-reconciler/reflection';
-import getComponentName from 'shared/getComponentName';
-import {HostComponent} from 'shared/ReactTypeOfWork';
-import emptyObject from 'fbjs/lib/emptyObject';
-import invariant from 'fbjs/lib/invariant';
+  findCurrentHostFiber
+} from "react-reconciler/reflection";
+import getComponentName from "shared/getComponentName";
+import { HostComponent } from "shared/ReactTypeOfWork";
+import emptyObject from "fbjs/lib/emptyObject";
+import invariant from "fbjs/lib/invariant";
 
-import {getFiberFromTag} from './ReactNativeRTComponentTree';
+import { getFiberFromTag } from "./ReactNativeRTComponentTree";
 
 let getInspectorDataForViewTag;
 
@@ -57,10 +57,10 @@ if (__DEV__) {
     return fiberHierarchy.map(fiber => ({
       name: getComponentName(fiber),
       getInspectorData: findNodeHandle => ({
-        measure: callback => invariant(false, 'Measure not implemented yet'),
+        measure: callback => invariant(false, "Measure not implemented yet"),
         props: getHostProps(fiber),
-        source: fiber._debugSource,
-      }),
+        source: fiber._debugSource
+      })
     }));
   };
 
@@ -73,7 +73,7 @@ if (__DEV__) {
         hierarchy: [],
         props: emptyObject,
         selection: null,
-        source: null,
+        source: null
       };
     }
 
@@ -89,18 +89,18 @@ if (__DEV__) {
       hierarchy,
       props,
       selection,
-      source,
+      source
     };
   };
 } else {
   getInspectorDataForViewTag = () => {
     invariant(
       false,
-      'getInspectorDataForViewTag() is not available in production',
+      "getInspectorDataForViewTag() is not available in production"
     );
   };
 }
 
 export default {
-  getInspectorDataForViewTag,
+  getInspectorDataForViewTag
 };

@@ -7,10 +7,10 @@
  * @providesModule ReactFeatureFlags
  */
 
-'use strict';
+"use strict";
 
 const ReactFeatureFlags = {
-  debugRenderPhaseSideEffects: false,
+  debugRenderPhaseSideEffects: false
 };
 
 module.exports = ReactFeatureFlags;

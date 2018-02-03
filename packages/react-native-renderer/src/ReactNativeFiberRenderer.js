@@ -7,37 +7,37 @@
  * @flow
  */
 
-import type {ReactNativeBaseComponentViewConfig} from './ReactNativeTypes';
+import type { ReactNativeBaseComponentViewConfig } from "./ReactNativeTypes";
 
-import ReactFiberReconciler from 'react-reconciler';
-import emptyObject from 'fbjs/lib/emptyObject';
-import invariant from 'fbjs/lib/invariant';
+import ReactFiberReconciler from "react-reconciler";
+import emptyObject from "fbjs/lib/emptyObject";
+import invariant from "fbjs/lib/invariant";
 // Modules provided by RN:
-import UIManager from 'UIManager';
-import deepFreezeAndThrowOnMutationInDev from 'deepFreezeAndThrowOnMutationInDev';
+import UIManager from "UIManager";
+import deepFreezeAndThrowOnMutationInDev from "deepFreezeAndThrowOnMutationInDev";
 
-import * as ReactNativeViewConfigRegistry from './ReactNativeViewConfigRegistry';
-import * as ReactNativeAttributePayload from './ReactNativeAttributePayload';
+import * as ReactNativeViewConfigRegistry from "./ReactNativeViewConfigRegistry";
+import * as ReactNativeAttributePayload from "./ReactNativeAttributePayload";
 import {
   precacheFiberNode,
   uncacheFiberNode,
-  updateFiberProps,
-} from './ReactNativeComponentTree';
-import ReactNativeFiberHostComponent from './ReactNativeFiberHostComponent';
-import * as ReactNativeFrameScheduling from './ReactNativeFrameScheduling';
-import ReactNativeTagHandles from './ReactNativeTagHandles';
+  updateFiberProps
+} from "./ReactNativeComponentTree";
+import ReactNativeFiberHostComponent from "./ReactNativeFiberHostComponent";
+import * as ReactNativeFrameScheduling from "./ReactNativeFrameScheduling";
+import ReactNativeTagHandles from "./ReactNativeTagHandles";
 
 export type Container = number;
 export type Instance = {
   _children: Array<Instance | number>,
   _nativeTag: number,
-  viewConfig: ReactNativeBaseComponentViewConfig,
+  viewConfig: ReactNativeBaseComponentViewConfig
 };
 export type Props = Object;
 export type TextInstance = number;
 
 function recursivelyUncacheFiberNode(node: Instance | TextInstance) {
-  if (typeof node === 'number') {
+  if (typeof node === "number") {
     // Leaf node (eg text)
     uncacheFiberNode(node);
   } else {
@@ -50,7 +50,7 @@ function recursivelyUncacheFiberNode(node: Instance | TextInstance) {
 const NativeRenderer = ReactFiberReconciler({
   appendInitialChild(
     parentInstance: Instance,
-    child: Instance | TextInstance,
+    child: Instance | TextInstance
   ): void {
     parentInstance._children.push(child);
   },
@@ -60,7 +60,7 @@ const NativeRenderer = ReactFiberReconciler({
     props: Props,
     rootContainerInstance: Container,
     hostContext: {},
-    internalInstanceHandle: Object,
+    internalInstanceHandle: Object
   ): Instance {
     const tag = ReactNativeTagHandles.allocateTag();
     const viewConfig = ReactNativeViewConfigRegistry.get(type);
@@ -75,14 +75,14 @@ const NativeRenderer = ReactFiberReconciler({
 
     const updatePayload = ReactNativeAttributePayload.create(
       props,
-      viewConfig.validAttributes,
+      viewConfig.validAttributes
     );
 
     UIManager.createView(
       tag, // reactTag
       viewConfig.uiViewClassName, // viewName
       rootContainerInstance, // rootTag
-      updatePayload, // props
+      updatePayload // props
     );
 
     const component = new ReactNativeFiberHostComponent(tag, viewConfig);
@@ -99,15 +99,15 @@ const NativeRenderer = ReactFiberReconciler({
     text: string,
     rootContainerInstance: Container,
     hostContext: {},
-    internalInstanceHandle: Object,
+    internalInstanceHandle: Object
   ): TextInstance {
     const tag = ReactNativeTagHandles.allocateTag();
 
     UIManager.createView(
       tag, // reactTag
-      'RCTRawText', // viewName
+      "RCTRawText", // viewName
       rootContainerInstance, // rootTag
-      {text: text}, // props
+      { text: text } // props
     );
 
     precacheFiberNode(internalInstanceHandle, tag);
@@ -119,7 +119,7 @@ const NativeRenderer = ReactFiberReconciler({
     parentInstance: Instance,
     type: string,
     props: Props,
-    rootContainerInstance: Container,
+    rootContainerInstance: Container
   ): boolean {
     // Don't send a no-op message over the bridge.
     if (parentInstance._children.length === 0) {
@@ -130,14 +130,14 @@ const NativeRenderer = ReactFiberReconciler({
     // Either way we need to pass a copy of the Array to prevent it from being frozen.
     const nativeTags = parentInstance._children.map(
       child =>
-        typeof child === 'number'
+        typeof child === "number"
           ? child // Leaf node (eg text)
-          : child._nativeTag,
+          : child._nativeTag
     );
 
     UIManager.setChildren(
       parentInstance._nativeTag, // containerTag
-      nativeTags, // reactTags
+      nativeTags // reactTags
     );
 
     return false;
@@ -167,7 +167,7 @@ const NativeRenderer = ReactFiberReconciler({
     oldProps: Props,
     newProps: Props,
     rootContainerInstance: Container,
-    hostContext: {},
+    hostContext: {}
   ): null | Object {
     return emptyObject;
   },
@@ -198,9 +198,9 @@ const NativeRenderer = ReactFiberReconciler({
   mutation: {
     appendChild(
       parentInstance: Instance,
-      child: Instance | TextInstance,
+      child: Instance | TextInstance
     ): void {
-      const childTag = typeof child === 'number' ? child : child._nativeTag;
+      const childTag = typeof child === "number" ? child : child._nativeTag;
       const children = parentInstance._children;
       const index = children.indexOf(child);
 
@@ -214,7 +214,7 @@ const NativeRenderer = ReactFiberReconciler({
           [children.length - 1], // moveToIndices
           [], // addChildReactTags
           [], // addAtIndices
-          [], // removeAtIndices
+          [] // removeAtIndices
         );
       } else {
         children.push(child);
@@ -225,31 +225,31 @@ const NativeRenderer = ReactFiberReconciler({
           [], // moveToIndices
           [childTag], // addChildReactTags
           [children.length - 1], // addAtIndices
-          [], // removeAtIndices
+          [] // removeAtIndices
         );
       }
     },
 
     appendChildToContainer(
       parentInstance: Container,
-      child: Instance | TextInstance,
+      child: Instance | TextInstance
     ): void {
-      const childTag = typeof child === 'number' ? child : child._nativeTag;
+      const childTag = typeof child === "number" ? child : child._nativeTag;
       UIManager.setChildren(
         parentInstance, // containerTag
-        [childTag], // reactTags
+        [childTag] // reactTags
       );
     },
 
     commitTextUpdate(
       textInstance: TextInstance,
       oldText: string,
-      newText: string,
+      newText: string
     ): void {
       UIManager.updateView(
         textInstance, // reactTag
-        'RCTRawText', // viewName
-        {text: newText}, // props
+        "RCTRawText", // viewName
+        { text: newText } // props
       );
     },
 
@@ -257,7 +257,7 @@ const NativeRenderer = ReactFiberReconciler({
       instance: Instance,
       type: string,
       newProps: Props,
-      internalInstanceHandle: Object,
+      internalInstanceHandle: Object
     ): void {
       // Noop
     },
@@ -268,7 +268,7 @@ const NativeRenderer = ReactFiberReconciler({
       type: string,
       oldProps: Props,
       newProps: Props,
-      internalInstanceHandle: Object,
+      internalInstanceHandle: Object
     ): void {
       const viewConfig = instance.viewConfig;
 
@@ -277,7 +277,7 @@ const NativeRenderer = ReactFiberReconciler({
       const updatePayload = ReactNativeAttributePayload.diff(
         oldProps,
         newProps,
-        viewConfig.validAttributes,
+        viewConfig.validAttributes
       );
 
       // Avoid the overhead of bridge calls if there's no update.
@@ -287,7 +287,7 @@ const NativeRenderer = ReactFiberReconciler({
         UIManager.updateView(
           instance._nativeTag, // reactTag
           viewConfig.uiViewClassName, // viewName
-          updatePayload, // props
+          updatePayload // props
         );
       }
     },
@@ -295,7 +295,7 @@ const NativeRenderer = ReactFiberReconciler({
     insertBefore(
       parentInstance: Instance,
       child: Instance | TextInstance,
-      beforeChild: Instance | TextInstance,
+      beforeChild: Instance | TextInstance
     ): void {
       const children = (parentInstance: any)._children;
       const index = children.indexOf(child);
@@ -312,13 +312,13 @@ const NativeRenderer = ReactFiberReconciler({
           [beforeChildIndex], // moveToIndices
           [], // addChildReactTags
           [], // addAtIndices
-          [], // removeAtIndices
+          [] // removeAtIndices
         );
       } else {
         const beforeChildIndex = children.indexOf(beforeChild);
         children.splice(beforeChildIndex, 0, child);
 
-        const childTag = typeof child === 'number' ? child : child._nativeTag;
+        const childTag = typeof child === "number" ? child : child._nativeTag;
 
         UIManager.manageChildren(
           (parentInstance: any)._nativeTag, // containerID
@@ -326,7 +326,7 @@ const NativeRenderer = ReactFiberReconciler({
           [], // moveToIndices
           [childTag], // addChildReactTags
           [beforeChildIndex], // addAtIndices
-          [], // removeAtIndices
+          [] // removeAtIndices
         );
       }
     },
@@ -334,21 +334,21 @@ const NativeRenderer = ReactFiberReconciler({
     insertInContainerBefore(
       parentInstance: Container,
       child: Instance | TextInstance,
-      beforeChild: Instance | TextInstance,
+      beforeChild: Instance | TextInstance
     ): void {
       // TODO (bvaughn): Remove this check when...
       // We create a wrapper object for the container in ReactNative render()
       // Or we refactor to remove wrapper objects entirely.
       // For more info on pros/cons see PR #8560 description.
       invariant(
-        typeof parentInstance !== 'number',
-        'Container does not support insertBefore operation',
+        typeof parentInstance !== "number",
+        "Container does not support insertBefore operation"
       );
     },
 
     removeChild(
       parentInstance: Instance,
-      child: Instance | TextInstance,
+      child: Instance | TextInstance
     ): void {
       recursivelyUncacheFiberNode(child);
       const children = parentInstance._children;
@@ -362,13 +362,13 @@ const NativeRenderer = ReactFiberReconciler({
         [], // moveToIndices
         [], // addChildReactTags
         [], // addAtIndices
-        [index], // removeAtIndices
+        [index] // removeAtIndices
       );
     },
 
     removeChildFromContainer(
       parentInstance: Container,
-      child: Instance | TextInstance,
+      child: Instance | TextInstance
     ): void {
       recursivelyUncacheFiberNode(child);
       UIManager.manageChildren(
@@ -377,14 +377,14 @@ const NativeRenderer = ReactFiberReconciler({
         [], // moveToIndices
         [], // addChildReactTags
         [], // addAtIndices
-        [0], // removeAtIndices
+        [0] // removeAtIndices
       );
     },
 
     resetTextContent(instance: Instance): void {
       // Noop
-    },
-  },
+    }
+  }
 });
 
 export default NativeRenderer;

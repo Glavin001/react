@@ -5,40 +5,40 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {accumulateTwoPhaseDispatches} from 'events/EventPropagators';
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment';
-import SyntheticEvent from 'events/SyntheticEvent';
-import isTextInputElement from 'shared/isTextInputElement';
-import getActiveElement from 'fbjs/lib/getActiveElement';
-import shallowEqual from 'fbjs/lib/shallowEqual';
+import { accumulateTwoPhaseDispatches } from "events/EventPropagators";
+import ExecutionEnvironment from "fbjs/lib/ExecutionEnvironment";
+import SyntheticEvent from "events/SyntheticEvent";
+import isTextInputElement from "shared/isTextInputElement";
+import getActiveElement from "fbjs/lib/getActiveElement";
+import shallowEqual from "fbjs/lib/shallowEqual";
 
-import {isListeningToAllDependencies} from './ReactBrowserEventEmitter';
-import {getNodeFromInstance} from '../client/ReactDOMComponentTree';
-import * as ReactInputSelection from '../client/ReactInputSelection';
-import {DOCUMENT_NODE} from '../shared/HTMLNodeType';
+import { isListeningToAllDependencies } from "./ReactBrowserEventEmitter";
+import { getNodeFromInstance } from "../client/ReactDOMComponentTree";
+import * as ReactInputSelection from "../client/ReactInputSelection";
+import { DOCUMENT_NODE } from "../shared/HTMLNodeType";
 
 const skipSelectionChangeEvent =
   ExecutionEnvironment.canUseDOM &&
-  'documentMode' in document &&
+  "documentMode" in document &&
   document.documentMode <= 11;
 
 const eventTypes = {
   select: {
     phasedRegistrationNames: {
-      bubbled: 'onSelect',
-      captured: 'onSelectCapture',
+      bubbled: "onSelect",
+      captured: "onSelectCapture"
     },
     dependencies: [
-      'topBlur',
-      'topContextMenu',
-      'topFocus',
-      'topKeyDown',
-      'topKeyUp',
-      'topMouseDown',
-      'topMouseUp',
-      'topSelectionChange',
-    ],
-  },
+      "topBlur",
+      "topContextMenu",
+      "topFocus",
+      "topKeyDown",
+      "topKeyUp",
+      "topMouseDown",
+      "topMouseUp",
+      "topSelectionChange"
+    ]
+  }
 };
 
 let activeElement = null;
@@ -57,12 +57,12 @@ let mouseDown = false;
  */
 function getSelection(node) {
   if (
-    'selectionStart' in node &&
+    "selectionStart" in node &&
     ReactInputSelection.hasSelectionCapabilities(node)
   ) {
     return {
       start: node.selectionStart,
-      end: node.selectionEnd,
+      end: node.selectionEnd
     };
   } else if (window.getSelection) {
     const selection = window.getSelection();
@@ -70,7 +70,7 @@ function getSelection(node) {
       anchorNode: selection.anchorNode,
       anchorOffset: selection.anchorOffset,
       focusNode: selection.focusNode,
-      focusOffset: selection.focusOffset,
+      focusOffset: selection.focusOffset
     };
   }
 }
@@ -103,10 +103,10 @@ function constructSelectEvent(nativeEvent, nativeEventTarget) {
       eventTypes.select,
       activeElementInst,
       nativeEvent,
-      nativeEventTarget,
+      nativeEventTarget
     );
 
-    syntheticEvent.type = 'select';
+    syntheticEvent.type = "select";
     syntheticEvent.target = activeElement;
 
     accumulateTwoPhaseDispatches(syntheticEvent);
@@ -138,7 +138,7 @@ const SelectEventPlugin = {
     topLevelType,
     targetInst,
     nativeEvent,
-    nativeEventTarget,
+    nativeEventTarget
   ) {
     const doc =
       nativeEventTarget.window === nativeEventTarget
@@ -148,7 +148,7 @@ const SelectEventPlugin = {
           : nativeEventTarget.ownerDocument;
     // Track whether all listeners exists for this plugin. If none exist, we do
     // not extract events. See #3639.
-    if (!doc || !isListeningToAllDependencies('onSelect', doc)) {
+    if (!doc || !isListeningToAllDependencies("onSelect", doc)) {
       return null;
     }
 
@@ -156,28 +156,28 @@ const SelectEventPlugin = {
 
     switch (topLevelType) {
       // Track the input node that has focus.
-      case 'topFocus':
+      case "topFocus":
         if (
           isTextInputElement(targetNode) ||
-          targetNode.contentEditable === 'true'
+          targetNode.contentEditable === "true"
         ) {
           activeElement = targetNode;
           activeElementInst = targetInst;
           lastSelection = null;
         }
         break;
-      case 'topBlur':
+      case "topBlur":
         activeElement = null;
         activeElementInst = null;
         lastSelection = null;
         break;
       // Don't fire the event while the user is dragging. This matches the
       // semantics of the native select event.
-      case 'topMouseDown':
+      case "topMouseDown":
         mouseDown = true;
         break;
-      case 'topContextMenu':
-      case 'topMouseUp':
+      case "topContextMenu":
+      case "topMouseUp":
         mouseDown = false;
         return constructSelectEvent(nativeEvent, nativeEventTarget);
       // Chrome and IE fire non-standard event when selection is changed (and
@@ -189,18 +189,18 @@ const SelectEventPlugin = {
       // keyup, but we check on keydown as well in the case of holding down a
       // key, when multiple keydown events are fired but only one keyup is.
       // This is also our approach for IE handling, for the reason above.
-      case 'topSelectionChange':
+      case "topSelectionChange":
         if (skipSelectionChangeEvent) {
           break;
         }
       // falls through
-      case 'topKeyDown':
-      case 'topKeyUp':
+      case "topKeyDown":
+      case "topKeyUp":
         return constructSelectEvent(nativeEvent, nativeEventTarget);
     }
 
     return null;
-  },
+  }
 };
 
 export default SelectEventPlugin;

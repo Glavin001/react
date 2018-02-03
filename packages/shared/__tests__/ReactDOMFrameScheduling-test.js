@@ -7,20 +7,20 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
-describe('ReactDOMFrameScheduling', () => {
-  it('warns when requestAnimationFrame is not polyfilled in the browser', () => {
+describe("ReactDOMFrameScheduling", () => {
+  it("warns when requestAnimationFrame is not polyfilled in the browser", () => {
     const previousRAF = global.requestAnimationFrame;
     try {
       global.requestAnimationFrame = undefined;
       jest.resetModules();
-      spyOnDev(console, 'error');
-      require('react-dom');
+      spyOnDev(console, "error");
+      require("react-dom");
       if (__DEV__) {
         expect(console.error.calls.count()).toBe(1);
         expect(console.error.calls.argsFor(0)[0]).toContain(
-          'React depends on requestAnimationFrame.',
+          "React depends on requestAnimationFrame."
         );
       }
     } finally {
@@ -30,7 +30,7 @@ describe('ReactDOMFrameScheduling', () => {
 
   // We're just testing importing, not using it.
   // It is important because even isomorphic components may import it.
-  it('can import findDOMNode in Node environment', () => {
+  it("can import findDOMNode in Node environment", () => {
     const previousRAF = global.requestAnimationFrame;
     const previousRIC = global.requestIdleCallback;
     const prevWindow = global.window;
@@ -41,7 +41,7 @@ describe('ReactDOMFrameScheduling', () => {
       delete global.window;
       jest.resetModules();
       expect(() => {
-        require('react-dom');
+        require("react-dom");
       }).not.toThrow();
     } finally {
       global.requestAnimationFrame = previousRAF;

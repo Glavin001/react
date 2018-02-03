@@ -7,6 +7,6 @@
  * @flow
  */
 
-'use strict';
+"use strict";
 
-module.exports = require('./src/unstable-native-dependencies/ReactDOMUnstableNativeDependencies');
+module.exports = require("./src/unstable-native-dependencies/ReactDOMUnstableNativeDependencies");

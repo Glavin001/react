@@ -5,11 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import SyntheticEvent from 'events/SyntheticEvent';
+import SyntheticEvent from "events/SyntheticEvent";
 
 const SyntheticUIEvent = SyntheticEvent.extend({
   view: null,
-  detail: null,
+  detail: null
 });
 
 export default SyntheticUIEvent;

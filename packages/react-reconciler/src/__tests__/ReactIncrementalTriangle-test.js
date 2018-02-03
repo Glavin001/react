@@ -7,62 +7,62 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactNoop;
 
-describe('ReactIncrementalTriangle', () => {
+describe("ReactIncrementalTriangle", () => {
   beforeEach(() => {
     jest.resetModules();
-    React = require('react');
-    ReactNoop = require('react-noop-renderer');
+    React = require("react");
+    ReactNoop = require("react-noop-renderer");
   });
 
   function span(prop) {
-    return {type: 'span', children: [], prop};
+    return { type: "span", children: [], prop };
   }
 
-  const FLUSH = 'FLUSH';
+  const FLUSH = "FLUSH";
   function flush(unitsOfWork = Infinity) {
     return {
       type: FLUSH,
-      unitsOfWork,
+      unitsOfWork
     };
   }
 
-  const STEP = 'STEP';
+  const STEP = "STEP";
   function step(counter) {
     return {
       type: STEP,
-      counter,
+      counter
     };
   }
 
-  const INTERRUPT = 'INTERRUPT';
+  const INTERRUPT = "INTERRUPT";
   function interrupt(key) {
     return {
-      type: INTERRUPT,
+      type: INTERRUPT
     };
   }
 
-  const TOGGLE = 'TOGGLE';
+  const TOGGLE = "TOGGLE";
   function toggle(childIndex) {
     return {
       type: TOGGLE,
-      childIndex,
+      childIndex
     };
   }
 
-  const EXPIRE = 'EXPIRE';
+  const EXPIRE = "EXPIRE";
   function expire(ms) {
     return {
       type: EXPIRE,
-      ms,
+      ms
     };
   }
 
-  const STOP = 'STOP';
+  const STOP = "STOP";
 
   function randomInteger(min, max) {
     min = Math.ceil(min);
@@ -77,26 +77,26 @@ describe('ReactIncrementalTriangle', () => {
       case STEP:
         return `step(${action.counter})`;
       case INTERRUPT:
-        return 'interrupt()';
+        return "interrupt()";
       case TOGGLE:
         return `toggle(${action.childIndex})`;
       case EXPIRE:
         return `expire(${action.ms})`;
       default:
-        throw new Error('Switch statement should be exhaustive');
+        throw new Error("Switch statement should be exhaustive");
     }
   }
 
   function formatActions(actions) {
-    let result = 'simulate(';
+    let result = "simulate(";
     for (let i = 0; i < actions.length; i++) {
       const action = actions[i];
       result += formatAction(action);
       if (i !== actions.length - 1) {
-        result += ', ';
+        result += ", ";
       }
     }
-    result += ')';
+    result += ")";
     return result;
   }
 
@@ -120,7 +120,7 @@ describe('ReactIncrementalTriangle', () => {
       case 4:
         return expire(randomInteger(0, 1500));
       default:
-        throw new Error('Switch statement should be exhaustive');
+        throw new Error("Switch statement should be exhaustive");
     }
   }
 
@@ -145,19 +145,19 @@ describe('ReactIncrementalTriangle', () => {
           this.leafIndex = leafTriangles.length;
           leafTriangles.push(this);
         }
-        this.state = {isActive: false};
+        this.state = { isActive: false };
       }
       activate() {
         if (this.props.depth !== 0) {
-          throw new Error('Cannot activate non-leaf component');
+          throw new Error("Cannot activate non-leaf component");
         }
-        this.setState({isActive: true});
+        this.setState({ isActive: true });
       }
       deactivate() {
         if (this.props.depth !== 0) {
-          throw new Error('Cannot deactivate non-leaf component');
+          throw new Error("Cannot deactivate non-leaf component");
         }
-        this.setState({isActive: false});
+        this.setState({ isActive: false });
       }
       shouldComponentUpdate(nextProps, nextState) {
         return (
@@ -169,31 +169,31 @@ describe('ReactIncrementalTriangle', () => {
         if (yieldAfterEachRender) {
           ReactNoop.yield(this);
         }
-        const {counter, depth} = this.props;
+        const { counter, depth } = this.props;
         if (depth === 0) {
           if (this.state.isActive) {
-            return <span prop={'*' + counter + '*'} />;
+            return <span prop={"*" + counter + "*"} />;
           }
           return <span prop={counter} />;
         }
         return [
           <Triangle key={1} counter={counter} depth={depth - 1} />,
           <Triangle key={2} counter={counter} depth={depth - 1} />,
-          <Triangle key={3} counter={counter} depth={depth - 1} />,
+          <Triangle key={3} counter={counter} depth={depth - 1} />
         ];
       }
     }
 
     let appInstance;
     class App extends React.Component {
-      state = {counter: 0};
+      state = { counter: 0 };
       interrupt() {
         // Triggers a restart from the top.
         this.forceUpdate();
       }
       setCounter(counter) {
         const currentCounter = this.state.counter;
-        this.setState({counter});
+        this.setState({ counter });
         return currentCounter;
       }
       render() {
@@ -210,7 +210,7 @@ describe('ReactIncrementalTriangle', () => {
       if (rootID) {
         ReactNoop.renderToRootWithID(
           <App depth={MAX_DEPTH} key={keyCounter++} />,
-          rootID,
+          rootID
         );
       } else {
         ReactNoop.render(<App depth={MAX_DEPTH} key={keyCounter++} />);
@@ -228,7 +228,7 @@ describe('ReactIncrementalTriangle', () => {
       const children = ReactNoop.getChildren(rootID);
 
       if (children.length !== TOTAL_CHILDREN) {
-        throw new Error('Wrong number of children.');
+        throw new Error("Wrong number of children.");
       }
 
       for (let i = 0; i < children.length; i++) {
@@ -238,7 +238,7 @@ describe('ReactIncrementalTriangle', () => {
         // If an expected counter is not specified, use the value of the
         // first child.
         if (counter === undefined) {
-          if (typeof num === 'string') {
+          if (typeof num === "string") {
             counter = parseInt(num.substr(1, num.length - 2), 10);
           } else {
             counter = num;
@@ -248,13 +248,13 @@ describe('ReactIncrementalTriangle', () => {
         if (i === activeIndex) {
           if (num !== `*${counter}*`) {
             throw new Error(
-              `Triangle ${i} is inconsistent: ${num} instead of *${counter}*.`,
+              `Triangle ${i} is inconsistent: ${num} instead of *${counter}*.`
             );
           }
         } else {
           if (num !== counter) {
             throw new Error(
-              `Triangle ${i} is inconsistent: ${num} instead of ${counter}.`,
+              `Triangle ${i} is inconsistent: ${num} instead of ${counter}.`
             );
           }
         }
@@ -289,7 +289,7 @@ describe('ReactIncrementalTriangle', () => {
             case TOGGLE:
               const targetTriangle = leafTriangles[action.childIndex];
               if (targetTriangle === undefined) {
-                throw new Error('Target index is out of bounds');
+                throw new Error("Target index is out of bounds");
               }
               if (targetTriangle === activeTriangle) {
                 activeTriangle = null;
@@ -328,17 +328,17 @@ describe('ReactIncrementalTriangle', () => {
       simulateAndYield,
       simulate,
       randomAction,
-      randomActions,
+      randomActions
     };
   }
 
-  describe('single root', () => {
+  describe("single root", () => {
     // These tests are not deterministic because the inputs are randomized. It
     // runs a limited number of tests on every run. If it fails, it will output
     // the case that led to the failure. Add the failing case to the test above
     // to prevent future regressions.
-    it('hard-coded tests', () => {
-      const {simulate} = TriangleSimulator();
+    it("hard-coded tests", () => {
+      const { simulate } = TriangleSimulator();
       simulate(step(1));
       simulate(toggle(0), step(1), toggle(0));
       simulate(step(1), toggle(0), flush(2), step(2), toggle(0));
@@ -349,8 +349,8 @@ describe('ReactIncrementalTriangle', () => {
       simulate(interrupt(), step(6), step(7), toggle(6), interrupt());
     });
 
-    it('generative tests', () => {
-      const {simulate} = TriangleSimulator();
+    it("generative tests", () => {
+      const { simulate } = TriangleSimulator();
 
       const limit = 1000;
 
@@ -362,7 +362,7 @@ describe('ReactIncrementalTriangle', () => {
           console.error(
             `Triangle fuzz tester error! Copy and paste the following line into the test suite:
 ${formatActions(actions)}
-          `,
+          `
           );
           throw e;
         }
@@ -370,8 +370,8 @@ ${formatActions(actions)}
     });
   });
 
-  describe('multiple roots', () => {
-    const rootIDs = ['a', 'b', 'c'];
+  describe("multiple roots", () => {
+    const rootIDs = ["a", "b", "c"];
 
     function randomActionsPerRoot() {
       function randomRootID() {
@@ -389,15 +389,15 @@ ${formatActions(actions)}
     }
 
     function formatActionsPerRoot(actions) {
-      let result = 'simulateMultipleRoots(';
+      let result = "simulateMultipleRoots(";
       for (let i = 0; i < actions.length; i++) {
         const [rootID, action] = actions[i];
         result += `['${rootID}', ${formatAction(action)}]`;
         if (i !== actions.length - 1) {
-          result += ', ';
+          result += ", ";
         }
       }
-      result += ')';
+      result += ")";
       return result;
     }
 
@@ -420,19 +420,19 @@ ${formatActions(actions)}
       });
     }
 
-    it('hard-coded tests', () => {
+    it("hard-coded tests", () => {
       simulateMultipleRoots(
-        ['b', interrupt()],
-        ['a', toggle(22)],
-        ['c', step(4)],
-        ['a', expire(10)],
-        ['a', interrupt()],
-        ['c', step(2)],
-        ['b', interrupt()],
+        ["b", interrupt()],
+        ["a", toggle(22)],
+        ["c", step(4)],
+        ["a", expire(10)],
+        ["a", interrupt()],
+        ["c", step(2)],
+        ["b", interrupt()]
       );
     });
 
-    it('generative tests', () => {
+    it("generative tests", () => {
       const limit = 100;
       for (let i = 0; i < limit; i++) {
         const actions = randomActionsPerRoot();
@@ -442,7 +442,7 @@ ${formatActions(actions)}
           console.error(
             `Triangle fuzz tester error! Copy and paste the following line into the test suite:
 ${formatActionsPerRoot(actions)}
-              `,
+              `
           );
           throw e;
         }

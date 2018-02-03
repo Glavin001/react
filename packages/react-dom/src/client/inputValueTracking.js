@@ -10,9 +10,9 @@
 type ValueTracker = {
   getValue(): string,
   setValue(value: string): void,
-  stopTracking(): void,
+  stopTracking(): void
 };
-type WrapperState = {_valueTracker?: ?ValueTracker};
+type WrapperState = { _valueTracker?: ?ValueTracker };
 type ElementWithValueTracker = HTMLInputElement & WrapperState;
 
 function isCheckable(elem: HTMLInputElement) {
@@ -20,8 +20,8 @@ function isCheckable(elem: HTMLInputElement) {
   const nodeName = elem.nodeName;
   return (
     nodeName &&
-    nodeName.toLowerCase() === 'input' &&
-    (type === 'checkbox' || type === 'radio')
+    nodeName.toLowerCase() === "input" &&
+    (type === "checkbox" || type === "radio")
   );
 }
 
@@ -34,13 +34,13 @@ function detachTracker(node: ElementWithValueTracker) {
 }
 
 function getValueFromNode(node: HTMLInputElement): string {
-  let value = '';
+  let value = "";
   if (!node) {
     return value;
   }
 
   if (isCheckable(node)) {
-    value = node.checked ? 'true' : 'false';
+    value = node.checked ? "true" : "false";
   } else {
     value = node.value;
   }
@@ -49,13 +49,13 @@ function getValueFromNode(node: HTMLInputElement): string {
 }
 
 function trackValueOnNode(node: any): ?ValueTracker {
-  const valueField = isCheckable(node) ? 'checked' : 'value';
+  const valueField = isCheckable(node) ? "checked" : "value";
   const descriptor = Object.getOwnPropertyDescriptor(
     node.constructor.prototype,
-    valueField,
+    valueField
   );
 
-  let currentValue = '' + node[valueField];
+  let currentValue = "" + node[valueField];
 
   // if someone has already defined a value or Safari, then bail
   // and don't track value will cause over reporting of changes,
@@ -63,8 +63,8 @@ function trackValueOnNode(node: any): ?ValueTracker {
   // (needed for certain tests that spyOn input values and Safari)
   if (
     node.hasOwnProperty(valueField) ||
-    typeof descriptor.get !== 'function' ||
-    typeof descriptor.set !== 'function'
+    typeof descriptor.get !== "function" ||
+    typeof descriptor.set !== "function"
   ) {
     return;
   }
@@ -76,9 +76,9 @@ function trackValueOnNode(node: any): ?ValueTracker {
       return descriptor.get.call(this);
     },
     set: function(value) {
-      currentValue = '' + value;
+      currentValue = "" + value;
       descriptor.set.call(this, value);
-    },
+    }
   });
 
   const tracker = {
@@ -86,12 +86,12 @@ function trackValueOnNode(node: any): ?ValueTracker {
       return currentValue;
     },
     setValue(value) {
-      currentValue = '' + value;
+      currentValue = "" + value;
     },
     stopTracking() {
       detachTracker(node);
       delete node[valueField];
-    },
+    }
   };
   return tracker;
 }

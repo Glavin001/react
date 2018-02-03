@@ -1,20 +1,20 @@
-'use strict';
+"use strict";
 
-const fs = require('fs');
-const path = require('path');
-const ts = require('typescript');
+const fs = require("fs");
+const path = require("path");
+const ts = require("typescript");
 
 const tsOptions = {
   module: ts.ModuleKind.CommonJS,
-  jsx: ts.JsxEmit.React,
+  jsx: ts.JsxEmit.React
 };
 
 function formatErrorMessage(error) {
   return (
     error.file.filename +
-    '(' +
+    "(" +
     error.file.getLineAndCharacterOfPosition(error.start).line +
-    '): ' +
+    "): " +
     error.messageText
   );
 }
@@ -30,12 +30,12 @@ function compile(content, contentFilename) {
       // `path.normalize` is used to turn forward slashes in
       // the file path into backslashes on Windows.
       filename = path.normalize(filename);
-      if (filename === 'lib.d.ts') {
+      if (filename === "lib.d.ts") {
         source = fs
-          .readFileSync(require.resolve('typescript/lib/lib.d.ts'))
+          .readFileSync(require.resolve("typescript/lib/lib.d.ts"))
           .toString();
       } else if (filename.match(jestRegex)) {
-        source = fs.readFileSync(path.join(__dirname, 'jest.d.ts')).toString();
+        source = fs.readFileSync(path.join(__dirname, "jest.d.ts")).toString();
       } else if (filename === contentFilename) {
         source = content;
       } else if (reactRegex.test(filename)) {
@@ -45,41 +45,41 @@ function compile(content, contentFilename) {
         try {
           source = fs.readFileSync(filename).toString();
         } catch (e) {
-          if (e.code === 'ENOENT') {
+          if (e.code === "ENOENT") {
             return undefined;
           }
           throw e;
         }
       } else {
-        throw new Error('Unexpected filename ' + filename);
+        throw new Error("Unexpected filename " + filename);
       }
-      return ts.createSourceFile(filename, source, 'ES5', '0');
+      return ts.createSourceFile(filename, source, "ES5", "0");
     },
     writeFile(name, text, writeByteOrderMark) {
       if (output === null) {
         output = text;
       } else {
-        throw new Error('Expected only one dependency.');
+        throw new Error("Expected only one dependency.");
       }
     },
     getCanonicalFileName(filename) {
       return filename;
     },
     getCurrentDirectory() {
-      return '';
+      return "";
     },
     getNewLine() {
-      return '\n';
+      return "\n";
     },
     fileExists(filename) {
       return ts.sys.fileExists(filename);
     },
     useCaseSensitiveFileNames() {
       return ts.sys.useCaseSensitiveFileNames;
-    },
+    }
   };
   const program = ts.createProgram(
-    ['lib.d.ts', 'jest.d.ts', contentFilename],
+    ["lib.d.ts", "jest.d.ts", contentFilename],
     tsOptions,
     compilerHost
   );
@@ -88,11 +88,11 @@ function compile(content, contentFilename) {
     .getPreEmitDiagnostics(program)
     .concat(emitResult.diagnostics);
   if (errors.length) {
-    throw new Error(errors.map(formatErrorMessage).join('\n'));
+    throw new Error(errors.map(formatErrorMessage).join("\n"));
   }
   return output;
 }
 
 module.exports = {
-  compile: compile,
+  compile: compile
 };

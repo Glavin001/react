@@ -16,8 +16,8 @@ export type ReactNativeRTType = {
   render(
     element: React$Element<any>,
     containerTag: any,
-    callback: ?Function,
+    callback: ?Function
   ): any,
   unmountComponentAtNode(containerTag: number): any,
-  unstable_batchedUpdates: any, // TODO (bvaughn) Add types
+  unstable_batchedUpdates: any // TODO (bvaughn) Add types
 };

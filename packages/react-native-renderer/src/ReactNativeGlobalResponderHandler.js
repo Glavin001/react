@@ -6,7 +6,7 @@
  */
 
 // Module provided by RN:
-import UIManager from 'UIManager';
+import UIManager from "UIManager";
 
 const ReactNativeGlobalResponderHandler = {
   onChange: function(from, to, blockNativeResponder) {
@@ -16,7 +16,7 @@ const ReactNativeGlobalResponderHandler = {
     } else {
       UIManager.clearJSResponder();
     }
-  },
+  }
 };
 
 export default ReactNativeGlobalResponderHandler;

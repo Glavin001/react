@@ -15,14 +15,14 @@
  *
  */
 
-'use strict';
+"use strict";
 
-var assign = require('object-assign');
-var PropTypes = require('prop-types');
-var React = require('react');
-var ReactART = require('react-art');
+var assign = require("object-assign");
+var PropTypes = require("prop-types");
+var React = require("react");
+var ReactART = require("react-art");
 
-var createReactClass = require('create-react-class');
+var createReactClass = require("create-react-class");
 
 var Path = ReactART.Path;
 var Shape = ReactART.Shape;
@@ -32,10 +32,10 @@ var Shape = ReactART.Shape;
  * components, it must be used in a <Surface>.
  */
 var Circle = createReactClass({
-  displayName: 'Circle',
+  displayName: "Circle",
 
   propTypes: {
-    radius: PropTypes.number.isRequired,
+    radius: PropTypes.number.isRequired
   },
 
   render: function render() {
@@ -46,8 +46,8 @@ var Circle = createReactClass({
       .arc(0, radius * 2, radius)
       .arc(0, radius * -2, radius)
       .close();
-    return React.createElement(Shape, assign({}, this.props, {d: path}));
-  },
+    return React.createElement(Shape, assign({}, this.props, { d: path }));
+  }
 });
 
 module.exports = Circle;

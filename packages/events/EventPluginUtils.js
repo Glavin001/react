@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import ReactErrorUtils from 'shared/ReactErrorUtils';
-import invariant from 'fbjs/lib/invariant';
-import warning from 'fbjs/lib/warning';
+import ReactErrorUtils from "shared/ReactErrorUtils";
+import invariant from "fbjs/lib/invariant";
+import warning from "fbjs/lib/warning";
 
 export let getFiberCurrentPropsFromNode = null;
 export let getInstanceFromNode = null;
@@ -18,31 +18,31 @@ export const injection = {
     ({
       getFiberCurrentPropsFromNode,
       getInstanceFromNode,
-      getNodeFromInstance,
+      getNodeFromInstance
     } = Injected);
     if (__DEV__) {
       warning(
         getNodeFromInstance && getInstanceFromNode,
-        'EventPluginUtils.injection.injectComponentTree(...): Injected ' +
-          'module is missing getNodeFromInstance or getInstanceFromNode.',
+        "EventPluginUtils.injection.injectComponentTree(...): Injected " +
+          "module is missing getNodeFromInstance or getInstanceFromNode."
       );
     }
-  },
+  }
 };
 
 export function isEndish(topLevelType) {
   return (
-    topLevelType === 'topMouseUp' ||
-    topLevelType === 'topTouchEnd' ||
-    topLevelType === 'topTouchCancel'
+    topLevelType === "topMouseUp" ||
+    topLevelType === "topTouchEnd" ||
+    topLevelType === "topTouchCancel"
   );
 }
 
 export function isMoveish(topLevelType) {
-  return topLevelType === 'topMouseMove' || topLevelType === 'topTouchMove';
+  return topLevelType === "topMouseMove" || topLevelType === "topTouchMove";
 }
 export function isStartish(topLevelType) {
-  return topLevelType === 'topMouseDown' || topLevelType === 'topTouchStart';
+  return topLevelType === "topMouseDown" || topLevelType === "topTouchStart";
 }
 
 let validateEventDispatches;
@@ -63,7 +63,7 @@ if (__DEV__) {
 
     warning(
       instancesIsArr === listenersIsArr && instancesLen === listenersLen,
-      'EventPluginUtils: Invalid `event`.',
+      "EventPluginUtils: Invalid `event`."
     );
   };
 }
@@ -76,13 +76,13 @@ if (__DEV__) {
  * @param {*} inst Internal component instance
  */
 function executeDispatch(event, simulated, listener, inst) {
-  const type = event.type || 'unknown-event';
+  const type = event.type || "unknown-event";
   event.currentTarget = getNodeFromInstance(inst);
   ReactErrorUtils.invokeGuardedCallbackAndCatchFirstError(
     type,
     listener,
     undefined,
-    event,
+    event
   );
   event.currentTarget = null;
 }
@@ -106,7 +106,7 @@ export function executeDispatchesInOrder(event, simulated) {
         event,
         simulated,
         dispatchListeners[i],
-        dispatchInstances[i],
+        dispatchInstances[i]
       );
     }
   } else if (dispatchListeners) {
@@ -174,7 +174,7 @@ export function executeDirectDispatch(event) {
   const dispatchInstance = event._dispatchInstances;
   invariant(
     !Array.isArray(dispatchListener),
-    'executeDirectDispatch(...): Invalid `event`.',
+    "executeDirectDispatch(...): Invalid `event`."
   );
   event.currentTarget = dispatchListener
     ? getNodeFromInstance(dispatchInstance)

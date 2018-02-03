@@ -7,22 +7,22 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactDOM;
 
-describe('EnterLeaveEventPlugin', () => {
+describe("EnterLeaveEventPlugin", () => {
   let container;
 
   beforeEach(() => {
     jest.resetModules();
 
-    React = require('react');
-    ReactDOM = require('react-dom');
+    React = require("react");
+    ReactDOM = require("react-dom");
 
     // The container has to be attached for events to fire.
-    container = document.createElement('div');
+    container = document.createElement("div");
     document.body.appendChild(container);
   });
 
@@ -31,12 +31,12 @@ describe('EnterLeaveEventPlugin', () => {
     container = null;
   });
 
-  it('should set onMouseLeave relatedTarget properly in iframe', () => {
-    const iframe = document.createElement('iframe');
+  it("should set onMouseLeave relatedTarget properly in iframe", () => {
+    const iframe = document.createElement("iframe");
     container.appendChild(iframe);
     const iframeDocument = iframe.contentDocument;
     iframeDocument.write(
-      '<!DOCTYPE html><html><head></head><body><div></div></body></html>',
+      "<!DOCTYPE html><html><head></head><body><div></div></body></html>"
     );
     iframeDocument.close();
 
@@ -48,15 +48,15 @@ describe('EnterLeaveEventPlugin', () => {
           leaveEvents.push(e);
         }}
       />,
-      iframeDocument.body.getElementsByTagName('div')[0],
+      iframeDocument.body.getElementsByTagName("div")[0]
     );
 
     node.dispatchEvent(
-      new MouseEvent('mouseout', {
+      new MouseEvent("mouseout", {
         bubbles: true,
         cancelable: true,
-        relatedTarget: iframe.contentWindow,
-      }),
+        relatedTarget: iframe.contentWindow
+      })
     );
 
     expect(leaveEvents.length).toBe(1);
@@ -64,12 +64,12 @@ describe('EnterLeaveEventPlugin', () => {
     expect(leaveEvents[0].relatedTarget).toBe(iframe.contentWindow);
   });
 
-  it('should set onMouseEnter relatedTarget properly in iframe', () => {
-    const iframe = document.createElement('iframe');
+  it("should set onMouseEnter relatedTarget properly in iframe", () => {
+    const iframe = document.createElement("iframe");
     container.appendChild(iframe);
     const iframeDocument = iframe.contentDocument;
     iframeDocument.write(
-      '<!DOCTYPE html><html><head></head><body><div></div></body></html>',
+      "<!DOCTYPE html><html><head></head><body><div></div></body></html>"
     );
     iframeDocument.close();
 
@@ -81,15 +81,15 @@ describe('EnterLeaveEventPlugin', () => {
           enterEvents.push(e);
         }}
       />,
-      iframeDocument.body.getElementsByTagName('div')[0],
+      iframeDocument.body.getElementsByTagName("div")[0]
     );
 
     node.dispatchEvent(
-      new MouseEvent('mouseover', {
+      new MouseEvent("mouseover", {
         bubbles: true,
         cancelable: true,
-        relatedTarget: null,
-      }),
+        relatedTarget: null
+      })
     );
 
     expect(enterEvents.length).toBe(1);
@@ -98,7 +98,7 @@ describe('EnterLeaveEventPlugin', () => {
   });
 
   // Regression test for https://github.com/facebook/react/issues/10906.
-  it('should find the common parent after updates', () => {
+  it("should find the common parent after updates", () => {
     let parentEnterCalls = 0;
     let childEnterCalls = 0;
     let parent = null;
@@ -108,7 +108,8 @@ describe('EnterLeaveEventPlugin', () => {
         return (
           <div
             onMouseEnter={() => parentEnterCalls++}
-            ref={node => (parent = node)}>
+            ref={node => (parent = node)}
+          >
             {this.props.showChild && (
               <div onMouseEnter={() => childEnterCalls++} />
             )}
@@ -123,11 +124,11 @@ describe('EnterLeaveEventPlugin', () => {
 
     // Enter from parent into the child.
     parent.dispatchEvent(
-      new MouseEvent('mouseout', {
+      new MouseEvent("mouseout", {
         bubbles: true,
         cancelable: true,
-        relatedTarget: parent.firstChild,
-      }),
+        relatedTarget: parent.firstChild
+      })
     );
 
     // Entering a child should fire on the child, not on the parent.

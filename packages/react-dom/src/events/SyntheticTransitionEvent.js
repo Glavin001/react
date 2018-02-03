@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import SyntheticEvent from 'events/SyntheticEvent';
+import SyntheticEvent from "events/SyntheticEvent";
 
 /**
  * @interface Event
@@ -15,7 +15,7 @@ import SyntheticEvent from 'events/SyntheticEvent';
 const SyntheticTransitionEvent = SyntheticEvent.extend({
   propertyName: null,
   elapsedTime: null,
-  pseudoElement: null,
+  pseudoElement: null
 });
 
 export default SyntheticTransitionEvent;

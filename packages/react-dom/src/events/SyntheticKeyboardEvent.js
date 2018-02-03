@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import SyntheticUIEvent from './SyntheticUIEvent';
-import getEventCharCode from './getEventCharCode';
-import getEventKey from './getEventKey';
-import getEventModifierState from './getEventModifierState';
+import SyntheticUIEvent from "./SyntheticUIEvent";
+import getEventCharCode from "./getEventCharCode";
+import getEventKey from "./getEventKey";
+import getEventModifierState from "./getEventModifierState";
 
 /**
  * @interface KeyboardEvent
@@ -31,7 +31,7 @@ const SyntheticKeyboardEvent = SyntheticUIEvent.extend({
 
     // KeyPress is deprecated, but its replacement is not yet final and not
     // implemented in any major browser. Only KeyPress has charCode.
-    if (event.type === 'keypress') {
+    if (event.type === "keypress") {
       return getEventCharCode(event);
     }
     return 0;
@@ -44,7 +44,7 @@ const SyntheticKeyboardEvent = SyntheticUIEvent.extend({
     // which cannot be detected. Assuming that it is a US keyboard layout
     // provides a surprisingly accurate mapping for US and European users.
     // Due to this, it is left to the user to implement at this time.
-    if (event.type === 'keydown' || event.type === 'keyup') {
+    if (event.type === "keydown" || event.type === "keyup") {
       return event.keyCode;
     }
     return 0;
@@ -52,14 +52,14 @@ const SyntheticKeyboardEvent = SyntheticUIEvent.extend({
   which: function(event) {
     // `which` is an alias for either `keyCode` or `charCode` depending on the
     // type of the event.
-    if (event.type === 'keypress') {
+    if (event.type === "keypress") {
       return getEventCharCode(event);
     }
-    if (event.type === 'keydown' || event.type === 'keyup') {
+    if (event.type === "keydown" || event.type === "keyup") {
       return event.keyCode;
     }
     return 0;
-  },
+  }
 });
 
 export default SyntheticKeyboardEvent;

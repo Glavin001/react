@@ -5,14 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
-const minimatch = require('minimatch');
-const CLIEngine = require('eslint').CLIEngine;
-const listChangedFiles = require('../shared/listChangedFiles');
-const {es5Paths, esNextPaths} = require('../shared/pathsByLanguageVersion');
+const minimatch = require("minimatch");
+const CLIEngine = require("eslint").CLIEngine;
+const listChangedFiles = require("../shared/listChangedFiles");
+const { es5Paths, esNextPaths } = require("../shared/pathsByLanguageVersion");
 
-const allPaths = ['**/*.js'];
+const allPaths = ["**/*.js"];
 
 let changedFiles = null;
 
@@ -46,7 +46,7 @@ function runESLintOnFilesWithOptions(filePatterns, onlyChanged, options) {
   return {
     output: formatter(messages),
     errorCount: report.errorCount,
-    warningCount: report.warningCount - ignoredMessageCount,
+    warningCount: report.warningCount - ignoredMessageCount
   };
 }
 
@@ -55,30 +55,30 @@ function intersect(files, patterns) {
   patterns.forEach(pattern => {
     intersection = [
       ...intersection,
-      ...minimatch.match(files, pattern, {matchBase: true}),
+      ...minimatch.match(files, pattern, { matchBase: true })
     ];
   });
   return [...new Set(intersection)];
 }
 
-function runESLint({onlyChanged}) {
-  if (typeof onlyChanged !== 'boolean') {
-    throw new Error('Pass options.onlyChanged as a boolean.');
+function runESLint({ onlyChanged }) {
+  if (typeof onlyChanged !== "boolean") {
+    throw new Error("Pass options.onlyChanged as a boolean.");
   }
   let errorCount = 0;
   let warningCount = 0;
-  let output = '';
+  let output = "";
   [
     runESLintOnFilesWithOptions(allPaths, onlyChanged, {
       configFile: `${__dirname}/eslintrc.default.js`,
-      ignorePattern: [...es5Paths, ...esNextPaths],
+      ignorePattern: [...es5Paths, ...esNextPaths]
     }),
     runESLintOnFilesWithOptions(esNextPaths, onlyChanged, {
-      configFile: `${__dirname}/eslintrc.esnext.js`,
+      configFile: `${__dirname}/eslintrc.esnext.js`
     }),
     runESLintOnFilesWithOptions(es5Paths, onlyChanged, {
-      configFile: `${__dirname}/eslintrc.es5.js`,
-    }),
+      configFile: `${__dirname}/eslintrc.es5.js`
+    })
   ].forEach(result => {
     errorCount += result.errorCount;
     warningCount += result.warningCount;

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {TEXT_NODE} from '../shared/HTMLNodeType';
+import { TEXT_NODE } from "../shared/HTMLNodeType";
 
 /**
  * Given any node return the first leaf node without children.
@@ -55,7 +55,7 @@ function getNodeForCharacterOffset(root, offset) {
       if (nodeStart <= offset && nodeEnd >= offset) {
         return {
           node: node,
-          offset: offset - nodeStart,
+          offset: offset - nodeStart
         };
       }
 

@@ -15,9 +15,9 @@ import {
   getPropertyInfo,
   isAttributeNameSafe,
   shouldIgnoreAttribute,
-  shouldRemoveAttribute,
-} from '../shared/DOMProperty';
-import quoteAttributeValueForBrowser from './quoteAttributeValueForBrowser';
+  shouldRemoveAttribute
+} from "../shared/DOMProperty";
+import quoteAttributeValueForBrowser from "./quoteAttributeValueForBrowser";
 
 /**
  * Operations for dealing with DOM properties.
@@ -30,7 +30,7 @@ import quoteAttributeValueForBrowser from './quoteAttributeValueForBrowser';
  * @return {string} Markup string.
  */
 export function createMarkupForID(id: string): string {
-  return ID_ATTRIBUTE_NAME + '=' + quoteAttributeValueForBrowser(id);
+  return ID_ATTRIBUTE_NAME + "=" + quoteAttributeValueForBrowser(id);
 }
 
 export function createMarkupForRoot(): string {
@@ -46,22 +46,22 @@ export function createMarkupForRoot(): string {
  */
 export function createMarkupForProperty(name: string, value: mixed): string {
   const propertyInfo = getPropertyInfo(name);
-  if (name !== 'style' && shouldIgnoreAttribute(name, propertyInfo, false)) {
-    return '';
+  if (name !== "style" && shouldIgnoreAttribute(name, propertyInfo, false)) {
+    return "";
   }
   if (shouldRemoveAttribute(name, value, propertyInfo, false)) {
-    return '';
+    return "";
   }
   if (propertyInfo !== null) {
     const attributeName = propertyInfo.attributeName;
-    const {type} = propertyInfo;
+    const { type } = propertyInfo;
     if (type === BOOLEAN || (type === OVERLOADED_BOOLEAN && value === true)) {
       return attributeName + '=""';
     } else {
-      return attributeName + '=' + quoteAttributeValueForBrowser(value);
+      return attributeName + "=" + quoteAttributeValueForBrowser(value);
     }
   } else {
-    return name + '=' + quoteAttributeValueForBrowser(value);
+    return name + "=" + quoteAttributeValueForBrowser(value);
   }
 }
 
@@ -74,10 +74,10 @@ export function createMarkupForProperty(name: string, value: mixed): string {
  */
 export function createMarkupForCustomAttribute(
   name: string,
-  value: mixed,
+  value: mixed
 ): string {
   if (!isAttributeNameSafe(name) || value == null) {
-    return '';
+    return "";
   }
-  return name + '=' + quoteAttributeValueForBrowser(value);
+  return name + "=" + quoteAttributeValueForBrowser(value);
 }

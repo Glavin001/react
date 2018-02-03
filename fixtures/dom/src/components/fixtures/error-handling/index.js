@@ -1,5 +1,5 @@
-import FixtureSet from '../../FixtureSet';
-import TestCase from '../../TestCase';
+import FixtureSet from "../../FixtureSet";
+import TestCase from "../../TestCase";
 
 const React = window.React;
 const ReactDOM = window.ReactDOM;
@@ -9,19 +9,19 @@ function BadRender(props) {
 }
 class ErrorBoundary extends React.Component {
   static defaultProps = {
-    buttonText: 'Trigger error',
+    buttonText: "Trigger error"
   };
   state = {
     shouldThrow: false,
     didThrow: false,
-    error: null,
+    error: null
   };
   componentDidCatch(error) {
-    this.setState({error, didThrow: true});
+    this.setState({ error, didThrow: true });
   }
   triggerError = () => {
     this.setState({
-      shouldThrow: true,
+      shouldThrow: true
     });
   };
   render() {
@@ -29,7 +29,7 @@ class ErrorBoundary extends React.Component {
       if (this.state.error) {
         return <p>Captured an error: {this.state.error.message}</p>;
       } else {
-        return <p>Captured an error: {'' + this.state.error}</p>;
+        return <p>Captured an error: {"" + this.state.error}</p>;
       }
     }
     if (this.state.shouldThrow) {
@@ -39,9 +39,9 @@ class ErrorBoundary extends React.Component {
   }
 }
 class Example extends React.Component {
-  state = {key: 0};
+  state = { key: 0 };
   restart = () => {
-    this.setState(state => ({key: state.key + 1}));
+    this.setState(state => ({ key: state.key + 1 }));
   };
   render() {
     return (
@@ -58,7 +58,7 @@ class Example extends React.Component {
 }
 
 class TriggerErrorAndCatch extends React.Component {
-  container = document.createElement('div');
+  container = document.createElement("div");
 
   triggerErrorAndCatch = () => {
     try {
@@ -66,7 +66,7 @@ class TriggerErrorAndCatch extends React.Component {
         ReactDOM.render(
           <BadRender
             doThrow={() => {
-              throw new Error('Caught error');
+              throw new Error("Caught error");
             }}
           />,
           this.container
@@ -90,7 +90,8 @@ export default class ErrorHandlingTestCases extends React.Component {
       <FixtureSet title="Error handling" description="">
         <TestCase
           title="Break on uncaught exceptions"
-          description="In DEV, errors should be treated as uncaught, even though React catches them internally">
+          description="In DEV, errors should be treated as uncaught, even though React catches them internally"
+        >
           <TestCase.Steps>
             <li>Open the browser DevTools</li>
             <li>Make sure "Pause on exceptions" is enabled</li>
@@ -106,7 +107,7 @@ export default class ErrorHandlingTestCases extends React.Component {
           </TestCase.ExpectedResult>
           <Example
             doThrow={() => {
-              throw new Error('Oops!');
+              throw new Error("Oops!");
             }}
           />
         </TestCase>
@@ -127,7 +128,8 @@ export default class ErrorHandlingTestCases extends React.Component {
         </TestCase>
         <TestCase
           title="Cross-origin errors (development mode only)"
-          description="">
+          description=""
+        >
           <TestCase.Steps>
             <li>Click the "Trigger cross-origin error" button</li>
             <li>Click the reset button</li>
@@ -149,7 +151,8 @@ export default class ErrorHandlingTestCases extends React.Component {
         </TestCase>
         <TestCase
           title="Errors are logged even if they're caught (development mode only)"
-          description="">
+          description=""
+        >
           <TestCase.Steps>
             <li>Click the "Trigger render error and catch" button</li>
           </TestCase.Steps>

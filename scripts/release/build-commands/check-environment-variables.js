@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 
-const chalk = require('chalk');
+const chalk = require("chalk");
 
 module.exports = () => {
   if (!process.env.CIRCLE_CI_API_TOKEN) {

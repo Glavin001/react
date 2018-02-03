@@ -7,14 +7,14 @@
  * @flow
  */
 
-import type {HostConfig} from 'react-reconciler';
-import type {Fiber} from './ReactFiber';
+import type { HostConfig } from "react-reconciler";
+import type { Fiber } from "./ReactFiber";
 
-import {HostComponent, HostText, HostRoot} from 'shared/ReactTypeOfWork';
-import {Deletion, Placement} from 'shared/ReactTypeOfSideEffect';
-import invariant from 'fbjs/lib/invariant';
+import { HostComponent, HostText, HostRoot } from "shared/ReactTypeOfWork";
+import { Deletion, Placement } from "shared/ReactTypeOfSideEffect";
+import invariant from "fbjs/lib/invariant";
 
-import {createFiberFromHostInstanceForDeletion} from './ReactFiber';
+import { createFiberFromHostInstanceForDeletion } from "./ReactFiber";
 
 export type HydrationContext<C, CX> = {
   enterHydrationState(fiber: Fiber): boolean,
@@ -23,16 +23,16 @@ export type HydrationContext<C, CX> = {
   prepareToHydrateHostInstance(
     fiber: Fiber,
     rootContainerInstance: C,
-    hostContext: CX,
+    hostContext: CX
   ): boolean,
   prepareToHydrateHostTextInstance(fiber: Fiber): boolean,
-  popHydrationState(fiber: Fiber): boolean,
+  popHydrationState(fiber: Fiber): boolean
 };
 
 export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
-  config: HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL>,
+  config: HostConfig<T, P, I, TI, HI, PI, C, CC, CX, PL>
 ): HydrationContext<C, CX> {
-  const {shouldSetTextContent, hydration} = config;
+  const { shouldSetTextContent, hydration } = config;
 
   // If this doesn't have hydration mode.
   if (!hydration) {
@@ -45,20 +45,20 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       prepareToHydrateHostInstance() {
         invariant(
           false,
-          'Expected prepareToHydrateHostInstance() to never be called. ' +
-            'This error is likely caused by a bug in React. Please file an issue.',
+          "Expected prepareToHydrateHostInstance() to never be called. " +
+            "This error is likely caused by a bug in React. Please file an issue."
         );
       },
       prepareToHydrateHostTextInstance() {
         invariant(
           false,
-          'Expected prepareToHydrateHostTextInstance() to never be called. ' +
-            'This error is likely caused by a bug in React. Please file an issue.',
+          "Expected prepareToHydrateHostTextInstance() to never be called. " +
+            "This error is likely caused by a bug in React. Please file an issue."
         );
       },
       popHydrationState(fiber: Fiber) {
         return false;
-      },
+      }
     };
   }
 
@@ -76,7 +76,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     didNotFindHydratableContainerInstance,
     didNotFindHydratableContainerTextInstance,
     didNotFindHydratableInstance,
-    didNotFindHydratableTextInstance,
+    didNotFindHydratableTextInstance
   } = hydration;
 
   // The deepest Fiber on the stack involved in a hydration context.
@@ -99,7 +99,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
         case HostRoot:
           didNotHydrateContainerInstance(
             returnFiber.stateNode.containerInfo,
-            instance,
+            instance
           );
           break;
         case HostComponent:
@@ -107,7 +107,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
             returnFiber.type,
             returnFiber.memoizedProps,
             returnFiber.stateNode,
-            instance,
+            instance
           );
           break;
       }
@@ -144,7 +144,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
               didNotFindHydratableContainerInstance(
                 parentContainer,
                 type,
-                props,
+                props
               );
               break;
             case HostText:
@@ -167,7 +167,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
                 parentProps,
                 parentInstance,
                 type,
-                props,
+                props
               );
               break;
             case HostText:
@@ -176,7 +176,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
                 parentType,
                 parentProps,
                 parentInstance,
-                text,
+                text
               );
               break;
           }
@@ -244,7 +244,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       // fiber associated with it.
       deleteHydratableInstance(
         (hydrationParentFiber: any),
-        nextHydratableInstance,
+        nextHydratableInstance
       );
     }
     hydrationParentFiber = fiber;
@@ -254,7 +254,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
   function prepareToHydrateHostInstance(
     fiber: Fiber,
     rootContainerInstance: C,
-    hostContext: CX,
+    hostContext: CX
   ): boolean {
     const instance: I = fiber.stateNode;
     const updatePayload = hydrateInstance(
@@ -263,7 +263,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
       fiber.memoizedProps,
       rootContainerInstance,
       hostContext,
-      fiber,
+      fiber
     );
     // TODO: Type this specific to this type of component.
     fiber.updateQueue = (updatePayload: any);
@@ -291,7 +291,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
               didNotMatchHydratedContainerTextInstance(
                 parentContainer,
                 textInstance,
-                textContent,
+                textContent
               );
               break;
             }
@@ -304,7 +304,7 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
                 parentProps,
                 parentInstance,
                 textInstance,
-                textContent,
+                textContent
               );
               break;
             }
@@ -351,8 +351,8 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     // TODO: Better heuristic.
     if (
       fiber.tag !== HostComponent ||
-      (type !== 'head' &&
-        type !== 'body' &&
+      (type !== "head" &&
+        type !== "body" &&
         !shouldSetTextContent(type, fiber.memoizedProps))
     ) {
       let nextInstance = nextHydratableInstance;
@@ -381,6 +381,6 @@ export default function<T, P, I, TI, HI, PI, C, CC, CX, PL>(
     tryToClaimNextHydratableInstance,
     prepareToHydrateHostInstance,
     prepareToHydrateHostTextInstance,
-    popHydrationState,
+    popHydrationState
   };
 }

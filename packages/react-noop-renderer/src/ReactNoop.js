@@ -14,36 +14,36 @@
  * environment.
  */
 
-import type {Fiber} from 'react-reconciler/src/ReactFiber';
-import type {UpdateQueue} from 'react-reconciler/src/ReactFiberUpdateQueue';
-import type {ReactNodeList} from 'shared/ReactTypes';
-import ReactFiberReconciler from 'react-reconciler';
-import {enablePersistentReconciler} from 'shared/ReactFeatureFlags';
-import * as ReactInstanceMap from 'shared/ReactInstanceMap';
-import * as ReactPortal from 'shared/ReactPortal';
-import emptyObject from 'fbjs/lib/emptyObject';
-import expect from 'expect';
+import type { Fiber } from "react-reconciler/src/ReactFiber";
+import type { UpdateQueue } from "react-reconciler/src/ReactFiberUpdateQueue";
+import type { ReactNodeList } from "shared/ReactTypes";
+import ReactFiberReconciler from "react-reconciler";
+import { enablePersistentReconciler } from "shared/ReactFeatureFlags";
+import * as ReactInstanceMap from "shared/ReactInstanceMap";
+import * as ReactPortal from "shared/ReactPortal";
+import emptyObject from "fbjs/lib/emptyObject";
+import expect from "expect";
 
 const UPDATE_SIGNAL = {};
 
 let scheduledCallback = null;
 
-type Container = {rootID: string, children: Array<Instance | TextInstance>};
-type Props = {prop: any, hidden?: boolean};
+type Container = { rootID: string, children: Array<Instance | TextInstance> };
+type Props = { prop: any, hidden?: boolean };
 type Instance = {|
   type: string,
   id: number,
   children: Array<Instance | TextInstance>,
-  prop: any,
+  prop: any
 |};
-type TextInstance = {|text: string, id: number|};
+type TextInstance = {| text: string, id: number |};
 
 let instanceCounter = 0;
 let failInBeginPhase = false;
 
 function appendChild(
   parentInstance: Instance | Container,
-  child: Instance | TextInstance,
+  child: Instance | TextInstance
 ): void {
   const index = parentInstance.children.indexOf(child);
   if (index !== -1) {
@@ -55,7 +55,7 @@ function appendChild(
 function insertBefore(
   parentInstance: Instance | Container,
   child: Instance | TextInstance,
-  beforeChild: Instance | TextInstance,
+  beforeChild: Instance | TextInstance
 ): void {
   const index = parentInstance.children.indexOf(child);
   if (index !== -1) {
@@ -63,18 +63,18 @@ function insertBefore(
   }
   const beforeIndex = parentInstance.children.indexOf(beforeChild);
   if (beforeIndex === -1) {
-    throw new Error('This child does not exist.');
+    throw new Error("This child does not exist.");
   }
   parentInstance.children.splice(beforeIndex, 0, child);
 }
 
 function removeChild(
   parentInstance: Instance | Container,
-  child: Instance | TextInstance,
+  child: Instance | TextInstance
 ): void {
   const index = parentInstance.children.indexOf(child);
   if (index === -1) {
-    throw new Error('This child does not exist.');
+    throw new Error("This child does not exist.");
   }
   parentInstance.children.splice(index, 1);
 }
@@ -84,7 +84,7 @@ let elapsedTimeInMs = 0;
 let SharedHostConfig = {
   getRootHostContext() {
     if (failInBeginPhase) {
-      throw new Error('Error in host config.');
+      throw new Error("Error in host config.");
     }
     return emptyObject;
   },
@@ -102,16 +102,16 @@ let SharedHostConfig = {
       id: instanceCounter++,
       type: type,
       children: [],
-      prop: props.prop,
+      prop: props.prop
     };
     // Hide from unit tests
-    Object.defineProperty(inst, 'id', {value: inst.id, enumerable: false});
+    Object.defineProperty(inst, "id", { value: inst.id, enumerable: false });
     return inst;
   },
 
   appendInitialChild(
     parentInstance: Instance,
-    child: Instance | TextInstance,
+    child: Instance | TextInstance
   ): void {
     parentInstance.children.push(child);
   },
@@ -119,7 +119,7 @@ let SharedHostConfig = {
   finalizeInitialChildren(
     domElement: Instance,
     type: string,
-    props: Props,
+    props: Props
   ): boolean {
     return false;
   },
@@ -128,14 +128,14 @@ let SharedHostConfig = {
     instance: Instance,
     type: string,
     oldProps: Props,
-    newProps: Props,
+    newProps: Props
   ): null | {} {
     return UPDATE_SIGNAL;
   },
 
   shouldSetTextContent(type: string, props: Props): boolean {
     return (
-      typeof props.children === 'string' || typeof props.children === 'number'
+      typeof props.children === "string" || typeof props.children === "number"
     );
   },
 
@@ -147,19 +147,19 @@ let SharedHostConfig = {
     text: string,
     rootContainerInstance: Container,
     hostContext: Object,
-    internalInstanceHandle: Object,
+    internalInstanceHandle: Object
   ): TextInstance {
-    const inst = {text: text, id: instanceCounter++};
+    const inst = { text: text, id: instanceCounter++ };
     // Hide from unit tests
-    Object.defineProperty(inst, 'id', {value: inst.id, enumerable: false});
+    Object.defineProperty(inst, "id", { value: inst.id, enumerable: false });
     return inst;
   },
 
   scheduleDeferredCallback(callback) {
     if (scheduledCallback) {
       throw new Error(
-        'Scheduling a callback twice is excessive. Instead, keep track of ' +
-          'whether the callback has already been scheduled.',
+        "Scheduling a callback twice is excessive. Instead, keep track of " +
+          "whether the callback has already been scheduled."
       );
     }
     scheduledCallback = callback;
@@ -168,7 +168,7 @@ let SharedHostConfig = {
 
   cancelDeferredCallback() {
     if (scheduledCallback === null) {
-      throw new Error('No callback is scheduled.');
+      throw new Error("No callback is scheduled.");
     }
     scheduledCallback = null;
   },
@@ -179,7 +179,7 @@ let SharedHostConfig = {
 
   now(): number {
     return elapsedTimeInMs;
-  },
+  }
 };
 
 const NoopRenderer = ReactFiberReconciler({
@@ -194,7 +194,7 @@ const NoopRenderer = ReactFiberReconciler({
       updatePayload: Object,
       type: string,
       oldProps: Props,
-      newProps: Props,
+      newProps: Props
     ): void {
       instance.prop = newProps.prop;
     },
@@ -202,7 +202,7 @@ const NoopRenderer = ReactFiberReconciler({
     commitTextUpdate(
       textInstance: TextInstance,
       oldText: string,
-      newText: string,
+      newText: string
     ): void {
       textInstance.text = newText;
     },
@@ -214,8 +214,8 @@ const NoopRenderer = ReactFiberReconciler({
     removeChild: removeChild,
     removeChildFromContainer: removeChild,
 
-    resetTextContent(instance: Instance): void {},
-  },
+    resetTextContent(instance: Instance): void {}
+  }
 });
 
 const PersistentNoopRenderer = enablePersistentReconciler
@@ -230,53 +230,53 @@ const PersistentNoopRenderer = enablePersistentReconciler
           newProps: Props,
           internalInstanceHandle: Object,
           keepChildren: boolean,
-          recyclableInstance: null | Instance,
+          recyclableInstance: null | Instance
         ): Instance {
           const clone = {
             id: instance.id,
             type: type,
             children: keepChildren ? instance.children : [],
-            prop: newProps.prop,
+            prop: newProps.prop
           };
-          Object.defineProperty(clone, 'id', {
+          Object.defineProperty(clone, "id", {
             value: clone.id,
-            enumerable: false,
+            enumerable: false
           });
           return clone;
         },
 
         createContainerChildSet(
-          container: Container,
+          container: Container
         ): Array<Instance | TextInstance> {
           return [];
         },
 
         appendChildToContainerChildSet(
           childSet: Array<Instance | TextInstance>,
-          child: Instance | TextInstance,
+          child: Instance | TextInstance
         ): void {
           childSet.push(child);
         },
 
         finalizeContainerChildren(
           container: Container,
-          newChildren: Array<Instance | TextInstance>,
+          newChildren: Array<Instance | TextInstance>
         ): void {},
 
         replaceContainerChildren(
           container: Container,
-          newChildren: Array<Instance | TextInstance>,
+          newChildren: Array<Instance | TextInstance>
         ): void {
           container.children = newChildren;
-        },
-      },
+        }
+      }
     })
   : null;
 
 const rootContainers = new Map();
 const roots = new Map();
 const persistentRoots = new Map();
-const DEFAULT_ROOT_ID = '<default>';
+const DEFAULT_ROOT_ID = "<default>";
 
 let yieldedValues = null;
 
@@ -299,7 +299,7 @@ function* flushUnitsOfWork(n: number): Generator<Array<mixed>, void, void> {
         }
         didStop = true;
         return 0;
-      },
+      }
     });
 
     if (yieldedValues !== null) {
@@ -323,7 +323,7 @@ const ReactNoop = {
   createPortal(
     children: ReactNodeList,
     container: Container,
-    key: ?string = null,
+    key: ?string = null
   ) {
     return ReactPortal.createPortal(children, container, null, key);
   },
@@ -336,11 +336,11 @@ const ReactNoop = {
   renderToRootWithID(
     element: React$Element<any>,
     rootID: string,
-    callback: ?Function,
+    callback: ?Function
   ) {
     let root = roots.get(rootID);
     if (!root) {
-      const container = {rootID: rootID, children: []};
+      const container = { rootID: rootID, children: [] };
       rootContainers.set(rootID, container);
       root = NoopRenderer.createContainer(container, true, false);
       roots.set(rootID, root);
@@ -351,16 +351,16 @@ const ReactNoop = {
   renderToPersistentRootWithID(
     element: React$Element<any>,
     rootID: string,
-    callback: ?Function,
+    callback: ?Function
   ) {
     if (PersistentNoopRenderer === null) {
       throw new Error(
-        'Enable ReactFeatureFlags.enablePersistentReconciler to use it in tests.',
+        "Enable ReactFeatureFlags.enablePersistentReconciler to use it in tests."
       );
     }
     let root = persistentRoots.get(rootID);
     if (!root) {
-      const container = {rootID: rootID, children: []};
+      const container = { rootID: rootID, children: [] };
       rootContainers.set(rootID, container);
       root = PersistentNoopRenderer.createContainer(container, true, false);
       persistentRoots.set(rootID, root);
@@ -379,14 +379,14 @@ const ReactNoop = {
   },
 
   findInstance(
-    componentOrElement: Element | ?React$Component<any, any>,
+    componentOrElement: Element | ?React$Component<any, any>
   ): null | Instance | TextInstance {
     if (componentOrElement == null) {
       return null;
     }
     // Unsound duck typing.
     const component = (componentOrElement: any);
-    if (typeof component.id === 'number') {
+    if (typeof component.id === "number") {
       return component;
     }
     const inst = ReactInstanceMap.get(component);
@@ -411,7 +411,7 @@ const ReactNoop = {
   },
 
   flushAndYield(
-    unitsOfWork: number = Infinity,
+    unitsOfWork: number = Infinity
   ): Generator<Array<mixed>, void, void> {
     return flushUnitsOfWork(unitsOfWork);
   },
@@ -474,65 +474,65 @@ const ReactNoop = {
     const root = roots.get(rootID);
     const rootContainer = rootContainers.get(rootID);
     if (!root || !rootContainer) {
-      console.log('Nothing rendered yet.');
+      console.log("Nothing rendered yet.");
       return;
     }
 
     let bufferedLog = [];
     function log(...args) {
-      bufferedLog.push(...args, '\n');
+      bufferedLog.push(...args, "\n");
     }
 
     function logHostInstances(children: Array<Instance | TextInstance>, depth) {
       for (let i = 0; i < children.length; i++) {
         const child = children[i];
-        const indent = '  '.repeat(depth);
-        if (typeof child.text === 'string') {
-          log(indent + '- ' + child.text);
+        const indent = "  ".repeat(depth);
+        if (typeof child.text === "string") {
+          log(indent + "- " + child.text);
         } else {
           // $FlowFixMe - The child should've been refined now.
-          log(indent + '- ' + child.type + '#' + child.id);
+          log(indent + "- " + child.type + "#" + child.id);
           // $FlowFixMe - The child should've been refined now.
           logHostInstances(child.children, depth + 1);
         }
       }
     }
     function logContainer(container: Container, depth) {
-      log('  '.repeat(depth) + '- [root#' + container.rootID + ']');
+      log("  ".repeat(depth) + "- [root#" + container.rootID + "]");
       logHostInstances(container.children, depth + 1);
     }
 
     function logUpdateQueue(updateQueue: UpdateQueue<mixed>, depth) {
-      log('  '.repeat(depth + 1) + 'QUEUED UPDATES');
+      log("  ".repeat(depth + 1) + "QUEUED UPDATES");
       const firstUpdate = updateQueue.first;
       if (!firstUpdate) {
         return;
       }
 
       log(
-        '  '.repeat(depth + 1) + '~',
+        "  ".repeat(depth + 1) + "~",
         firstUpdate && firstUpdate.partialState,
-        firstUpdate.callback ? 'with callback' : '',
-        '[' + firstUpdate.expirationTime + ']',
+        firstUpdate.callback ? "with callback" : "",
+        "[" + firstUpdate.expirationTime + "]"
       );
       let next;
       while ((next = firstUpdate.next)) {
         log(
-          '  '.repeat(depth + 1) + '~',
+          "  ".repeat(depth + 1) + "~",
           next.partialState,
-          next.callback ? 'with callback' : '',
-          '[' + firstUpdate.expirationTime + ']',
+          next.callback ? "with callback" : "",
+          "[" + firstUpdate.expirationTime + "]"
         );
       }
     }
 
     function logFiber(fiber: Fiber, depth) {
       log(
-        '  '.repeat(depth) +
-          '- ' +
+        "  ".repeat(depth) +
+          "- " +
           // need to explicitly coerce Symbol to a string
-          (fiber.type ? fiber.type.name || fiber.type.toString() : '[root]'),
-        '[' + fiber.expirationTime + (fiber.pendingProps ? '*' : '') + ']',
+          (fiber.type ? fiber.type.name || fiber.type.toString() : "[root]"),
+        "[" + fiber.expirationTime + (fiber.pendingProps ? "*" : "") + "]"
       );
       if (fiber.updateQueue) {
         logUpdateQueue(fiber.updateQueue, depth);
@@ -557,9 +557,9 @@ const ReactNoop = {
       }
     }
 
-    log('HOST INSTANCES:');
+    log("HOST INSTANCES:");
     logContainer(rootContainer, 0);
-    log('FIBERS:');
+    log("FIBERS:");
     logFiber(root.current, 0);
 
     console.log(...bufferedLog);
@@ -572,7 +572,7 @@ const ReactNoop = {
     } finally {
       failInBeginPhase = false;
     }
-  },
+  }
 };
 
 export default ReactNoop;

@@ -13,10 +13,10 @@
  * Provide minimal Flow typing for the high-level API and call it a day.
  */
 
-import type {Options, Element} from 'CSComponent';
+import type { Options, Element } from "CSComponent";
 
 export type Children<ChildType> = {|
-  +children: $ReadOnlyArray<React$Element<ChildType>>,
+  +children: $ReadOnlyArray<React$Element<ChildType>>
 |};
 
 type StatelessComponent<Props> = React$StatelessFunctionalComponent<Props>;
@@ -25,5 +25,5 @@ type ClassComponent<Props, Instance> = Class<React$Component<Props> & Instance>;
 
 export type ReactNativeCSType = <Props, Instance>(
   props: Children<ClassComponent<Props, Instance> | StatelessComponent<Props>>,
-  options: Options<Instance> | void,
+  options: Options<Instance> | void
 ) => Element;

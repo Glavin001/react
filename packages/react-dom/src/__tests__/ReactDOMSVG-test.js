@@ -7,30 +7,30 @@
  * @emails react-core
  */
 
-'use strict';
+"use strict";
 
 let React;
 let ReactDOM;
 let ReactDOMServer;
 
-describe('ReactDOMSVG', () => {
+describe("ReactDOMSVG", () => {
   beforeEach(() => {
-    React = require('react');
-    ReactDOM = require('react-dom');
-    ReactDOMServer = require('react-dom/server');
+    React = require("react");
+    ReactDOM = require("react-dom");
+    ReactDOMServer = require("react-dom/server");
   });
 
-  it('creates initial namespaced markup', () => {
+  it("creates initial namespaced markup", () => {
     const markup = ReactDOMServer.renderToString(
       <svg>
         <image xlinkHref="http://i.imgur.com/w7GCRPb.png" />
-      </svg>,
+      </svg>
     );
     expect(markup).toContain('xlink:href="http://i.imgur.com/w7GCRPb.png"');
   });
 
-  it('creates elements with SVG namespace inside SVG tag during mount', () => {
-    const node = document.createElement('div');
+  it("creates elements with SVG namespace inside SVG tag during mount", () => {
+    const node = document.createElement("div");
     let div,
       div2,
       div3,
@@ -80,37 +80,37 @@ describe('ReactDOMSVG', () => {
         </p>
         <div ref={el => (div3 = el)} />
       </div>,
-      node,
+      node
     );
     [svg, svg2, svg3, svg4].forEach(el => {
-      expect(el.namespaceURI).toBe('http://www.w3.org/2000/svg');
+      expect(el.namespaceURI).toBe("http://www.w3.org/2000/svg");
       // SVG tagName is case sensitive.
-      expect(el.tagName).toBe('svg');
+      expect(el.tagName).toBe("svg");
     });
-    expect(g.namespaceURI).toBe('http://www.w3.org/2000/svg');
-    expect(g.tagName).toBe('g');
-    expect(g.getAttribute('stroke-width')).toBe('5');
-    expect(p.namespaceURI).toBe('http://www.w3.org/1999/xhtml');
+    expect(g.namespaceURI).toBe("http://www.w3.org/2000/svg");
+    expect(g.tagName).toBe("g");
+    expect(g.getAttribute("stroke-width")).toBe("5");
+    expect(p.namespaceURI).toBe("http://www.w3.org/1999/xhtml");
     // DOM tagName is capitalized by browsers.
-    expect(p.tagName).toBe('P');
+    expect(p.tagName).toBe("P");
     [image, image2, image3].forEach(el => {
-      expect(el.namespaceURI).toBe('http://www.w3.org/2000/svg');
-      expect(el.tagName).toBe('image');
-      expect(el.getAttributeNS('http://www.w3.org/1999/xlink', 'href')).toBe(
-        'http://i.imgur.com/w7GCRPb.png',
+      expect(el.namespaceURI).toBe("http://www.w3.org/2000/svg");
+      expect(el.tagName).toBe("image");
+      expect(el.getAttributeNS("http://www.w3.org/1999/xlink", "href")).toBe(
+        "http://i.imgur.com/w7GCRPb.png"
       );
     });
     [foreignObject, foreignObject2].forEach(el => {
-      expect(el.namespaceURI).toBe('http://www.w3.org/2000/svg');
-      expect(el.tagName).toBe('foreignObject');
+      expect(el.namespaceURI).toBe("http://www.w3.org/2000/svg");
+      expect(el.tagName).toBe("foreignObject");
     });
     [div, div2, div3].forEach(el => {
-      expect(el.namespaceURI).toBe('http://www.w3.org/1999/xhtml');
-      expect(el.tagName).toBe('DIV');
+      expect(el.namespaceURI).toBe("http://www.w3.org/1999/xhtml");
+      expect(el.tagName).toBe("DIV");
     });
   });
 
-  it('creates elements with SVG namespace inside SVG tag during update', () => {
+  it("creates elements with SVG namespace inside SVG tag during update", () => {
     let inst,
       div,
       div2,
@@ -125,10 +125,10 @@ describe('ReactDOMSVG', () => {
       svg4;
 
     class App extends React.Component {
-      state = {step: 0};
+      state = { step: 0 };
       render() {
         inst = this;
-        const {step} = this.state;
+        const { step } = this.state;
         if (step === 0) {
           return null;
         }
@@ -158,70 +158,70 @@ describe('ReactDOMSVG', () => {
       }
     }
 
-    const node = document.createElement('div');
+    const node = document.createElement("div");
     ReactDOM.render(
       <svg ref={el => (svg = el)}>
         <App />
       </svg>,
-      node,
+      node
     );
-    inst.setState({step: 1});
+    inst.setState({ step: 1 });
 
     [svg, svg2, svg3, svg4].forEach(el => {
-      expect(el.namespaceURI).toBe('http://www.w3.org/2000/svg');
+      expect(el.namespaceURI).toBe("http://www.w3.org/2000/svg");
       // SVG tagName is case sensitive.
-      expect(el.tagName).toBe('svg');
+      expect(el.tagName).toBe("svg");
     });
-    expect(g.namespaceURI).toBe('http://www.w3.org/2000/svg');
-    expect(g.tagName).toBe('g');
-    expect(g.getAttribute('stroke-width')).toBe('5');
+    expect(g.namespaceURI).toBe("http://www.w3.org/2000/svg");
+    expect(g.tagName).toBe("g");
+    expect(g.getAttribute("stroke-width")).toBe("5");
     [image, image2].forEach(el => {
-      expect(el.namespaceURI).toBe('http://www.w3.org/2000/svg');
-      expect(el.tagName).toBe('image');
-      expect(el.getAttributeNS('http://www.w3.org/1999/xlink', 'href')).toBe(
-        'http://i.imgur.com/w7GCRPb.png',
+      expect(el.namespaceURI).toBe("http://www.w3.org/2000/svg");
+      expect(el.tagName).toBe("image");
+      expect(el.getAttributeNS("http://www.w3.org/1999/xlink", "href")).toBe(
+        "http://i.imgur.com/w7GCRPb.png"
       );
     });
     [foreignObject, foreignObject2].forEach(el => {
-      expect(el.namespaceURI).toBe('http://www.w3.org/2000/svg');
-      expect(el.tagName).toBe('foreignObject');
+      expect(el.namespaceURI).toBe("http://www.w3.org/2000/svg");
+      expect(el.tagName).toBe("foreignObject");
     });
     [div, div2].forEach(el => {
-      expect(el.namespaceURI).toBe('http://www.w3.org/1999/xhtml');
+      expect(el.namespaceURI).toBe("http://www.w3.org/1999/xhtml");
       // DOM tagName is capitalized by browsers.
-      expect(el.tagName).toBe('DIV');
+      expect(el.tagName).toBe("DIV");
     });
   });
 
-  it('can render SVG into a non-React SVG tree', () => {
+  it("can render SVG into a non-React SVG tree", () => {
     const outerSVGRoot = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'svg',
+      "http://www.w3.org/2000/svg",
+      "svg"
     );
     const container = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'g',
+      "http://www.w3.org/2000/svg",
+      "g"
     );
     outerSVGRoot.appendChild(container);
     let image;
     ReactDOM.render(<image ref={el => (image = el)} />, container);
-    expect(image.namespaceURI).toBe('http://www.w3.org/2000/svg');
-    expect(image.tagName).toBe('image');
+    expect(image.namespaceURI).toBe("http://www.w3.org/2000/svg");
+    expect(image.tagName).toBe("image");
   });
 
-  it('can render HTML into a foreignObject in non-React SVG tree', () => {
+  it("can render HTML into a foreignObject in non-React SVG tree", () => {
     const outerSVGRoot = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'svg',
+      "http://www.w3.org/2000/svg",
+      "svg"
     );
     const container = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'foreignObject',
+      "http://www.w3.org/2000/svg",
+      "foreignObject"
     );
     outerSVGRoot.appendChild(container);
     let div;
     ReactDOM.render(<div ref={el => (div = el)} />, container);
-    expect(div.namespaceURI).toBe('http://www.w3.org/1999/xhtml');
-    expect(div.tagName).toBe('DIV');
+    expect(div.namespaceURI).toBe("http://www.w3.org/1999/xhtml");
+    expect(div.tagName).toBe("DIV");
   });
 });

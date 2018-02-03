@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('bindings')('perfcounters');
+module.exports = require("bindings")("perfcounters");

@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-const ncp = require('ncp').ncp;
-const path = require('path');
-const mkdirp = require('mkdirp');
-const rimraf = require('rimraf');
-const exec = require('child_process').exec;
-const targz = require('targz');
+const ncp = require("ncp").ncp;
+const path = require("path");
+const mkdirp = require("mkdirp");
+const rimraf = require("rimraf");
+const exec = require("child_process").exec;
+const targz = require("targz");
 
 function asyncCopyTo(from, to) {
   return asyncMkDirP(path.dirname(to)).then(
@@ -72,7 +72,7 @@ function asyncRimRaf(filepath) {
 }
 
 function resolvePath(filepath) {
-  if (filepath[0] === '~') {
+  if (filepath[0] === "~") {
     return path.join(process.env.HOME, filepath.slice(1));
   } else {
     return path.resolve(filepath);
@@ -85,5 +85,5 @@ module.exports = {
   asyncExecuteCommand,
   asyncExtractTar,
   asyncMkDirP,
-  asyncRimRaf,
+  asyncRimRaf
 };

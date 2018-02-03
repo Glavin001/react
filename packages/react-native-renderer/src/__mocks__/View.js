@@ -5,14 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+"use strict";
 
-const createReactNativeComponentClass = require('../createReactNativeComponentClass')
+const createReactNativeComponentClass = require("../createReactNativeComponentClass")
   .default;
 
 const View = createReactNativeComponentClass({
   validAttributes: {},
-  uiViewClassName: 'View',
+  uiViewClassName: "View"
 });
 
 module.exports = View;
